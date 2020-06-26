@@ -62,19 +62,6 @@
                                 <status>1</status>
                             </depends>
                         </user_name>
-                        <user_pass translate="label comment" module="qps">
-                            <label>User pass</label>
-                            <frontend_type>obscure</frontend_type>
-                            <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
-                            <validate>required-entry</validate>
-                            <sort_order>60</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>0</show_in_website>
-                            <show_in_store>0</show_in_store>
-                            <depends>
-                                <status>1</status>
-                            </depends>
-                        </user_pass>
                     </fields>
                 </config>
             </groups>

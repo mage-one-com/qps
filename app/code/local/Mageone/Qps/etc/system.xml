@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<config>
+    <sections>
+        <qps_section translate="label" module="qps">
+            <label>Quick Protection System</label>
+            <tab>general</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>5000</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>0</show_in_website>
+            <show_in_store>0</show_in_store>
+            <groups>
+                <config translate="label" module="qps">
+                    <label>Configuration</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>100</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <status translate="label" module="qps">
+                            <label>Enabled</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </status>
+                        <public_key translate="label comment" module="qps">
+                            <label>Public key</label>
+                            <frontend_type>textarea</frontend_type>
+                            <validate>required-entry</validate>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends>
+                                <status>1</status>
+                            </depends>
+                        </public_key>
+                        <private_key translate="label comment" module="qps">
+                            <label>Private key</label>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends>
+                                <status>1</status>
+                            </depends>
+                        </private_key>
+                        <user_name translate="label comment" module="qps">
+                            <label>User name</label>
+                            <frontend_type>text</frontend_type>
+                            <validate>required-entry</validate>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends>
+                                <status>1</status>
+                            </depends>
+                        </user_name>
+                        <user_pass translate="label comment" module="qps">
+                            <label>User pass</label>
+                            <frontend_type>obscure</frontend_type>
+                            <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
+                            <validate>required-entry</validate>
+                            <sort_order>60</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends>
+                                <status>1</status>
+                            </depends>
+                        </user_pass>
+                    </fields>
+                </config>
+            </groups>
+        </qps_section>
+    </sections>
+</config>

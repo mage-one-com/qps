@@ -74,7 +74,7 @@
         <qps_section>
             <config>
                 <status>0</status>
-                <url>https://qps.mage-one.com/update/</url>
+                <url>https://qps.mage-one.com/update</url>
             </config>
         </qps_section>
     </default>

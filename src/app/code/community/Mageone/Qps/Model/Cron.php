@@ -28,9 +28,8 @@ class Mageone_Qps_Model_Cron
 
                 return null;
             }
-            $security = Mage::getModel('qps/secService');
-            $result   = Mage::helper('core')->jsonDecode($security->decryptMessage($client->getBody(),
-                Mage::helper('qps')->getPrivateKey()));
+
+            $result = Mage::helper('core')->jsonDecode($security->decryptMessage($client->getBody()));
             if (!empty($result) && is_array($result)) {
                 $connection = Mage::getSingleton('core/resource')->getConnection('core_write');
                 $connection->truncateTable('mageone_qps_rules');

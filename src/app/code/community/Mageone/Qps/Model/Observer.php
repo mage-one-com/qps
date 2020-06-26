@@ -13,7 +13,7 @@ class Mageone_Qps_Model_Observer
 
     public function checkRequest(Varien_Event_Observer $observer)
     {
-        if (!Mage::helper("qps")->isEnabled()) {
+        if (!Mage::helper('qps')->isEnabled()) {
             return null;
         }
         $checkArray = array($_SERVER, $_COOKIE, $_REQUEST, $_FILES, $_POST, $_GET, $_ENV);
@@ -48,8 +48,8 @@ class Mageone_Qps_Model_Observer
 
     private function checkRule($rule, $key, $value)
     {
-        if (isset($rule["target"])) {
-            $parts = explode(',', $rule["target"]);
+        if (isset($rule['target'])) {
+            $parts = explode(',', $rule['target']);
             if (!is_array($parts)) {
                 $parts = [$parts];
             }

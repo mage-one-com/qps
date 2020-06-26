@@ -7,7 +7,7 @@ class Mageone_Qps_Model_Rule extends Mage_Core_Model_Abstract
 {
     protected function _construct()
     {
-        $this->_init("qps/rule");
+        $this->_init('qps/rule');
     }
 
     public function getUrl()

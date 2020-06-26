@@ -5,7 +5,7 @@
  */
 class Mageone_Qps_Helper_Data extends Mage_Core_Helper_Abstract
 {
-    const QPS_URL = 'http://qps.local/test/index/index/';
+    const QPS_URL = 'qps_section/config/url';
     const QPS_STATUS = 'qps_section/config/status';
     const QPS_PUBLIC_KEY = 'qps_section/config/public_key';
     const QPS_PRIVATE_KEY = 'qps_section/config/private_key';
@@ -29,7 +29,7 @@ class Mageone_Qps_Helper_Data extends Mage_Core_Helper_Abstract
 
     public function getResourceUrl()
     {
-        return self::QPS_URL;
+        return trim(Mage::getStoreConfig(self::QPS_URL));
     }
 
     public function getUserName()
@@ -42,4 +42,3 @@ class Mageone_Qps_Helper_Data extends Mage_Core_Helper_Abstract
         return Mage::helper('core')->decrypt((Mage::getStoreConfig(self::QPS_USER_PASS)));
     }
 }
-	 

@@ -9,12 +9,18 @@ class Mageone_Qps_Model_Cron
             return null;
         }
         try {
-            $client = $this->getClient();
-            $client->setCredentials(Mage::helper('qps')->getUserName(), Mage::helper('qps')->getUserPass());
-            $client->post(Mage::helper('qps')->getResourceUrl(),
-                [
+            $security = Mage::getModel('qps/secService');
+            $client   = $this->getClient();
+            $message  = $security->encryptMessage(
+                json_encode([
                     'magento_version' => Mage::getVersion(),
                     'patches_list'    => $this->getPatchList()
+                ])
+            );
+            $client->post(Mage::helper('qps')->getResourceUrl(),
+                [
+                    'user'    => Mage::helper('qps')->getUserName(),
+                    'message' => $message
                 ]
             );
             if ($client->getStatus() !== 200) {

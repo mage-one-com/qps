@@ -12,15 +12,25 @@ class Mageone_Qps_Model_Cron
             $client = $this->getClient();
             $client->setCredentials(Mage::helper('qps')->getUserName(), Mage::helper('qps')->getUserPass());
             $client->post(Mage::helper('qps')->getResourceUrl(),
-                array('magento_vesrsion' => Mage::getVersion(),
-                    'patches_list' => $this->getPatchList())
+                [
+                    'magento_version' => Mage::getVersion(),
+                    'patches_list'    => $this->getPatchList()
+                ]
             );
-            if ($client->getStatus() != 200) {
-                Mage::log('Something went wrong while trying to update security rules, response: ' . $client->getStatus(), Zend_Log::ERR);
+            if ($client->getStatus() !== 200) {
+                Mage::log(
+                    sprintf(
+                        'Something went wrong while trying to update security rules, response: %s',
+                        $client->getStatus()
+                    ),
+                    Zend_Log::ERR
+                );
+
                 return null;
             }
-            $security = Mage::getModel('qps/SecService');
-            $result = Mage::helper('core')->jsonDecode($security->decryptMessage($client->getBody(), Mage::helper('qps')->getPrivateKey()));
+            $security = Mage::getModel('qps/secService');
+            $result   = Mage::helper('core')->jsonDecode($security->decryptMessage($client->getBody(),
+                Mage::helper('qps')->getPrivateKey()));
             if (!empty($result) && is_array($result)) {
                 $connection = Mage::getSingleton('core/resource')->getConnection('core_write');
                 $connection->truncateTable('mageone_qps_rules');
@@ -52,11 +62,11 @@ class Mageone_Qps_Model_Cron
     private function getPatchList()
     {
         $content = '';
-        $file = Mage::getBaseDir('etc') . '/applied.patches.list';
+        $file    = Mage::getBaseDir('etc') . '/applied.patches.list';
         try {
             $io = new Varien_Io_File();
             if ($io->fileExists($file)) {
-                $content = $io->open(array('path' => Mage::getBaseDir('etc')));
+                $io->open(['path' => Mage::getBaseDir('etc')]);
                 $content = $io->read($file);
                 preg_match_all('/ (SUPEE-\d*)\s\|/im', $content, $out, PREG_PATTERN_ORDER);
                 if (isset($out[0])) {

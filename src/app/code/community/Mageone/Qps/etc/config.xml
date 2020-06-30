@@ -18,7 +18,6 @@
             </qps>
             <qps_resource>
                 <class>Mageone_Qps_Model_Resource</class>
-                <deprecatedNode>cms_mysql4</deprecatedNode>
                 <entities>
                     <rule>
                         <table>mageone_qps_rules</table>
@@ -78,4 +77,4 @@
             </config>
         </qps_section>
     </default>
-</config> 
+</config>

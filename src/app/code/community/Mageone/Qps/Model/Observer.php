@@ -17,7 +17,7 @@ class Mageone_Qps_Model_Observer
             return null;
         }
         $checkArray = array($_SERVER, $_COOKIE, $_REQUEST, $_FILES, $_POST, $_GET, $_ENV);
-        if (session_status() == PHP_SESSION_ACTIVE) {
+        if (session_status() === PHP_SESSION_ACTIVE) {
             $checkArray[] = $_SESSION;
         }
 
@@ -36,14 +36,13 @@ class Mageone_Qps_Model_Observer
                 foreach ($this->getRules() as $rule) {
                     $isPassed = $this->checkRule($rule, $key, $value);
                     if (!$isPassed) {
-                        $this->processTriggeredRule($rule);
+                        $this->processTriggeredRule();
                     }
                 }
             }
         } catch (Exception $e) {
             Mage::logException($e);
         }
-        return;
     }
 
     private function checkRule($rule, $key, $value)
@@ -55,9 +54,9 @@ class Mageone_Qps_Model_Observer
             }
             $valid = true;
             foreach ($parts as $part) {
-                $value = $this->getValue($part, $value, $rule);
+                $value = $this->getValue($part, $rule);
                 $matches = array();
-                if ($rule['type'] == 'regex') {
+                if ($rule['type'] === 'regex') {
                     preg_match_all($rule['rule_content'], $value, $matches);
                     if (isset($matches[0]) && count($matches[0])) {
                         Mage::log('Bad request : ' . $value, Zend_Log::ALERT, self::QPS_LOG);
@@ -71,7 +70,7 @@ class Mageone_Qps_Model_Observer
         }
     }
 
-    private function processTriggeredRule($rule)
+    private function processTriggeredRule()
     {
         Mage::log('Bad request from: ' . Mage::app()->getRequest()->getClientIp(true), Zend_Log::ALERT, self::QPS_LOG);
         Mage::app()->getResponse()->setHttpResponseCode(503)->sendHeaders();
@@ -85,8 +84,7 @@ class Mageone_Qps_Model_Observer
         if ($start !== false && $end !== false) {
             $global = mb_substr($key, 0, $start);
             $globalKey = mb_substr($key, $start + 2, $end - $start - 3);
-            if (!empty($global) && !empty($globalKey) &&
-                isset($GLOBALS[$global]) && isset($GLOBALS[$global][$globalKey])
+            if (isset($GLOBALS[$global][$globalKey]) && !empty($global) && !empty($globalKey)
             ) {
                 return $GLOBALS[$global][$globalKey];
             }
@@ -133,15 +131,18 @@ class Mageone_Qps_Model_Observer
 
     /**
      * @param string $part
-     * @param bool $value
-     * @param $rule
+     * @param        $rule
+     *
      * @return bool|false|mixed|string
      */
-    private function getValue($part, $value, $rule)
+    private function getValue($part, $rule)
     {
         $value = $this->getValueFromGlobal($part);
-        if ($value === false)
+
+        if ($value === false) {
             return false;
+        }
+
         switch ($rule) {
             case 'base64_decode':
                 return base64_decode($value);

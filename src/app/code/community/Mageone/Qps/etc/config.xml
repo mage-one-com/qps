@@ -77,4 +77,15 @@
             </config>
         </qps_section>
     </default>
+    <adminhtml>
+        <translate>
+            <modules>
+                <Mageone_Qps>
+                    <files>
+                        <default>Mageone_Qps.csv</default>
+                    </files>
+                </Mageone_Qps>
+            </modules>
+        </translate>
+    </adminhtml>
 </config>

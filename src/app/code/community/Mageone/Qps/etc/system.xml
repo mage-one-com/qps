@@ -28,7 +28,7 @@
                             <show_in_store>0</show_in_store>
                         </status>
                         <public_key translate="label comment" module="qps">
-                            <label>Public key</label>
+                            <label>Public Key</label>
                             <frontend_type>textarea</frontend_type>
                             <validate>required-entry</validate>
                             <sort_order>20</sort_order>
@@ -40,7 +40,7 @@
                             </depends>
                         </public_key>
                         <private_key translate="label comment" module="qps">
-                            <label>Private key</label>
+                            <label>Private Key</label>
                             <frontend_type>textarea</frontend_type>
                             <sort_order>40</sort_order>
                             <show_in_default>1</show_in_default>
@@ -51,7 +51,7 @@
                             </depends>
                         </private_key>
                         <user_name translate="label comment" module="qps">
-                            <label>User name</label>
+                            <label>Username</label>
                             <frontend_type>text</frontend_type>
                             <validate>required-entry</validate>
                             <sort_order>50</sort_order>

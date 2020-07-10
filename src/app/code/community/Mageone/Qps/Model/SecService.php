@@ -77,8 +77,7 @@ class Mageone_Qps_Model_SecService
 
         // Decrypt the message
         $rij->setKey($symKey);
-        $plaintext = $rij->decrypt($ciphertext);
 
-        return $plaintext;
+        return $rij->decrypt($ciphertext);
     }
 }

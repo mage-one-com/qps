@@ -1,10 +1,45 @@
 # Quick Protection System (QPS)
 
-QPS is a little request inspection module for Magento 1 stores. It receives its configuration via the API of https://mage-one.com/
+QPS is a little request inspection module for Magento 1 stores. It receives its configuration via the API of https://mage-one.com/.
+
+# Installation
+## with composer
+
+1. Add the repository with the module:
+
+        "repositories": [
+            {
+                "type": "vcs",
+                "url": "git@github.com:mage-one-com/qps.git"
+            }
+        ],
+
+2. `composer require mage_one_come/qps`
+
+## with modman
+
+    modman clone git@github.com:mage-one-com/qps.git
+
+## manually
+[Download zip file](https://github.com/mage-one-com/qps/archive/master.zip) and copy the files from `src` into your magento root directory
+
+# Deinstallation
+
+## with composer
+- Remove module from `composer.json` and rerun `composer update mageone/qps`
+- Drop the rules table: `DROP TABLE <prefix>mageone_qps_rules;`
+
+## with modman or manually
+- Remove the files from your installation
+- Drop the rules table: `DROP TABLE <prefix>mageone_qps_rules;`
+
+# How does it work?
+
+## 
 
 # Contribution
 
-Please send your contribution as a pull request against our develop branch. Also, please include the MIT License header in every file.
+Please send your contribution as a pull request against our develop branch.
 
 # Developer
 
@@ -22,3 +57,9 @@ The above copyright notice and this permission notice shall be included in all c
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+
+
+
+
+
+ 

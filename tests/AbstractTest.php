@@ -16,11 +16,13 @@ abstract class AbstractTest extends TestCase
     /**
      * @param string   $path
      * @param string   $value
-     * @param int|null $storeId
+     * @param int|null $singleStoreId
+     *
+     * @throws \Mage_Core_Model_Store_Exception
      */
-    public function setConfigurationSetting($path, $value, $storeId = null)
+    public function setConfigurationSetting($path, $value, $singleStoreId = null)
     {
-        $storeIds = $storeId ? [$storeId] : array_keys(\Mage::app()->getStores());
+        $storeIds = $singleStoreId ? [$singleStoreId] : array_keys(\Mage::app()->getStores());
         foreach ($storeIds as $storeId) {
             $store   = \Mage::app()->getStore($storeId);
             $storeId = $storeId === null ? 0 : $storeId;
@@ -28,7 +30,6 @@ abstract class AbstractTest extends TestCase
             $this->configSettingsToRestore[$storeId][$path] = $store->getConfig($path);
 
             $this->setConfig($path, $value, $store);
-
         }
     }
 

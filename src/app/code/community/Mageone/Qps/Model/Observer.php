@@ -16,7 +16,7 @@ class Mageone_Qps_Model_Observer
         if (!Mage::helper('qps')->isEnabled()) {
             return null;
         }
-        $checkArray = array($_SERVER, $_COOKIE, $_REQUEST, $_FILES, $_POST, $_GET, $_ENV);
+        $checkArray = [$_SERVER, $_COOKIE, $_REQUEST, $_FILES, $_POST, $_GET, $_ENV];
         if (session_status() === PHP_SESSION_ACTIVE) {
             $checkArray[] = $_SESSION;
         }
@@ -26,6 +26,7 @@ class Mageone_Qps_Model_Observer
                 $this->checkGlobalArrayData($data);
             }
         }
+
         return $this;
     }
 
@@ -54,8 +55,8 @@ class Mageone_Qps_Model_Observer
             }
             $valid = true;
             foreach ($parts as $part) {
-                $value = $this->getValue($part, $rule);
-                $matches = array();
+                $value   = $this->getValue($part, $rule);
+                $matches = [];
                 if ($rule['type'] === 'regex') {
                     preg_match_all($rule['rule_content'], $value, $matches);
                     if (isset($matches[0]) && count($matches[0])) {
@@ -63,8 +64,12 @@ class Mageone_Qps_Model_Observer
                         $valid = false;
                     }
                 } else {
-                    Mage::dispatchEvent('qps_custom_check', array('rule' => $rule, 'key' => $key, 'value' => $value, 'valid' => $valid));
+                    Mage::dispatchEvent(
+                        'qps_custom_check',
+                        ['rule' => $rule, 'key' => $key, 'value' => $value, 'valid' => $valid]
+                    );
                 }
+
                 return $valid;
             }
         }
@@ -80,15 +85,15 @@ class Mageone_Qps_Model_Observer
     private function getValueFromGlobal($key)
     {
         $start = mb_strpos($key, '[');
-        $end = mb_strpos($key, ']');
+        $end   = mb_strpos($key, ']');
         if ($start !== false && $end !== false) {
-            $global = mb_substr($key, 0, $start);
+            $global    = mb_substr($key, 0, $start);
             $globalKey = mb_substr($key, $start + 2, $end - $start - 3);
-            if (isset($GLOBALS[$global][$globalKey]) && !empty($global) && !empty($globalKey)
-            ) {
+            if (isset($GLOBALS[$global][$globalKey]) && !empty($global) && !empty($globalKey)) {
                 return $GLOBALS[$global][$globalKey];
             }
         }
+
         return false;
     }
 
@@ -108,6 +113,7 @@ class Mageone_Qps_Model_Observer
         if (empty($this->rules)) {
             $this->rules = $this->getCachedData();
         }
+
         return $this->rules;
     }
 
@@ -126,6 +132,7 @@ class Mageone_Qps_Model_Observer
         } else {
             $data = $this->getCollection();
         }
+
         return $data;
     }
 

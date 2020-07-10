@@ -1,0 +1,33 @@
+<phpunit
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.2/phpunit.xsd"
+        backupGlobals="false"
+        backupStaticAttributes="false"
+        bootstrap="bootstrap.php"
+        cacheTokens="false"
+        colors="true"
+        convertErrorsToExceptions="true"
+        convertNoticesToExceptions="true"
+        convertWarningsToExceptions="true"
+        forceCoversAnnotation="true"
+        processIsolation="false"
+        stopOnError="false"
+        stopOnFailure="false"
+        stopOnIncomplete="false"
+        stopOnSkipped="false"
+        stopOnRisky="false"
+        timeoutForSmallTests="1"
+        timeoutForMediumTests="10"
+        timeoutForLargeTests="60"
+        verbose="false">
+
+    <testsuites>
+        <testsuite name="QPS Unit Tests">
+            <directory>Unit</directory>
+        </testsuite>
+        <testsuite name="QPS Integration Tests">
+            <directory>Integration</directory>
+        </testsuite>
+    </testsuites>
+
+</phpunit>

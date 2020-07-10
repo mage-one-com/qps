@@ -30,20 +30,7 @@
                 <setup>
                     <module>Mageone_Qps</module>
                 </setup>
-                <connection>
-                    <use>core_setup</use>
-                </connection>
             </qps_setup>
-            <qps_write>
-                <connection>
-                    <use>core_write</use>
-                </connection>
-            </qps_write>
-            <qps_read>
-                <connection>
-                    <use>core_read</use>
-                </connection>
-            </qps_read>
         </resources>
         <events>
             <controller_front_init_before>

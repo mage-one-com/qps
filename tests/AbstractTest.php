@@ -128,13 +128,13 @@ qzrEphd4FSt8f2CbSztLQ046asfCcRDoLQIDAQAB
     protected function startTransaction()
     {
         $writeConnection = $this->getConnection();
-        $writeConnection->query('START TRANSACTION;');
+        $writeConnection->beginTransaction();
     }
 
     protected function rollbackTransaction()
     {
         $writeConnection = $this->getConnection();
-        $writeConnection->query('ROLLBACK;');
+        $writeConnection->rollBack();
     }
 
     /**
@@ -142,9 +142,6 @@ qzrEphd4FSt8f2CbSztLQ046asfCcRDoLQIDAQAB
      */
     protected function getConnection()
     {
-        $resource       = \Mage::getSingleton('core/resource');
-        $readConnection = $resource->getConnection('core_read');
-
-        return $resource->getConnection('core_write');
+        return \Mage::getSingleton('core/resource')->getConnection('core_write');
     }
 }

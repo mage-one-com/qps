@@ -68,6 +68,8 @@ class RuleUpdateTest extends AbstractTest
 
     /**
      * @dataProvider getRules
+     *
+     * @param string[] $rules
      */
     public function testWriteNewRules($rules)
     {

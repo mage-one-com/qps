@@ -30,6 +30,45 @@ class Mageone_Qps_Model_Observer
         return $this;
     }
 
+    /**
+     * @return array
+     */
+    private function getRules()
+    {
+        if (empty($this->rules)) {
+            $this->rules = $this->getCachedData();
+        }
+
+        return $this->rules;
+    }
+
+    /**
+     * @return array
+     */
+    private function getCachedData()
+    {
+        if (Mage::helper('pagecache')->isEnabled()) {
+            if (Mage::app()->loadCache(self::QPS_CACHE) === false) {
+                $data = $this->getCollection();
+                Mage::app()->saveCache(Mage::helper('core')->jsonEncode($data), self::QPS_CACHE, [self::QPS_CACHE_TAG]);
+            } else {
+                $data = Mage::helper('core')->jsonDecode(Mage::app()->loadCache(self::QPS_CACHE));
+            }
+        } else {
+            $data = $this->getCollection();
+        }
+
+        return $data;
+    }
+
+    /**
+     * @return mixed
+     */
+    private function getCollection()
+    {
+        return Mage::getResourceModel('qps/rule_collection')->getData();
+    }
+
     private function checkGlobalArrayData($data)
     {
         try {
@@ -75,67 +114,6 @@ class Mageone_Qps_Model_Observer
         }
     }
 
-    private function processTriggeredRule()
-    {
-        Mage::log('Bad request from: ' . Mage::app()->getRequest()->getClientIp(true), Zend_Log::ALERT, self::QPS_LOG);
-        Mage::app()->getResponse()->setHttpResponseCode(503)->sendHeaders();
-        exit;
-    }
-
-    private function getValueFromGlobal($key)
-    {
-        $start = mb_strpos($key, '[');
-        $end   = mb_strpos($key, ']');
-        if ($start !== false && $end !== false) {
-            $global    = mb_substr($key, 0, $start);
-            $globalKey = mb_substr($key, $start + 2, $end - $start - 3);
-            if (isset($GLOBALS[$global][$globalKey]) && !empty($global) && !empty($globalKey)) {
-                return $GLOBALS[$global][$globalKey];
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * @return mixed
-     */
-    private function getCollection()
-    {
-        return Mage::getResourceModel('qps/rule_collection')->getData();
-    }
-
-    /**
-     * @return array
-     */
-    private function getRules()
-    {
-        if (empty($this->rules)) {
-            $this->rules = $this->getCachedData();
-        }
-
-        return $this->rules;
-    }
-
-    /**
-     * @return array
-     */
-    private function getCachedData()
-    {
-        if (Mage::helper('pagecache')->isEnabled()) {
-            if (Mage::app()->loadCache(self::QPS_CACHE) === false) {
-                $data = $this->getCollection();
-                Mage::app()->saveCache(Mage::helper('core')->jsonEncode($data), self::QPS_CACHE, [self::QPS_CACHE_TAG]);
-            } else {
-                $data = Mage::helper('core')->jsonDecode(Mage::app()->loadCache(self::QPS_CACHE));
-            }
-        } else {
-            $data = $this->getCollection();
-        }
-
-        return $data;
-    }
-
     /**
      * @param string $part
      * @param        $rule
@@ -162,5 +140,27 @@ class Mageone_Qps_Model_Observer
                 return $value;
         }
 
+    }
+
+    private function getValueFromGlobal($key)
+    {
+        $start = mb_strpos($key, '[');
+        $end   = mb_strpos($key, ']');
+        if ($start !== false && $end !== false) {
+            $global    = mb_substr($key, 0, $start);
+            $globalKey = mb_substr($key, $start + 2, $end - $start - 3);
+            if (isset($GLOBALS[$global][$globalKey]) && !empty($global) && !empty($globalKey)) {
+                return $GLOBALS[$global][$globalKey];
+            }
+        }
+
+        return false;
+    }
+
+    private function processTriggeredRule()
+    {
+        Mage::log('Bad request from: ' . Mage::app()->getRequest()->getClientIp(true), Zend_Log::ALERT, self::QPS_LOG);
+        Mage::app()->getResponse()->setHttpResponseCode(503)->sendHeaders();
+        exit;
     }
 }

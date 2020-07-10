@@ -1,5 +1,6 @@
 <?php
 
+use phpseclib\Crypt\Random;
 use phpseclib\Crypt\Rijndael;
 use phpseclib\Crypt\RSA;
 
@@ -25,7 +26,7 @@ class Mageone_Qps_Model_SecService
         $rij = new Rijndael();
 
         // Generate Random Symmetric Key
-        $symKey = \phpseclib\Crypt\Random::string(self::KEY_LENGTH);
+        $symKey = Random::string(self::KEY_LENGTH);
 
         // Encrypt Message with new Symmetric Key
         $rij->setKey($symKey);

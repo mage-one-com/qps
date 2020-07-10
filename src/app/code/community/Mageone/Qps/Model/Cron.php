@@ -2,11 +2,23 @@
 
 class Mageone_Qps_Model_Cron
 {
+    /**
+     * @var Mage_HTTP_Client
+     */
+    private $client;
 
+    public function __construct(array $args = [])
+    {
+        $this->client = $args['client'];
+    }
+
+    /**
+     * @return void
+     */
     public function getRules()
     {
         if (!Mage::helper('qps')->isEnabled()) {
-            return null;
+            return;
         }
         try {
             $security = Mage::getModel('qps/secService');
@@ -32,7 +44,7 @@ class Mageone_Qps_Model_Cron
                     Zend_Log::ERR
                 );
 
-                return null;
+                return;
             }
 
             $result = Mage::helper('core')->jsonDecode($security->decryptMessage($client->getBody()));
@@ -48,8 +60,6 @@ class Mageone_Qps_Model_Cron
         } catch (Exception $exception) {
             Mage::logException($exception);
         }
-
-        return;
     }
 
     /**
@@ -58,10 +68,11 @@ class Mageone_Qps_Model_Cron
      */
     private function getClient()
     {
-        return Mage_HTTP_Client::getInstance();
+        return $this->client ?: \Mage_HTTP_Client::getInstance();
     }
 
     /**
+     * @return void
      * @throws Exception
      */
     private function getPatchList()

@@ -42,10 +42,19 @@ class SecServiceTest extends AbstractTest
 
     public function testEncryptDecrypt()
     {
-        $this->assertEquals(
-            $this->getMessage(),
-            $this->secService->decryptMessage($this->secService->encryptMessage($this->getMessage()))
-        );
+        for ($i = 0; $i <= 100; $i++) {
+            $encryptedDecryptedMessage = $this->secService->decryptMessage(
+                $this->secService->encryptMessage($this->getMessage())
+            );
+            $this->assertIsString(
+                $encryptedDecryptedMessage,
+                'I don\'t know why, but from time to time this test fails, we need to fix that.'
+            );
+            $this->assertEquals(
+                $this->getMessage(),
+                $encryptedDecryptedMessage
+            );
+        }
     }
 
     /**

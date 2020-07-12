@@ -9,7 +9,9 @@ class Mageone_Qps_Model_Cron
 
     public function __construct(array $args = [])
     {
-        $this->client = $args['client'];
+        if (isset($args['client'])) {
+            $this->client = $args['client'];
+        }
     }
 
     /**

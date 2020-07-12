@@ -67,7 +67,27 @@ class RuleValidationTest extends AbstractTest
 
     public function testPreprocessBase64Decode()
     {
+        $this->expectException(\Mageone_Qps_Model_Exception_ExitSkippedForTestingException::class);
 
+        $this->createRule(
+            '/checkout/cart/add/',
+            'Custom URL which never matches',
+            '#core_config_data#',
+            '_GET["config"]',
+            'base64_decode',
+            'MO-1'
+        );
+        $request = $this->setupRequest(
+            '/checkout/cart/add/',
+            [
+                'id'     => '7',
+                'config' => base64_encode(
+                    'INSERT INTO `core_config_data` SET `value` = \'<script>\'WHERE `path` = \'design/footer/absolute_footer\''
+                )
+            ],
+            []
+        );
+        $this->observer->checkRequest($this->setupEvent($request));
     }
 
     private function createRule($url, $name, $content, $target, $preprocess, $patchFix)

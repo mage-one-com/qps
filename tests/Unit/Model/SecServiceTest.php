@@ -1,6 +1,6 @@
 <?php
 
-namespace MageOne\Qps\Test\Unit;
+namespace MageOne\Qps\Test\Unit\Model;
 
 use MageOne\Qps\Test\AbstractTest;
 

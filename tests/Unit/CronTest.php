@@ -2,12 +2,12 @@
 
 namespace MageOne\Qps\Test\Unit;
 
-use PHPUnit\Framework\TestCase;
+use MageOne\Qps\Test\AbstractTest;
 
 /**
  * @covers Mageone_Qps_Model_Cron
  */
-class CronTest extends TestCase
+class CronTest extends AbstractTest
 {
     public function testCron()
     {

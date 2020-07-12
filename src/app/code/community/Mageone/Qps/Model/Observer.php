@@ -141,19 +141,14 @@ class Mageone_Qps_Model_Observer
 
     }
 
-    private function getValueFromGlobal($key)
+    /**
+     * @param string $expr
+     *
+     * @return string|mixed
+     */
+    private function getValueFromGlobal($expr)
     {
-        $start = mb_strpos($key, '[');
-        $end   = mb_strpos($key, ']');
-        if ($start !== false && $end !== false) {
-            $global    = mb_substr($key, 0, $start);
-            $globalKey = mb_substr($key, $start + 2, $end - $start - 3);
-            if (isset($GLOBALS[$global][$globalKey]) && !empty($global) && !empty($globalKey)) {
-                return $GLOBALS[$global][$globalKey];
-            }
-        }
-
-        return false;
+        return Mage::helper('qps/globalGetter')->get($expr);
     }
 
     private function processTriggeredRule()

@@ -48,7 +48,8 @@ class SecServiceTest extends AbstractTest
             );
             $this->assertIsString(
                 $encryptedDecryptedMessage,
-                'I don\'t know why, but from time to time this test fails, we need to fix that.'
+                'I don\'t know why, but from time to time this test fails, therefore we run it 100 times, to make sure '
+                . 'it fails on each run. We need to fix that.'
             );
             $this->assertEquals(
                 $this->getMessage(),

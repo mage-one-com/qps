@@ -2,6 +2,20 @@
 
 class Mageone_Qps_Model_Rule extends Mage_Core_Model_Abstract
 {
+    const CACHE_TAG = 'm1_qps_rule';
+    /**
+     * @var string
+     */
+    protected $_cacheTag = 'm1_qps_rule';
+    /**
+     * @var string
+     */
+    protected $_eventPrefix = 'm1_qps_rule';
+    /**
+     * @var string
+     */
+    protected $_eventObject = 'rule';
+
     /**
      * @return string
      */

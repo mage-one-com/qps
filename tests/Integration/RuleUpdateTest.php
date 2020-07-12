@@ -137,4 +137,13 @@ class RuleUpdateTest extends AbstractTest
 
         $this->secService = \Mage::getModel('qps/secService');
     }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        /** @var \Mage_Core_Model_Resource $resource */
+        $resource = \Mage::getSingleton('core/resource');
+        $this->getConnection()->truncateTable($resource->getTableName('qps/rule'));
+    }
+
 }

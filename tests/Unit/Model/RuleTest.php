@@ -20,9 +20,9 @@ class RuleTest extends AbstractTest
      * @param string $method
      * @param string $data
      */
-    public function testGetSetGet($method, $data)
+    public function testGetSetGet($method, $data, $dataBefore = null)
     {
-        $this->assertNull($this->rule->{'get' . $method}());
+        $this->assertSame($dataBefore, $this->rule->{'get' . $method}());
         $this->assertSame($this->rule, $this->rule->{'set' . $method}($data));
         $this->assertSame($data, $this->rule->{'get' . $method}());
     }
@@ -33,16 +33,16 @@ class RuleTest extends AbstractTest
     public function getMethodAndValidData()
     {
         return [
-            ['Id', 7],
-            ['Url', 'adminhtml*wysiwyg/directive/index*'],
-            ['Type', 'regex'],
-            ['Name', 'Block admin create via plain SQL'],
-            ['Rule_content', '/(^([a-zA-z]+)(\\d+)?$)/u'],
-            ['Preprocess', 'base64_decode'],
-            ['Preprocess', 'json_decode'],
-            ['Preprocess', 'rawurldecode'],
-            ['Preprocess', ''],
-            ['Patch_fix', 'SUPEE-5344'],
+            'id'           => ['Id', 7],
+            'url'          => ['Url', 'adminhtml*wysiwyg/directive/index*'],
+            'type'         => ['Type', 'regex', ''],
+            'name'         => ['Name', 'Block admin create via plain SQL'],
+            'rule_content' => ['Rule_content', '/(^([a-zA-z]+)(\\d+)?$)/u'],
+            'preprocess_1' => ['Preprocess', 'base64_decode', ''],
+            'preprocess_2' => ['Preprocess', 'json_decode', ''],
+            'preprocess_3' => ['Preprocess', 'rawurldecode', ''],
+            'preprocess_4' => ['Preprocess', '', ''],
+            'patch_fix'    => ['Patch_fix', 'SUPEE-5344'],
         ];
     }
 

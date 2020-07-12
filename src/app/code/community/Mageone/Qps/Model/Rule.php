@@ -2,6 +2,9 @@
 
 class Mageone_Qps_Model_Rule extends Mage_Core_Model_Abstract
 {
+    const TYPE_REGEX = 'regex';
+    const TYPE_CUSTOM = 'custom';
+
     const CACHE_TAG = 'm1_qps_rule';
     /**
      * @var string
@@ -39,7 +42,7 @@ class Mageone_Qps_Model_Rule extends Mage_Core_Model_Abstract
      */
     public function getType()
     {
-        return $this->_getData('type');
+        return (string)$this->_getData('type');
     }
 
     /**
@@ -116,7 +119,7 @@ class Mageone_Qps_Model_Rule extends Mage_Core_Model_Abstract
      */
     public function getPreprocess()
     {
-        return $this->_getData('preprocess');
+        return (string)$this->_getData('preprocess');
     }
 
     /**

@@ -6,12 +6,17 @@ class Mageone_Qps_Model_Cron
      * @var Mage_HTTP_Client
      */
     private $client;
+    /**
+     * @var Mageone_Qps_Helper_Data
+     */
+    private $helper;
 
     public function __construct(array $args = [])
     {
         if (isset($args['client'])) {
             $this->client = $args['client'];
         }
+        $this->helper = Mage::helper('qps');
     }
 
     /**
@@ -19,7 +24,7 @@ class Mageone_Qps_Model_Cron
      */
     public function getRules()
     {
-        if (!Mage::helper('qps')->isEnabled()) {
+        if (!$this->helper->isEnabled()) {
             return;
         }
         try {
@@ -31,9 +36,9 @@ class Mageone_Qps_Model_Cron
                     'patches_list'    => $this->getPatchList()
                 ])
             );
-            $client->post(Mage::helper('qps')->getResourceUrl(),
+            $client->post($this->helper->getResourceUrl(),
                 [
-                    'user'    => Mage::helper('qps')->getUserName(),
+                    'user'    => $this->helper->getUserName(),
                     'message' => $message
                 ]
             );
@@ -71,11 +76,11 @@ class Mageone_Qps_Model_Cron
      */
     private function getClient()
     {
-        return $this->client ?: \Mage_HTTP_Client::getInstance();
+        return $this->client ?: Mage_HTTP_Client::getInstance();
     }
 
     /**
-     * @return void
+     * @return string
      * @throws Exception
      */
     private function getPatchList()

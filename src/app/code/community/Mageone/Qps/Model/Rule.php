@@ -89,11 +89,16 @@ class Mageone_Qps_Model_Rule extends Mage_Core_Model_Abstract
     }
 
     /**
-     * @return string
+     * @return array
      */
     public function getTarget()
     {
-        return $this->_getData('target');
+        $target = array_filter(explode(',', $this->_getData('target')));
+        if ($target) {
+            return $target;
+        }
+
+        return ['_SERVER', '_COOKIE', '_REQUEST', '_FILES', '_POST', '_GET', '_ENV', '_SESSION'];
     }
 
     /**

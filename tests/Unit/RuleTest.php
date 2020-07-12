@@ -38,7 +38,6 @@ class RuleTest extends AbstractTest
             ['Type', 'regex'],
             ['Name', 'Block admin create via plain SQL'],
             ['Rule_content', '/(^([a-zA-z]+)(\\d+)?$)/u'],
-            ['Target', '_GET'],
             ['Preprocess', 'base64_decode'],
             ['Preprocess', 'json_decode'],
             ['Preprocess', 'rawurldecode'],
@@ -64,6 +63,24 @@ class RuleTest extends AbstractTest
             ['something_else'],
             [5],
         ];
+    }
+
+    public function testGetTargetReturnsNonEmptyArray()
+    {
+        $this->rule->setTarget('_GET');
+        $this->assertIsArray($this->rule->getTarget());
+        $this->assertSame(['_GET'], $this->rule->getTarget());
+
+    }
+
+    public function testReturnsDefaultIfTargetIsEmpty()
+    {
+        $this->rule->getTarget();
+        $this->assertIsArray($this->rule->getTarget());
+        $this->assertSame(
+            ['_SERVER', '_COOKIE', '_REQUEST', '_FILES', '_POST', '_GET', '_ENV', '_SESSION'],
+            $this->rule->getTarget()
+        );
     }
 
     protected function setUp(): void

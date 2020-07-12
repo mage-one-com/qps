@@ -14,7 +14,7 @@ class GlobalGetterTest extends AbstractTest
      */
     private $helper;
 
-    protected $backupGlobals = 1;
+    protected $backupGlobals = true;
 
     protected function setUp(): void
     {

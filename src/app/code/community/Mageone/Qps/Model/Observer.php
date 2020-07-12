@@ -158,6 +158,11 @@ class Mageone_Qps_Model_Observer
 
     private function processTriggeredRule()
     {
+        if (defined('TESTING')) {
+            throw new Mageone_Qps_Model_Exception_ExitSkippedForTestingException(
+                'Rule did not pass.'
+            );
+        }
         Mage::log('Bad request from: ' . Mage::app()->getRequest()->getClientIp(true), Zend_Log::ALERT, self::QPS_LOG);
         Mage::app()->getResponse()->setHttpResponseCode(503)->sendHeaders();
         exit;

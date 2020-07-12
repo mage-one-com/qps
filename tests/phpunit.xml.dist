@@ -28,6 +28,9 @@
         <testsuite name="QPS Integration Tests">
             <directory>Integration</directory>
         </testsuite>
-    </testsuites>
 
+    </testsuites>
+    <php>
+        <const name="TESTING" value="1"/>
+    </php>
 </phpunit>

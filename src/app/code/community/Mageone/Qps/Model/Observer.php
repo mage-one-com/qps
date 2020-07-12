@@ -72,12 +72,11 @@ class Mageone_Qps_Model_Observer
     private function checkGlobalArrayData($data)
     {
         try {
-            foreach ($data as $key => $value) {
-                foreach ($this->getRules() as $rule) {
-                    $isPassed = $this->checkRule($rule, $key, $value);
-                    if (!$isPassed) {
-                        $this->processTriggeredRule();
-                    }
+            foreach ($this->getRules() as $rule) {
+                try {
+                    $this->validateRule($rule, $request);
+                } catch (Mageone_Qps_Model_Exception_RuleNotPassedException $e) {
+                    $this->processTriggeredRule();
                 }
             }
         } catch (Exception $e) {

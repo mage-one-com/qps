@@ -94,7 +94,7 @@ class RuleUpdateTest extends AbstractTest
             'one rule'  => [
                 [
                     [
-                        'url'          => 'adminhtml*wysiwyg/directive/index*',
+                        'url'          => '*adminhtml*wysiwyg/directive/index',
                         'type'         => 'regex',
                         'name'         => 'Block admin create via plain SQL',
                         'rule_content' => '/(^([a-zA-z]+)(\\d+)?$)/u',
@@ -107,7 +107,7 @@ class RuleUpdateTest extends AbstractTest
             'two rules' => [
                 [
                     [
-                        'url'          => 'adminhtml*wysiwyg/directive/index*',
+                        'url'          => '*adminhtml*wysiwyg/directive/*',
                         'type'         => 'regex',
                         'name'         => 'Block admin create via plain SQL',
                         'rule_content' => '/(^([a-zA-z]+)(\\d+)?$)/u',

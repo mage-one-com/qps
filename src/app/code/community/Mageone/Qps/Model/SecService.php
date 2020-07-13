@@ -11,7 +11,9 @@ set_include_path(get_include_path() . PATH_SEPARATOR . 'phpseclib/bootstrap.php'
  */
 class Mageone_Qps_Model_SecService
 {
-    const KEY_LENGTH = 150;
+    const KEY_LENGTH = 32;
+    const IV_LENGTH = 16;
+    const IV_BASE64_LENGTH = 24;
 
     /**
      * @param string $message
@@ -20,32 +22,16 @@ class Mageone_Qps_Model_SecService
      */
     public function encryptMessage($message)
     {
-        $key = Mage::helper('qps')->getPublicKey();
 
-        $rsa = new RSA();
         $rij = new Rijndael();
 
-        // Generate Random Symmetric Key
         $symKey = Random::string(self::KEY_LENGTH);
+        $iv     = Random::string($rij->getBlockLength() >> 3);
 
-        // Encrypt Message with new Symmetric Key
-        $rij->setKey($symKey);
-        $ciphertext = $rij->encrypt($message);
-        $ciphertext = base64_encode($ciphertext);
+        $ciphertext = $this->encryptSymetrically($rij, $symKey, $iv, $message);
+        $symKey     = $this->encryptAsymmetrically($symKey);
 
-        // Encrypted the Symmetric Key with the Asymmetric Key
-        $rsa->setEncryptionMode(RSA::ENCRYPTION_PKCS1);
-
-        $rsa->loadKey($key);
-        $symKey = $rsa->encrypt($symKey);
-
-        // Base 64 encode the symmetric key for transport
-        $symKey = base64_encode($symKey);
-        $len    = strlen($symKey); // Get the length
-        $len    = dechex($len); // The first 3 bytes of the message are the key length
-        $len    = str_pad($len, 3, '0', STR_PAD_LEFT); // Zero pad to be sure.
-        // Concatenate the length, the encrypted symmetric key, and the message
-        return $len . $symKey . $ciphertext;
+        return implode('|', array_map('base64_encode', [$iv, $symKey, $ciphertext]));
     }
 
     /**
@@ -57,25 +43,100 @@ class Mageone_Qps_Model_SecService
     {
         $key = Mage::helper('qps')->getPrivateKey();
 
+        list($iv, $symKey, $message) = explode('|', $message);
+
+        $symKey = $this->decryptAsymmetrically($key, $symKey);
+
+        return $this->decryptSymmetrically($iv, $message, $symKey);
+    }
+
+    /**
+     * @param Rijndael $rij
+     * @param string   $symKey
+     * @param string   $iv
+     * @param string   $message
+     *
+     * @return false|string
+     */
+    private function encryptSymetrically(Rijndael $rij, $symKey, $iv, $message)
+    {
+        $rij->setKey($symKey);
+
+        if ($rij->getBlockLength() >> 3 !== self::IV_LENGTH) {
+            throw new RuntimeException('Update constant IV_LENGTH!');
+        }
+
+        $rij->setIV($iv);
+
+        return $rij->encrypt($message);
+    }
+
+    /**
+     * @param $symKey
+     *
+     * @return false|string
+     */
+    private function encryptAsymmetrically($symKey)
+    {
         $rsa = new RSA();
-        $rij = new Rijndael();
 
-        // Extract the Symmetric Key
-        $len    = substr($message, 0, 3);
-        $len    = hexdec($len);
-        $symKey = substr($message, 3, $len);
+        $rsa->setEncryptionMode(RSA::ENCRYPTION_PKCS1);
+        $rsa->loadKey(Mage::helper('qps')->getPublicKey());
+        $symKey = $rsa->encrypt($symKey);
 
-        //Extract the encrypted message
-        $message    = substr($message, $len + 3);
-        $ciphertext = base64_decode($message);
-        $ciphertext = str_replace(['\/', '\n'], ['/', ''], $ciphertext);
+        return $symKey;
+    }
+
+    /**
+     * @param string $encoded
+     *
+     * @return string
+     */
+    private function decodeBase64AndCheck($encoded)
+    {
+        $decoded = base64_decode($encoded, true);
+        if (!$decoded) {
+            throw new RuntimeException('base64_decode of IV failed');
+        }
+
+        return $decoded;
+    }
+
+    /**
+     * @param string $key
+     * @param string $symKey
+     *
+     * @return false|string
+     */
+    private function decryptAsymmetrically($key, $symKey)
+    {
+        $rsa = new RSA();
         // Decrypt the encrypted symmetric key
         $rsa->setEncryptionMode(RSA::ENCRYPTION_PKCS1);
         $rsa->loadKey($key);
-        $symKey = base64_decode($symKey);
+
+        $symKey = $this->decodeBase64AndCheck($symKey);
         $symKey = $rsa->decrypt($symKey);
 
-        // Decrypt the message
+        return $symKey;
+    }
+
+    /**
+     * @param string $iv
+     * @param string $message
+     * @param string $symKey
+     *
+     * @return false|int|string
+     */
+    private function decryptSymmetrically($iv, $message, $symKey)
+    {
+        $rij = new Rijndael();
+
+        $iv = $this->decodeBase64AndCheck($iv);
+        $rij->setIV($iv);
+
+        $ciphertext = $this->decodeBase64AndCheck($message);
+
         $rij->setKey($symKey);
 
         return $rij->decrypt($ciphertext);

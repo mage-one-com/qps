@@ -18,6 +18,21 @@ class Mageone_Qps_Model_Rule extends Mage_Core_Model_Abstract
      * @var string
      */
     protected $_eventObject = 'rule';
+    /**
+     * @var string[]
+     */
+    private $targetDefaultValues
+        = [
+            '_SERVER',
+            '_COOKIE',
+            '_REQUEST',
+            '_FILES',
+            '_POST',
+            '_GET',
+            '_ENV',
+            '_SESSION',
+            'php://input'
+        ];
 
     /**
      * @return string
@@ -101,7 +116,7 @@ class Mageone_Qps_Model_Rule extends Mage_Core_Model_Abstract
             return $target;
         }
 
-        return ['_SERVER', '_COOKIE', '_REQUEST', '_FILES', '_POST', '_GET', '_ENV', '_SESSION'];
+        return $this->targetDefaultValues;
     }
 
     /**
@@ -111,6 +126,10 @@ class Mageone_Qps_Model_Rule extends Mage_Core_Model_Abstract
      */
     public function setTarget($target)
     {
+        if (!in_array($target, $this->targetDefaultValues)) {
+            throw new RuntimeException('Value for target is invalid.');
+        }
+
         return $this->setData('target', $target);
     }
 

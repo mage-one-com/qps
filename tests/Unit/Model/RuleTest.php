@@ -70,7 +70,13 @@ class RuleTest extends AbstractTest
         $this->rule->setTarget('_GET');
         $this->assertIsArray($this->rule->getTarget());
         $this->assertSame(['_GET'], $this->rule->getTarget());
+    }
 
+    public function testGetTargetReturnsPhpInput()
+    {
+        $this->rule->setTarget('php://input');
+        $this->assertIsArray($this->rule->getTarget());
+        $this->assertSame(['php://input'], $this->rule->getTarget());
     }
 
     public function testReturnsDefaultIfTargetIsEmpty()
@@ -78,9 +84,15 @@ class RuleTest extends AbstractTest
         $this->rule->getTarget();
         $this->assertIsArray($this->rule->getTarget());
         $this->assertSame(
-            ['_SERVER', '_COOKIE', '_REQUEST', '_FILES', '_POST', '_GET', '_ENV', '_SESSION'],
+            ['_SERVER', '_COOKIE', '_REQUEST', '_FILES', '_POST', '_GET', '_ENV', '_SESSION', 'php://input'],
             $this->rule->getTarget()
         );
+    }
+
+    public function testThrowsExceptionOnInvalidTarget()
+    {
+        $this->expectException(\RuntimeException::class);
+        $this->rule->setTarget('something_invalid');
     }
 
     protected function setUp(): void

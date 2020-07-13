@@ -19,7 +19,12 @@ class GlobalGetterTest extends AbstractTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->helper = \Mage::helper('qps/globalGetter');
+        $this->helper = new \Mageone_Qps_Helper_GlobalGetter();
+    }
+
+    public function testCreateHelperViaMageHelper()
+    {
+        $this->assertInstanceOf(\Mageone_Qps_Helper_GlobalGetter::class, Mage::helper('qps/globalGetter'));
     }
 
     public function testGetWithSingleQuote()
@@ -49,5 +54,22 @@ class GlobalGetterTest extends AbstractTest
     public function testReturnsEmptyStringIfUndefined()
     {
         $this->assertSame('', $this->helper->get('_GET[\'one\'][\'two\'][\'three\'][\'four\']'));
+
+    }
+
+    public function testThrowsExceptionIfExprIsNoString()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->assertSame('', $this->helper->get(new \stdClass()));
+    }
+
+    public function testReturnsPhpInput()
+    {
+        $expected = '12345';
+        $getter   = new \Mageone_Qps_Helper_GlobalGetter(static function () use ($expected) {
+            return $expected;
+        });
+
+        $this->assertSame($expected, $getter->get('php://input'));
     }
 }

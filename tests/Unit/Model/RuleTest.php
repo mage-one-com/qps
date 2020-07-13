@@ -79,12 +79,30 @@ class RuleTest extends AbstractTest
         $this->assertSame(['php://input'], $this->rule->getTarget());
     }
 
+    public function testGetTargetReturnsPhpStdin()
+    {
+        $this->rule->setTarget('php://stdin');
+        $this->assertIsArray($this->rule->getTarget());
+        $this->assertSame(['php://stdin'], $this->rule->getTarget());
+    }
+
     public function testReturnsDefaultIfTargetIsEmpty()
     {
         $this->rule->getTarget();
         $this->assertIsArray($this->rule->getTarget());
         $this->assertSame(
-            ['_SERVER', '_COOKIE', '_REQUEST', '_FILES', '_POST', '_GET', '_ENV', '_SESSION', 'php://input'],
+            [
+                '_SERVER',
+                '_COOKIE',
+                '_REQUEST',
+                '_FILES',
+                '_POST',
+                '_GET',
+                '_ENV',
+                '_SESSION',
+                'php://input',
+                'php://stdin'
+            ],
             $this->rule->getTarget()
         );
     }

@@ -24,12 +24,12 @@ class GlobalGetterTest extends AbstractTest
 
     public function testCreateHelperViaMageHelper()
     {
-        $this->assertInstanceOf(\Mageone_Qps_Helper_GlobalGetter::class, Mage::helper('qps/globalGetter'));
+        $this->assertInstanceOf(\Mageone_Qps_Helper_GlobalGetter::class, \Mage::helper('qps/globalGetter'));
     }
 
     public function testGetWithSingleQuote()
     {
-        $value                        = 123;
+        $value                        = '123';
         $GLOBALS['_GET']['something'] = $value;
 
         $this->assertSame($value, $this->helper->get('_GET[\'something\']'));
@@ -37,7 +37,7 @@ class GlobalGetterTest extends AbstractTest
 
     public function testGetWithDoubleQuote()
     {
-        $value                        = 123;
+        $value                        = '123';
         $GLOBALS['_GET']['something'] = $value;
 
         $this->assertSame($value, $this->helper->get('_GET["something"]'));
@@ -45,7 +45,7 @@ class GlobalGetterTest extends AbstractTest
 
     public function testGetWithDeepArray()
     {
-        $value                                          = 1234;
+        $value                                          = '1234';
         $GLOBALS['_GET']['one']['two']['three']['four'] = $value;
 
         $this->assertSame($value, $this->helper->get('_GET[\'one\'][\'two\'][\'three\'][\'four\']'));
@@ -71,5 +71,15 @@ class GlobalGetterTest extends AbstractTest
         });
 
         $this->assertSame($expected, $getter->get('php://input'));
+    }
+
+    public function testReturnsPhpStdin()
+    {
+        $expected = 'lalala';
+        $getter   = new \Mageone_Qps_Helper_GlobalGetter(null, static function () use ($expected) {
+            return $expected;
+        });
+
+        $this->assertSame($expected, $getter->get('php://stdin'));
     }
 }

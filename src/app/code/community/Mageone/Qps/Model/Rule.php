@@ -31,7 +31,8 @@ class Mageone_Qps_Model_Rule extends Mage_Core_Model_Abstract
             '_GET',
             '_ENV',
             '_SESSION',
-            'php://input'
+            'php://input',
+            'php://stdin',
         ];
 
     /**

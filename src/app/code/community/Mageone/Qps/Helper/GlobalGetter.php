@@ -3,15 +3,18 @@
 class Mageone_Qps_Helper_GlobalGetter
 {
     /**
-     * @var callable
+     * @var callable|null
      */
-    private $inputStreamReader = null;
+    private $inputStreamReader;
+    /**
+     * @var callable|null
+     */
+    private $stdinStreamReader;
 
-    public function __construct(callable $inputStreamReader = null)
+    public function __construct(callable $inputStreamReader = null, callable $stdinStreamReader = null)
     {
-        if ($inputStreamReader) {
-            $this->inputStreamReader = $inputStreamReader;
-        }
+        $this->inputStreamReader = $inputStreamReader;
+        $this->stdinStreamReader = $stdinStreamReader;
     }
 
     /**
@@ -26,6 +29,8 @@ class Mageone_Qps_Helper_GlobalGetter
         }
         if ($expr === 'php://input') {
             return $this->getPhpInput();
+        } elseif ($expr === 'php://stdin') {
+            return $this->getPhpStdin();
         }
 
         $expr = str_replace([']', '\'', '"'], '', $expr);
@@ -39,8 +44,11 @@ class Mageone_Qps_Helper_GlobalGetter
      *
      * @return array|string|mixed
      */
-    private function getFrom($array, $keys)
-    {
+    private
+    function getFrom(
+        $array,
+        $keys
+    ) {
         if (!isset($array[current($keys)])) {
             return '';
         }
@@ -55,12 +63,22 @@ class Mageone_Qps_Helper_GlobalGetter
     /**
      * @return string
      */
-    private function getPhpInput()
+    private
+    function getPhpInput()
     {
         if ($this->inputStreamReader) {
             return (string)call_user_func($this->inputStreamReader);
         }
 
         return (string)file_get_contents('php://input');
+    }
+
+    private function getPhpStdin()
+    {
+        if ($this->stdinStreamReader) {
+            return (string)call_user_func($this->stdinStreamReader);
+        }
+
+        return (string)file_get_contents('php://stdin');
     }
 }

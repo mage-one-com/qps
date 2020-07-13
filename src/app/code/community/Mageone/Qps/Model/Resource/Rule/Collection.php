@@ -8,6 +8,10 @@ class Mageone_Qps_Model_Resource_Rule_Collection extends Mage_Core_Model_Resourc
     public function _construct()
     {
         $this->_init('qps/rule');
-        $this->initCache(Mage::app()->getCacheInstance(), 'm1_qps_rules', [Mageone_Qps_Model_Rule::CACHE_TAG]);
+        $this->initCache(
+            Mage::app()->getCacheInstance(),
+            'm1_qps_rules',
+            [Mageone_Qps_Model_Rule::CACHE_TAG, Mageone_Qps_Model_Observer::QPS_CACHE_TAG]
+        );
     }
 }

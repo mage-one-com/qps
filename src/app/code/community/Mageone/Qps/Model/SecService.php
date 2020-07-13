@@ -13,7 +13,6 @@ class Mageone_Qps_Model_SecService
 {
     const KEY_LENGTH = 32;
     const IV_LENGTH = 16;
-    const IV_BASE64_LENGTH = 24;
 
     /**
      * @param string $message
@@ -22,7 +21,6 @@ class Mageone_Qps_Model_SecService
      */
     public function encryptMessage($message)
     {
-
         $rij = new Rijndael();
 
         $symKey = Random::string(self::KEY_LENGTH);

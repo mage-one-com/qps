@@ -16,6 +16,10 @@ abstract class AbstractTest extends TestCase
      * @var string[]
      */
     private $configSettingsToRestore;
+    /**
+     * @var string[]
+     */
+    private $cleanupHelperMocks;
 
     protected function setUp(): void
     {
@@ -26,7 +30,6 @@ abstract class AbstractTest extends TestCase
         $this->setConfigurationSetting(\Mageone_Qps_Helper_Data::QPS_USER, self::EXAMPLE_USER);
         $this->setConfigurationSetting(\Mageone_Qps_Helper_Data::QPS_PUBLIC_KEY, $this->getPublicKey());
 
-        \Mage::unregister('_helper/qps');
         $this->helperMock = $this->createMock(\Mageone_Qps_Helper_Data::class);
 
         // returns one time the private and one time the public key to test decryption/encryption
@@ -42,8 +45,7 @@ abstract class AbstractTest extends TestCase
             );
 
         $this->helperMock->method('isEnabled')->willReturn(true);
-
-        \Mage::register('_helper/qps', $this->helperMock);
+        $this->replaceHelperWithMock($this->helperMock, 'qps');
     }
 
     protected function startTransaction()
@@ -144,9 +146,17 @@ ttN9LdCCHb6T79AHfi5n6Wjl4xvtYoQ3chpLFoy7fXuLgUtGxDiK7KQQMdCg9bb7
 -----END RSA PRIVATE KEY-----';
     }
 
-    protected function replaceHelperWithMock(object $helper, string $mock)
+    /**
+     * @param object $mock
+     * @param string $helper
+     *
+     * @throws \Mage_Core_Exception
+     */
+    protected function replaceHelperWithMock($mock, $helper)
     {
-
+        \Mage::unregister('_helper/' . $helper);
+        \Mage::register('_helper/' . $helper, $mock);
+        $this->cleanupHelperMocks[] = $helper;
     }
 
     protected function tearDown(): void
@@ -154,7 +164,10 @@ ttN9LdCCHb6T79AHfi5n6Wjl4xvtYoQ3chpLFoy7fXuLgUtGxDiK7KQQMdCg9bb7
         $this->restoreConfigSettings();
         parent::tearDown();
         $this->rollbackTransaction();
-        \Mage::unregister('_helper/qps');
+
+        foreach ($this->cleanupHelperMocks as $helper) {
+            \Mage::unregister('_helper/' . $helper);
+        }
 
     }
 

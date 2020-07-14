@@ -32,6 +32,9 @@ class RuleUpdateTest extends AbstractTest
 
         $this->helperMock->method('getUsername')->willReturn(self::EXAMPLE_USER);
         $this->helperMock->method('getResourceUrl')->willReturn(self::RESOURCE_URL);
+
+        \Mage::app()->cleanCache([\Mageone_Qps_Model_Observer::QPS_CACHE_TAG]);
+        $this->assertEquals(0, \Mage::getResourceModel('qps/rule_collection')->count());
     }
 
     protected function tearDown(): void
@@ -39,7 +42,6 @@ class RuleUpdateTest extends AbstractTest
         parent::tearDown();
         /** @var \Mage_Core_Model_Resource $resource */
         $resource = \Mage::getSingleton('core/resource');
-        $this->getConnection()->truncateTable($resource->getTableName('qps/rule'));
     }
 
     public function testDoNothingIfNotEnabled()

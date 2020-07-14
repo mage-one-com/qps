@@ -58,7 +58,6 @@ class Mageone_Qps_Model_Cron
             if (!empty($result) && is_array($result)) {
                 $resource   = Mage::getSingleton('core/resource');
                 $connection = $resource->getConnection('core_write');
-                $connection->truncateTable($resource->getTableName('qps/rule'));
                 /** @var array $item */
                 foreach ($result as $item) {
                     Mage::getModel('qps/rule')->addData($item)->save();

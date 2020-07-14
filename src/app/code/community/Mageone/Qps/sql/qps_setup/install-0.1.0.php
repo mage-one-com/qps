@@ -1,9 +1,6 @@
 <?php
-
-/* @var $installer Mage_Core_Model_Resource_Setup */
+/** @var Mage_Core_Model_Resource_Setup $installer */
 $installer = $this;
-
-$installer->startSetup();
 
 /**
  * Create table 'qps/rule'
@@ -44,6 +41,3 @@ if ($installer->getConnection()->isTableExists($installer->getTable('qps/rule'))
 }
 
 $installer->getConnection()->createTable($table);
-
-$installer->endSetup();
-

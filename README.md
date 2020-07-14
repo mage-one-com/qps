@@ -2,6 +2,10 @@
 
 QPS is a little request inspection module for Magento 1 stores. It receives its configuration via the API of https://mage-one.com/.
 
+#Important
+
+The cron job needs to run or the rules will not be updated.
+
 # Installation
 ## with composer
 

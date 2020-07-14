@@ -39,6 +39,18 @@ class RuleValidationTest extends AbstractTest
         $this->assertTrue(true, 'We expect that no exception is thrown');
     }
 
+    public function testRuleIsNotValidatedIfDisabled()
+    {
+        $this->createRule('/', 'Custom URL which never matches', '#^value$#', '_GET["key"]', '', 'MO-1', 0);
+        $request = $this->setupRequest('/', ['key' => 'value'], []);
+        $this->observer->checkRequest($this->setupEvent($request));
+
+        /*
+         * Rule is disabled, therefore we don't expect an exception
+         */
+        $this->assertTrue(true, 'We expect that no exception is thrown');
+    }
+
     public function testRuleDoesNotTriggerIfUrlDoesNotMatch()
     {
         $this->createRule(
@@ -107,7 +119,7 @@ class RuleValidationTest extends AbstractTest
         $this->observer->checkRequest($this->setupEvent($request));
     }
 
-    private function createRule($url, $name, $content, $target, $preprocess, $patchFix)
+    private function createRule($url, $name, $content, $target, $preprocess, $patchFix, $enabled = 1)
     {
         \Mage::getModel('qps/rule')->setData([
             //`url` varchar(255) DEFAULT NULL COMMENT 'specific URL utilized by threat covered if present, adminhtml placeholder represents adminhtml path in current magento installation, optional.',
@@ -123,7 +135,8 @@ class RuleValidationTest extends AbstractTest
             //`preprocess` text COMMENT 'name of the function executed on raw target values, (base64_decode|json_decode|rawurldecode), optional.',
             'preprocess'   => $preprocess,
             //`patch_fix` text COMMENT 'patch that covers rule related threat, no need to check rule if customer magento 1 have this patch, optional',
-            'patch_fix'    => $patchFix
+            'patch_fix'    => $patchFix,
+            'enabled'      => $enabled
         ])->save();
     }
 

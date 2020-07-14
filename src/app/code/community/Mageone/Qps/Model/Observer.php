@@ -44,7 +44,8 @@ class Mageone_Qps_Model_Observer
     private function getRules()
     {
         if (!$this->rules) {
-            $this->rules = Mage::getResourceModel('qps/rule_collection');
+            $this->rules = Mage::getResourceModel('qps/rule_collection')
+                ->addFieldToFilter('enabled', 1);
         }
 
         return $this->rules;

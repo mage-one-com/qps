@@ -6,7 +6,7 @@ $installer = $this;
 $installer->startSetup();
 
 /**
- * Create table 'core/resource'
+ * Create table 'qps/rule'
  */
 $table = $installer->getConnection()
     ->newTable($installer->getTable('qps/rule'))

@@ -15,3 +15,14 @@ $installer->getConnection()
             'comment'  => 'Mage One internal identifier'
         ]
     );
+$installer->getConnection()
+    ->addColumn(
+        $installer->getTable('qps/rule'),
+        'enabled',
+        [
+            'type'     => Varien_Db_Ddl_Table::TYPE_BOOLEAN,
+            'nullable' => false,
+            'default'  => 0,
+            'comment'  => 'Rule enabled or disabled for checking'
+        ]
+    );

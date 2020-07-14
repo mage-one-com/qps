@@ -56,12 +56,18 @@ class Mageone_Qps_Model_Cron
 
             $result = Mage::helper('core')->jsonDecode($security->decryptMessage($client->getBody()));
             if (!empty($result) && is_array($result)) {
-                $resource   = Mage::getSingleton('core/resource');
-                $connection = $resource->getConnection('core_write');
+                /** @var $keys string[] */
+                // load all rules before update
+                $collection = Mage::getResourceModel('qps/rule_collection');
                 /** @var array $item */
                 foreach ($result as $item) {
-                    Mage::getModel('qps/rule')->addData($item)->save();
+                    // update rules, save to database and unset on collection
+                    $rule = $collection->getItemByColumnValue('key', $item['key']) ?: Mage::getModel('qps/rule');
+                    $rule->addData($item)->save();
+                    $collection->removeItemByKey($rule->getId());
                 }
+                // delete everything which was not updated and unset
+                $collection->walk('delete');
                 Mage::app()->cleanCache([Mageone_Qps_Model_Observer::QPS_CACHE_TAG]);
             }
         } catch (Exception $exception) {

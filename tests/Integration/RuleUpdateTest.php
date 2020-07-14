@@ -10,6 +10,19 @@ use MageOne\Qps\Test\AbstractTest;
 class RuleUpdateTest extends AbstractTest
 {
     const RESOURCE_URL = 'https://example.com/mageone/qps';
+    const RULE
+        = [
+            'url'          => '*adminhtml*wysiwyg/directive/index',
+            'type'         => 'regex',
+            'name'         => 'Block admin create via plain SQL',
+            'rule_content' => '/(^([a-zA-z]+)(\\d+)?$)/u',
+            'target'       => '_GET',
+            'preprocess'   => self::RULE_PREPROCESS,
+            'patch_fix'    => 'SUPEE-5344',
+            'key'          => self::RULE_KEY
+        ];
+    const RULE_KEY = 'MO-4711';
+    const RULE_PREPROCESS = 'base64_decode';
     /**
      * @var \Mageone_Qps_Model_Cron
      */
@@ -124,33 +137,78 @@ class RuleUpdateTest extends AbstractTest
         $this->assertEquals(count($rules), \Mage::getResourceModel('qps/rule_collection')->count());
     }
 
+    /**
+     * @dataProvider getRules
+     */
+    public function testUpdateRule($rules)
+    {
+        $enabled = '1';
+        \Mage::getModel('qps/rule')
+            ->setData(self::RULE)
+            ->setData('enabled', $enabled)
+            ->setData('preprocess', '')
+            ->save();
+
+        $this->clientMock
+            ->method('getStatus')
+            ->willReturn(200);
+
+        $message = $this->secService->encryptMessage(json_encode($rules));
+
+        $this->clientMock
+            ->method('getBody')
+            ->willReturn($message);
+
+        $this->cron->getRules();
+
+        $rule = \Mage::getModel('qps/rule')->load(self::RULE_KEY, 'key');
+
+        $this->assertFalse($rule->isObjectNew());
+        $this->assertSame($enabled, $rule->getData('enabled'));
+        $this->assertSame(self::RULE_PREPROCESS, $rule->getData('preprocess'));
+        $this->assertSame(self::RULE_KEY, $rule->getData('key'));
+
+    }
+
+    /**
+     * @dataProvider getRules
+     */
+    public function testDeleteRuleOnUpdate($rules)
+    {
+        $key = 'something_else';
+        \Mage::getModel('qps/rule')
+            ->setData(self::RULE)
+            ->setData('key', $key)
+            ->save();
+
+        $this->clientMock
+            ->method('getStatus')
+            ->willReturn(200);
+
+        $message = $this->secService->encryptMessage(json_encode($rules));
+
+        $this->clientMock
+            ->method('getBody')
+            ->willReturn($message);
+
+        $this->cron->getRules();
+
+        $rule = \Mage::getModel('qps/rule')->load($key, 'key');
+
+        $this->assertTrue($rule->isObjectNew());
+    }
+
     public function getRules()
     {
         return [
             'one rule'  => [
                 [
-                    [
-                        'url'          => '*adminhtml*wysiwyg/directive/index',
-                        'type'         => 'regex',
-                        'name'         => 'Block admin create via plain SQL',
-                        'rule_content' => '/(^([a-zA-z]+)(\\d+)?$)/u',
-                        'target'       => '_GET',
-                        'preprocess'   => 'base64_decode',
-                        'patch_fix'    => 'SUPEE-5344'
-                    ]
+                    self::RULE
                 ]
             ],
             'two rules' => [
                 [
-                    [
-                        'url'          => '*adminhtml*wysiwyg/directive/*',
-                        'type'         => 'regex',
-                        'name'         => 'Block admin create via plain SQL',
-                        'rule_content' => '/(^([a-zA-z]+)(\\d+)?$)/u',
-                        'target'       => '_GET',
-                        'preprocess'   => 'base64_decode',
-                        'patch_fix'    => 'SUPEE-5344'
-                    ],
+                    self::RULE,
                     [
                         'url'          => 'catalog/product/view',
                         'type'         => 'regex',
@@ -158,7 +216,8 @@ class RuleUpdateTest extends AbstractTest
                         'rule_content' => '/^13$/u',
                         'target'       => '_GET',
                         'preprocess'   => '',
-                        'patch_fix'    => 'MO-1'
+                        'patch_fix'    => '',
+                        'key'          => 'MO-4077'
                     ]
                 ],
             ],

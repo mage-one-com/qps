@@ -156,7 +156,7 @@ ttN9LdCCHb6T79AHfi5n6Wjl4xvtYoQ3chpLFoy7fXuLgUtGxDiK7KQQMdCg9bb7
     {
         \Mage::unregister('_helper/' . $helper);
         \Mage::register('_helper/' . $helper, $mock);
-        $this->cleanupHelperMocks[] = $helper;
+        $this->cleanupHelperMocks[$helper] = $helper;
     }
 
     protected function tearDown(): void

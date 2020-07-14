@@ -23,6 +23,39 @@ class RuleUpdateTest extends AbstractTest
      */
     private $secService;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->clientMock = $this->createMock(\Mage_HTTP_IClient::class);
+        $this->cron       = \Mage::getModel('qps/cron', ['client' => $this->clientMock]);
+        $this->secService = \Mage::getModel('qps/secService');
+
+        $this->helperMock->method('getUsername')->willReturn(self::EXAMPLE_USER);
+        $this->helperMock->method('getResourceUrl')->willReturn(self::RESOURCE_URL);
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        /** @var \Mage_Core_Model_Resource $resource */
+        $resource = \Mage::getSingleton('core/resource');
+        $this->getConnection()->truncateTable($resource->getTableName('qps/rule'));
+    }
+
+    public function testDoNothingIfNotEnabled()
+    {
+        $helperMock = $this->createMock(\Mageone_Qps_Helper_Data::class);
+        $helperMock->method('isEnabled')->willReturn(false);
+        $this->replaceHelperWithMock($helperMock, 'qps');
+
+        $this->clientMock
+            ->expects($this->never())
+            ->method('post');
+
+        $cron = \Mage::getModel('qps/cron', ['client' => $this->clientMock]);
+        $cron->getRules();
+    }
+
     public function testClientReturns200()
     {
         $secService       = $this->secService;
@@ -128,24 +161,5 @@ class RuleUpdateTest extends AbstractTest
                 ],
             ],
         ];
-    }
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->clientMock = $this->createMock(\Mage_HTTP_IClient::class);
-        $this->cron       = \Mage::getModel('qps/cron', ['client' => $this->clientMock]);
-        $this->secService = \Mage::getModel('qps/secService');
-
-        $this->helperMock->method('getUsername')->willReturn(self::EXAMPLE_USER);
-        $this->helperMock->method('getResourceUrl')->willReturn(self::RESOURCE_URL);
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-        /** @var \Mage_Core_Model_Resource $resource */
-        $resource = \Mage::getSingleton('core/resource');
-        $this->getConnection()->truncateTable($resource->getTableName('qps/rule'));
     }
 }

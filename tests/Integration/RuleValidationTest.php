@@ -22,6 +22,23 @@ class RuleValidationTest extends AbstractTest
         $this->observer = \Mage::getModel('qps/observer');
     }
 
+    public function testDoesNothingIfDisabled()
+    {
+        $helperMock = $this->createMock(\Mageone_Qps_Helper_Data::class);
+        $helperMock->method('isEnabled')->willReturn(false);
+        $this->replaceHelperWithMock($helperMock, 'qps');
+
+        $this->createRule('/', 'Custom URL which never matches', '#^value$#', '_GET["key"]', '', 'MO-1');
+        $request = $this->setupRequest('/', ['key' => 'value'], []);
+        $this->observer->checkRequest($this->setupEvent($request));
+
+        /*
+         * same as: RuleValidationTest::testRuleDoesTriggerIfUrlDoesMatch
+         * but we don't expect an exception.
+         */
+        $this->assertTrue(true, 'We expect that no exception is thrown');
+    }
+
     public function testRuleDoesNotTriggerIfUrlDoesNotMatch()
     {
         $this->createRule(

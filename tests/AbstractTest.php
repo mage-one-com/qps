@@ -2,16 +2,63 @@
 
 namespace MageOne\Qps\Test;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 abstract class AbstractTest extends TestCase
 {
+    public const EXAMPLE_USER = 'example@mage-one.com';
+    /**
+     * @var \Mageone_Qps_Helper_Data|MockObject
+     */
+    protected $helperMock;
     /**
      * @var string[]
      */
     private $configSettingsToRestore;
 
-    public const EXAMPLE_USER = 'example@mage-one.com';
+    protected function setUp(): void
+    {
+        $this->startTransaction();
+
+        parent::setUp();
+        $this->setConfigurationSetting(\Mageone_Qps_Helper_Data::QPS_STATUS, 1);
+        $this->setConfigurationSetting(\Mageone_Qps_Helper_Data::QPS_USER, self::EXAMPLE_USER);
+        $this->setConfigurationSetting(\Mageone_Qps_Helper_Data::QPS_PUBLIC_KEY, $this->getPublicKey());
+
+        \Mage::unregister('_helper/qps');
+        $this->helperMock = $this->createMock(\Mageone_Qps_Helper_Data::class);
+
+        // returns one time the private and one time the public key to test decryption/encryption
+        // for two rule testing this method is called three times and needs to return public key
+        // TODO fix this weird setup
+        $this->helperMock
+            ->expects($this->atMost(4))
+            ->method('getPublicKey')
+            ->willReturnOnConsecutiveCalls(
+                $this->getPrivateKey(),
+                $this->getPublicKey(),
+                $this->getPublicKey()
+            );
+
+        $this->helperMock->method('isEnabled')->willReturn(true);
+
+        \Mage::register('_helper/qps', $this->helperMock);
+    }
+
+    protected function startTransaction()
+    {
+        $writeConnection = $this->getConnection();
+        $writeConnection->beginTransaction();
+    }
+
+    /**
+     * @return \Varien_Db_Adapter_Interface
+     */
+    protected function getConnection()
+    {
+        return \Mage::getSingleton('core/resource')->getConnection('core_write');
+    }
 
     /**
      * @param string   $path
@@ -48,39 +95,25 @@ abstract class AbstractTest extends TestCase
         $propReflection->setAccessible(false);
     }
 
-    protected function setUp(): void
+    /**
+     * @return string
+     */
+    protected function getPublicKey()
     {
-        $this->startTransaction();
-
-        parent::setUp();
-        $this->setConfigurationSetting(\Mageone_Qps_Helper_Data::QPS_STATUS, 1);
-        $this->setConfigurationSetting(\Mageone_Qps_Helper_Data::QPS_USER, self::EXAMPLE_USER);
-        $this->setConfigurationSetting(\Mageone_Qps_Helper_Data::QPS_PRIVATE_KEY, $this->getPrivateKey());
-        $this->setConfigurationSetting(\Mageone_Qps_Helper_Data::QPS_PUBLIC_KEY, $this->getPublicKey());
-    }
-
-    protected function tearDown(): void
-    {
-        $this->restoreConfigSettings();
-        parent::tearDown();
-        $this->rollbackTransaction();
-
-    }
-
-    private function restoreConfigSettings()
-    {
-        foreach ($this->configSettingsToRestore as $storeId => $settings) {
-            $store = \Mage::app()->getStore($storeId);
-            foreach ($settings as $path => $value) {
-                $this->setConfig($path, $value, $store);
-            }
-        }
+        return '-----BEGIN RSA PUBLIC KEY-----
+MIIBCgKCAQEAuCW8CyWqeDXW6E93D+u5Tlq7Ys0mpLfQUbBdEivwPHKgWwYgb4OA
+6vTqYObb7OqXUDU/lznCSGvhD+CbQMxyC0603/LO2y7/cGBQHODBh8EKpzd2E0QU
+oO7Y9+JKcrsSwIqgULxRbMqcIfdXFaZSIjHU3OcOXgfb8DhWZi09FcJs8mjDQNHP
+P+6PwK/uFue3YYyN8SUUU2ot0oielMCsML4JY0Nrj0jZkLlkufZdxMF8zLF21AwP
+/sX8imSkaj4895EnqJ6cpEaTOgj2UlcFoypW5qu4Pe2F4QBEl4E2o8ltmqsn3Eph
+qzrEphd4FSt8f2CbSztLQ046asfCcRDoLQIDAQAB
+-----END RSA PUBLIC KEY-----';
     }
 
     /**
      * @return string
      */
-    private function getPrivateKey()
+    protected function getPrivateKey()
     {
         return '-----BEGIN RSA PRIVATE KEY-----
 MIIEpQIBAAKCAQEAuCW8CyWqeDXW6E93D+u5Tlq7Ys0mpLfQUbBdEivwPHKgWwYg
@@ -111,38 +144,33 @@ ttN9LdCCHb6T79AHfi5n6Wjl4xvtYoQ3chpLFoy7fXuLgUtGxDiK7KQQMdCg9bb7
 -----END RSA PRIVATE KEY-----';
     }
 
-    /**
-     * @return string
-     */
-    private function getPublicKey()
+    protected function replaceHelperWithMock(object $helper, string $mock)
     {
-        return '-----BEGIN RSA PUBLIC KEY-----
-MIIBCgKCAQEAuCW8CyWqeDXW6E93D+u5Tlq7Ys0mpLfQUbBdEivwPHKgWwYgb4OA
-6vTqYObb7OqXUDU/lznCSGvhD+CbQMxyC0603/LO2y7/cGBQHODBh8EKpzd2E0QU
-oO7Y9+JKcrsSwIqgULxRbMqcIfdXFaZSIjHU3OcOXgfb8DhWZi09FcJs8mjDQNHP
-P+6PwK/uFue3YYyN8SUUU2ot0oielMCsML4JY0Nrj0jZkLlkufZdxMF8zLF21AwP
-/sX8imSkaj4895EnqJ6cpEaTOgj2UlcFoypW5qu4Pe2F4QBEl4E2o8ltmqsn3Eph
-qzrEphd4FSt8f2CbSztLQ046asfCcRDoLQIDAQAB
------END RSA PUBLIC KEY-----';
+
     }
 
-    protected function startTransaction()
+    protected function tearDown(): void
     {
-        $writeConnection = $this->getConnection();
-        $writeConnection->beginTransaction();
+        $this->restoreConfigSettings();
+        parent::tearDown();
+        $this->rollbackTransaction();
+        \Mage::unregister('_helper/qps');
+
+    }
+
+    private function restoreConfigSettings()
+    {
+        foreach ($this->configSettingsToRestore as $storeId => $settings) {
+            $store = \Mage::app()->getStore($storeId);
+            foreach ($settings as $path => $value) {
+                $this->setConfig($path, $value, $store);
+            }
+        }
     }
 
     protected function rollbackTransaction()
     {
         $writeConnection = $this->getConnection();
         $writeConnection->rollBack();
-    }
-
-    /**
-     * @return \Varien_Db_Adapter_Interface
-     */
-    protected function getConnection()
-    {
-        return \Mage::getSingleton('core/resource')->getConnection('core_write');
     }
 }

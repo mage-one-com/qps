@@ -39,7 +39,7 @@ class Mageone_Qps_Model_SecService
      */
     public function decryptMessage($message)
     {
-        $key = Mage::helper('qps')->getPrivateKey();
+        $key = Mage::helper('qps')->getPublicKey();
 
         list($iv, $symKey, $message) = explode('|', $message);
 

@@ -39,17 +39,6 @@
                                 <status>1</status>
                             </depends>
                         </public_key>
-                        <private_key translate="label comment" module="qps">
-                            <label>Private Key</label>
-                            <frontend_type>textarea</frontend_type>
-                            <sort_order>40</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>0</show_in_website>
-                            <show_in_store>0</show_in_store>
-                            <depends>
-                                <status>1</status>
-                            </depends>
-                        </private_key>
                         <user_name translate="label comment" module="qps">
                             <label>Username</label>
                             <frontend_type>text</frontend_type>

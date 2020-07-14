@@ -9,6 +9,7 @@ use MageOne\Qps\Test\AbstractTest;
  */
 class RuleUpdateTest extends AbstractTest
 {
+    const RESOURCE_URL = 'https://example.com/mageone/qps';
     /**
      * @var \Mageone_Qps_Model_Cron
      */
@@ -42,7 +43,7 @@ class RuleUpdateTest extends AbstractTest
         $this->clientMock
             ->expects($this->once())
             ->method('post')
-            ->with('https://qps.mage-one.com/update', $this->callback($validatePostData));
+            ->with(self::RESOURCE_URL, $this->callback($validatePostData));
 
         $this->clientMock
             ->expects($this->once())
@@ -134,8 +135,10 @@ class RuleUpdateTest extends AbstractTest
         parent::setUp();
         $this->clientMock = $this->createMock(\Mage_HTTP_IClient::class);
         $this->cron       = \Mage::getModel('qps/cron', ['client' => $this->clientMock]);
-
         $this->secService = \Mage::getModel('qps/secService');
+
+        $this->helperMock->method('getUsername')->willReturn(self::EXAMPLE_USER);
+        $this->helperMock->method('getResourceUrl')->willReturn(self::RESOURCE_URL);
     }
 
     protected function tearDown(): void
@@ -145,5 +148,4 @@ class RuleUpdateTest extends AbstractTest
         $resource = \Mage::getSingleton('core/resource');
         $this->getConnection()->truncateTable($resource->getTableName('qps/rule'));
     }
-
 }

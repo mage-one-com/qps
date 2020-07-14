@@ -48,7 +48,8 @@
         <jobs>
             <qps_getrules>
                 <schedule>
-                    <cron_expr>*/5 * * * *</cron_expr>
+                    <!-- Run cron 8 minutes after each full hour - to not run in parallel with all hourly crons-->
+                    <cron_expr>8 * * * *</cron_expr>
                 </schedule>
                 <run>
                     <model>qps/cron::getRules</model>

@@ -49,6 +49,28 @@
             </controller_front_init_before>
         </events>
     </global>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <Mageone_Qps before="-">Mageone_Qps_Adminhtml</Mageone_Qps>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+    <adminhtml>
+        <translate>
+            <modules>
+                <Mageone_Qps>
+                    <files>
+                        <default>Mageone_Qps.csv</default>
+                    </files>
+                </Mageone_Qps>
+            </modules>
+        </translate>
+    </adminhtml>
     <crontab>
         <jobs>
             <qps_getrules>
@@ -67,29 +89,8 @@
             <config>
                 <status>0</status>
                 <url>https://qps.mage-one.com/update</url>
+                <rule_auto_enable>0</rule_auto_enable>
             </config>
         </qps_section>
     </default>
-    <adminhtml>
-        <translate>
-            <modules>
-                <Mageone_Qps>
-                    <files>
-                        <default>Mageone_Qps.csv</default>
-                    </files>
-                </Mageone_Qps>
-            </modules>
-        </translate>
-    </adminhtml>
-    <admin>
-        <routers>
-            <adminhtml>
-                <args>
-                    <modules>
-                        <Mageone_Qps before="-">Mageone_Qps_Adminhtml</Mageone_Qps>
-                    </modules>
-                </args>
-            </adminhtml>
-        </routers>
-    </admin>
 </config>

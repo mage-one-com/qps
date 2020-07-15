@@ -47,6 +47,7 @@ class RuleUpdateTest extends AbstractTest
         $this->helperMock->method('getResourceUrl')->willReturn(self::RESOURCE_URL);
 
         \Mage::app()->cleanCache([\Mageone_Qps_Model_Observer::QPS_CACHE_TAG]);
+        $this->getConnection()->delete($this->getResource()->getTableName('qps/rule'));
         $this->assertEquals(0, \Mage::getResourceModel('qps/rule_collection')->count());
     }
 
@@ -167,7 +168,6 @@ class RuleUpdateTest extends AbstractTest
         $this->assertSame($enabled, $rule->getData('enabled'));
         $this->assertSame(self::RULE_PREPROCESS, $rule->getData('preprocess'));
         $this->assertSame(self::RULE_KEY, $rule->getData('m1_key'));
-
     }
 
     /**

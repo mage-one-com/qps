@@ -59,7 +59,7 @@ abstract class AbstractTest extends TestCase
      */
     protected function getConnection()
     {
-        return \Mage::getSingleton('core/resource')->getConnection('core_write');
+        return $this->getResource()->getConnection('core_write');
     }
 
     /**
@@ -185,5 +185,16 @@ ttN9LdCCHb6T79AHfi5n6Wjl4xvtYoQ3chpLFoy7fXuLgUtGxDiK7KQQMdCg9bb7
     {
         $writeConnection = $this->getConnection();
         $writeConnection->rollBack();
+    }
+
+    /**
+     * @return \Mage_Core_Model_Resource
+     */
+    protected function getResource()
+    {
+        /** @var \Mage_Core_Model_Resource $return */
+        $return = \Mage::getSingleton('core/resource');
+
+        return $return;
     }
 }

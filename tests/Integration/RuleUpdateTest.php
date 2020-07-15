@@ -121,6 +121,58 @@ class RuleUpdateTest extends AbstractTest
      *
      * @param string[] $rules
      */
+    public function testRulesAreAutoDisabled($rules)
+    {
+        $this->clientMock
+            ->method('getStatus')
+            ->willReturn(200);
+
+        $message = $this->secService->encryptMessage(json_encode($rules));
+
+        $this->clientMock
+            ->method('getBody')
+            ->willReturn($message);
+
+        $this->cron->getRules();
+
+        foreach (\Mage::getResourceModel('qps/rule_collection') as $rule) {
+            /** @var \Mageone_Qps_Model_Rule $rule */
+            $this->assertFalse($rule->getEnabled());
+        }
+    }
+
+    /**
+     * @dataProvider getRules
+     *
+     * @param string[] $rules
+     */
+    public function testRulesAreAutoEnabled($rules)
+    {
+        $this->helperMock->method('isRuleAutoEnable')->willReturn(true);
+
+        $this->clientMock
+            ->method('getStatus')
+            ->willReturn(200);
+
+        $message = $this->secService->encryptMessage(json_encode($rules));
+
+        $this->clientMock
+            ->method('getBody')
+            ->willReturn($message);
+
+        $this->cron->getRules();
+
+        foreach (\Mage::getResourceModel('qps/rule_collection') as $rule) {
+            /** @var \Mageone_Qps_Model_Rule $rule */
+            $this->assertTrue($rule->getEnabled());
+        }
+    }
+
+    /**
+     * @dataProvider getRules
+     *
+     * @param string[] $rules
+     */
     public function testWriteNewRules($rules)
     {
         $this->clientMock

@@ -176,6 +176,42 @@ class Mageone_Qps_Model_Rule extends Mage_Core_Model_Abstract
         return $this->setData('patch_fix', $patchFix);
     }
 
+    /**
+     * @return string
+     */
+    public function getM1Key()
+    {
+        return $this->_getData('m1_key');
+    }
+
+    /**
+     * @param string $key
+     *
+     * @return Mageone_Qps_Model_Rule
+     */
+    public function setM1Key($key)
+    {
+        return $this->setData('m1_key', $key);
+    }
+
+    /**
+     * @return bool
+     */
+    public function getEnabled()
+    {
+        return (bool)$this->_getData('enabled');
+    }
+
+    /**
+     * @param bool $enabled
+     *
+     * @return Mageone_Qps_Model_Rule
+     */
+    public function setEnabled($enabled)
+    {
+        return $this->setData('enabled', $enabled);
+    }
+
     protected function _construct()
     {
         $this->_init('qps/rule');

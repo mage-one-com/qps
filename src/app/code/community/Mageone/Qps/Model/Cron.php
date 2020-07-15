@@ -62,7 +62,7 @@ class Mageone_Qps_Model_Cron
                 /** @var array $item */
                 foreach ($result as $item) {
                     // update rules, save to database and unset on collection
-                    $rule = $collection->getItemByColumnValue('key', $item['key']) ?: Mage::getModel('qps/rule');
+                    $rule = $collection->getItemByColumnValue('m1_key', $item['m1_key']) ?: Mage::getModel('qps/rule');
                     $rule->addData($item)->save();
                     $collection->removeItemByKey($rule->getId());
                 }

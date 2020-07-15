@@ -7,7 +7,7 @@ $installer = $this;
 $installer->getConnection()
     ->addColumn(
         $installer->getTable('qps/rule'),
-        'key',
+        'm1_key',
         [
             'type'     => Varien_Db_Ddl_Table::TYPE_TEXT,
             'length'   => 255,

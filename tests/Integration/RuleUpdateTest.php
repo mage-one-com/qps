@@ -19,7 +19,7 @@ class RuleUpdateTest extends AbstractTest
             'target'       => '_GET',
             'preprocess'   => self::RULE_PREPROCESS,
             'patch_fix'    => 'SUPEE-5344',
-            'key'          => self::RULE_KEY
+            'm1_key'       => self::RULE_KEY
         ];
     const RULE_KEY = 'MO-4711';
     const RULE_PREPROCESS = 'base64_decode';
@@ -161,12 +161,12 @@ class RuleUpdateTest extends AbstractTest
 
         $this->cron->getRules();
 
-        $rule = \Mage::getModel('qps/rule')->load(self::RULE_KEY, 'key');
+        $rule = \Mage::getModel('qps/rule')->load(self::RULE_KEY, 'm1_key');
 
         $this->assertFalse($rule->isObjectNew());
         $this->assertSame($enabled, $rule->getData('enabled'));
         $this->assertSame(self::RULE_PREPROCESS, $rule->getData('preprocess'));
-        $this->assertSame(self::RULE_KEY, $rule->getData('key'));
+        $this->assertSame(self::RULE_KEY, $rule->getData('m1_key'));
 
     }
 
@@ -178,7 +178,7 @@ class RuleUpdateTest extends AbstractTest
         $key = 'something_else';
         \Mage::getModel('qps/rule')
             ->setData(self::RULE)
-            ->setData('key', $key)
+            ->setData('m1_key', $key)
             ->save();
 
         $this->clientMock
@@ -193,7 +193,7 @@ class RuleUpdateTest extends AbstractTest
 
         $this->cron->getRules();
 
-        $rule = \Mage::getModel('qps/rule')->load($key, 'key');
+        $rule = \Mage::getModel('qps/rule')->load($key, 'm1_key');
 
         $this->assertTrue($rule->isObjectNew());
     }
@@ -217,7 +217,7 @@ class RuleUpdateTest extends AbstractTest
                         'target'       => '_GET',
                         'preprocess'   => '',
                         'patch_fix'    => '',
-                        'key'          => 'MO-4077'
+                        'm1_key'       => 'MO-4077'
                     ]
                 ],
             ],

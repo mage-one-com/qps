@@ -11,6 +11,11 @@
                 <class>Mageone_Qps_Helper</class>
             </qps>
         </helpers>
+        <blocks>
+            <qps>
+                <class>Mageone_Qps_Block</class>
+            </qps>
+        </blocks>
         <models>
             <qps>
                 <class>Mageone_Qps_Model</class>
@@ -76,4 +81,15 @@
             </modules>
         </translate>
     </adminhtml>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <Mageone_Qps before="-">Mageone_Qps_Adminhtml</Mageone_Qps>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
 </config>

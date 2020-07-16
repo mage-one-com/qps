@@ -83,7 +83,8 @@ class RuleUpdateTest extends AbstractTest
             try {
                 $message = json_decode($decrypt, true, 512, JSON_THROW_ON_ERROR);
 
-                return $message['magento_version'] === \Mage::getVersion() && $message['patches_list'] === '';
+                return $message['magento_version'] === \Mage::getVersion()
+                    && $message['patches_list'] === ['test-patch' => 'TEST patch'];
             } catch (\Exception $e) {
                 return false;
             }

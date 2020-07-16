@@ -86,27 +86,11 @@ class Mageone_Qps_Model_Cron
     }
 
     /**
-     * @return string
+     * @return string[]
      * @throws Exception
      */
     private function getPatchList()
     {
-        $content = '';
-        $file    = Mage::getBaseDir('etc') . '/applied.patches.list';
-        try {
-            $io = new Varien_Io_File();
-            if ($io->fileExists($file)) {
-                $io->open(['path' => Mage::getBaseDir('etc')]);
-                $content = $io->read($file);
-                preg_match_all('/ (SUPEE-\d*)\s\|/im', $content, $out, PREG_PATTERN_ORDER);
-                if (isset($out[0])) {
-                    $content = implode('', $out[0]);
-                }
-            }
-        } catch (Exception $e) {
-            Mage::logException($e);
-        }
-
-        return $content;
+        return Mage::helper('qps/patches')->getPatchList();
     }
 }

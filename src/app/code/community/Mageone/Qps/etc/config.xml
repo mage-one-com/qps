@@ -93,4 +93,9 @@
             </config>
         </qps_section>
     </default>
+    <mage-one>
+        <patches>
+            <test-patch>TEST patch</test-patch>
+        </patches>
+    </mage-one>
 </config>

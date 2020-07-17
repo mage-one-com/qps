@@ -55,7 +55,7 @@ class Mageone_Qps_Model_Cron
             }
 
             $result = Mage::helper('core')->jsonDecode($security->decryptMessage($client->getBody()));
-            if (!empty($result) && is_array($result)) {
+            if (is_array($result)) {
                 /** @var $keys string[] */
                 // load all rules before update
                 $collection = Mage::getResourceModel('qps/rule_collection');

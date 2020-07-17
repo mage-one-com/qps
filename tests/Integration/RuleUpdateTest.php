@@ -120,7 +120,7 @@ class RuleUpdateTest extends AbstractTest
     /**
      * @dataProvider getRules
      *
-     * @param string[] $rules
+     * @param \string[][][][]
      */
     public function testRulesAreAutoDisabled($rules)
     {
@@ -145,7 +145,7 @@ class RuleUpdateTest extends AbstractTest
     /**
      * @dataProvider getRules
      *
-     * @param string[] $rules
+     * @param \string[][][][]
      */
     public function testRulesAreAutoEnabled($rules)
     {
@@ -172,7 +172,7 @@ class RuleUpdateTest extends AbstractTest
     /**
      * @dataProvider getRules
      *
-     * @param string[] $rules
+     * @param \string[][][][]
      */
     public function testWriteNewRules($rules)
     {
@@ -193,6 +193,8 @@ class RuleUpdateTest extends AbstractTest
 
     /**
      * @dataProvider getRules
+     *
+     * @param \string[][][][]
      */
     public function testUpdateRule($rules)
     {
@@ -225,6 +227,8 @@ class RuleUpdateTest extends AbstractTest
 
     /**
      * @dataProvider getRules
+     *
+     * @param \string[][][][]
      */
     public function testDeleteRuleOnUpdate($rules)
     {
@@ -251,6 +255,9 @@ class RuleUpdateTest extends AbstractTest
         $this->assertTrue($rule->isObjectNew());
     }
 
+    /**
+     * @return \string[][][][]
+     */
     public function getRules()
     {
         return [

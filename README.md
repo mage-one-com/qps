@@ -1,12 +1,12 @@
 # Quick Protection System (QPS)
 
-QPS is a little request inspection module for Magento 1 stores. It receives its configuration via the API of https://mage-one.com/.
+QPS is a request inspection module for Magento 1 stores. It receives its configuration via the API of https://mage-one.com/.
 
-#Important
+# Important
 
-The cron job needs to run or the rules will not be updated.
+The Magento cron job needs to run in order to obtain updated rule sets.
 
-# Installation
+# Install
 ## with composer
 
 1. Add the repository with the module:
@@ -18,7 +18,7 @@ The cron job needs to run or the rules will not be updated.
             }
         ],
 
-2. `composer require mage_one_come/qps`
+2. `composer require mage_one_com/qps`
 
 ## with modman
 
@@ -27,8 +27,7 @@ The cron job needs to run or the rules will not be updated.
 ## manually
 [Download zip file](https://github.com/mage-one-com/qps/archive/master.zip) and copy the files from `src` into your magento root directory
 
-# Deinstallation
-
+# Uninstall
 ## with composer
 - Remove module from `composer.json` and rerun `composer update mageone/qps`
 - Drop the rules table: `DROP TABLE <prefix>mageone_qps_rules;`
@@ -51,15 +50,22 @@ This module is under development by Mage One (https://mage-one.com) a service of
 
 # License
 
-QPS is licensed under the MIT License
+QPS is licensed under BSD 3-clause License, modified according to german law.
 
 Copyright 2020 Paddox GmbH, Germany
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
 
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+
+3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS". NO CONTRIBUTER SHALL BE LIABLE FOR DAMAGES ARISING FROM CAUSES OTHER THEN THE DETRIMENT TO LIFE, BODY AND HEALTH ONLY TO THE EXTENT SUCH DAMAGES ARISES FROM WILFUL MISCONDUCT, GROSS NEGLIGENCE OR THE CULPABLE VIOLATION OF A FUNDAMENTAL CONTRACTUAL OBLIGATION ON THE PART OF THE CONTRIBUTOR OR ANY VICARIOUS AGENTS. ANY FURTHER LIABILITY FOR DAMAGES SHALL BE EXCLUDED, ESPECIALLY LIABILITY FOR THE LOSS OF DATA AND THE RECOVERY OF THIS DATA IF THIS LOSS COULD HAVE BEEN AVOIDED BY THE SOFTWARE USER THROUGH APPROPRIATE PRECAUTIONARY MEASUERS, IN PARTICULAR BY CREATING DAILY BACKUPS OF ALL DATA. THE PROVISIONS OF THE GERMAN PRODUCT LIABILITY ACT AND OTHER MANDATORY LEGAL STATUTES SHALL REMAIN UNAFFECTED.
+
+
+
 
 
 

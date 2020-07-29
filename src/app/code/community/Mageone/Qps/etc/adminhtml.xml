@@ -26,7 +26,7 @@
                 <tools>
                     <children>
                         <qps module="qps" translate="title">
-                            <title>Mageone QPS Rules</title>
+                            <title>Mage One QPS Rules</title>
                             <sort_order>1</sort_order>
                             <action>adminhtml/qps</action>
                         </qps>

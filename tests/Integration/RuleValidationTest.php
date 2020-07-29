@@ -2,8 +2,19 @@
 
 namespace MageOne\Qps\Test\Integration;
 
+require __DIR__ . '/_Mageone_Test_Observer.php';
+
+use Mage;
+use Mage_Adminhtml_Helper_Data;
+use Mage_Core_Controller_Request_Http;
+use Mage_Core_Controller_Varien_Front;
 use MageOne\Qps\Test\AbstractTest;
+use Mageone_Qps_Helper_Data;
+use Mageone_Qps_Model_Exception_ExitSkippedForTestingException;
+use Mageone_Qps_Model_Observer;
 use PHPUnit\Framework\MockObject\MockObject;
+use RuntimeException;
+use Varien_Event_Observer;
 
 /**
  * @covers \Mageone_Qps_Model_Observer
@@ -12,19 +23,19 @@ class RuleValidationTest extends AbstractTest
 {
     protected $backupGlobals = true;
     /**
-     * @var \Mageone_Qps_Model_Observer
+     * @var Mageone_Qps_Model_Observer
      */
     private $observer;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->observer = \Mage::getModel('qps/observer');
+        $this->observer = Mage::getModel('qps/observer');
     }
 
-    public function testDoesNothingIfDisabled()
+    public function testDoesNothingIfDisabled(): void
     {
-        $helperMock = $this->createMock(\Mageone_Qps_Helper_Data::class);
+        $helperMock = $this->createMock(Mageone_Qps_Helper_Data::class);
         $helperMock->method('isEnabled')->willReturn(false);
         $this->replaceHelperWithMock($helperMock, 'qps');
 
@@ -39,7 +50,7 @@ class RuleValidationTest extends AbstractTest
         $this->assertTrue(true, 'We expect that no exception is thrown');
     }
 
-    public function testRuleIsNotValidatedIfDisabled()
+    public function testRuleIsNotValidatedIfDisabled(): void
     {
         $this->createRule('/', 'Custom URL which never matches', '#^value$#', '_GET["key"]', '', 'MO-1', 0);
         $request = $this->setupRequest('/', ['key' => 'value'], []);
@@ -51,7 +62,7 @@ class RuleValidationTest extends AbstractTest
         $this->assertTrue(true, 'We expect that no exception is thrown');
     }
 
-    public function testRuleDoesNotTriggerIfUrlDoesNotMatch()
+    public function testRuleDoesNotTriggerIfUrlDoesNotMatch(): void
     {
         $this->createRule(
             '/url/does/not/match',
@@ -67,20 +78,39 @@ class RuleValidationTest extends AbstractTest
         $this->assertTrue(true, 'We expect that no exception is thrown');
     }
 
-    public function testRuleDoesTriggerIfUrlDoesMatch()
+    public function testRuleDoesTriggerIfUrlDoesMatch(): void
     {
-        $this->expectException(\Mageone_Qps_Model_Exception_ExitSkippedForTestingException::class);
+        $this->expectException(Mageone_Qps_Model_Exception_ExitSkippedForTestingException::class);
 
         $this->createRule('/', 'Custom URL which never matches', '#^value$#', '_GET["key"]', '', 'MO-1');
         $request = $this->setupRequest('/', ['key' => 'value'], []);
         $this->observer->checkRequest($this->setupEvent($request));
     }
 
-    public function testAdminhtmlReplacementWorks()
+    public function testRuleDoesTriggerEventIfNotRegex(): void
+    {
+        $called = \Mageone_Test_Observer::$called;
+
+        $path = 'global/events/qps_custom_check/observers/mage_one/';
+        Mage::app()->getConfig()->setNode($path . 'type', 'singleton');
+        Mage::app()->getConfig()->setNode($path . 'class', 'Mageone_Test_Observer');
+        Mage::app()->getConfig()->setNode($path . 'method', 'qpsCustomCheck');
+
+        $this->expectException(Mageone_Qps_Model_Exception_ExitSkippedForTestingException::class);
+
+        $this->createRule(
+            '/', 'Custom URL which never matches', '#^value$#', '_GET["key"]', '', 'MO-1', 1, 'something-else'
+        );
+        $request = $this->setupRequest('/', ['key' => 'value'], []);
+        $this->observer->checkRequest($this->setupEvent($request));
+        $this->assertSame($called + 1, \Mageone_Test_Observer::$called);
+    }
+
+    public function testAdminhtmlReplacementWorks(): void
     {
         $adminPath = $this->getAdminPath();
 
-        $this->expectException(\Mageone_Qps_Model_Exception_ExitSkippedForTestingException::class);
+        $this->expectException(Mageone_Qps_Model_Exception_ExitSkippedForTestingException::class);
 
         $this->createRule(
             '/*adminhtml*/customer/index/',
@@ -94,9 +124,9 @@ class RuleValidationTest extends AbstractTest
         $this->observer->checkRequest($this->setupEvent($request));
     }
 
-    public function testPreprocessBase64Decode()
+    public function testPreprocessBase64Decode(): void
     {
-        $this->expectException(\Mageone_Qps_Model_Exception_ExitSkippedForTestingException::class);
+        $this->expectException(Mageone_Qps_Model_Exception_ExitSkippedForTestingException::class);
 
         $this->createRule(
             '/checkout/cart/add/',
@@ -119,13 +149,21 @@ class RuleValidationTest extends AbstractTest
         $this->observer->checkRequest($this->setupEvent($request));
     }
 
-    private function createRule($url, $name, $content, $target, $preprocess, $patchFix, $enabled = 1)
-    {
-        \Mage::getModel('qps/rule')->setData([
+    private function createRule(
+        $url,
+        $name,
+        $content,
+        $target,
+        $preprocess,
+        $patchFix,
+        $enabled = 1,
+        $type = 'regex'
+    ): void {
+        Mage::getModel('qps/rule')->setData([
             //`url` varchar(255) DEFAULT NULL COMMENT 'specific URL utilized by threat covered if present, adminhtml placeholder represents adminhtml path in current magento installation, optional.',
             'url'          => $url,
             //`type` text COMMENT 'rule type (regex|custom), custom rules reserved for future purpose and not covered in this document, mandatory.',
-            'type'         => 'regex',
+            'type'         => $type,
             //`name` varchar(255) DEFAULT '' COMMENT 'rule title, optional',
             'name'         => $name,
             //`rule_content` text COMMENT 'regex string for request validation, custom rules could have more complex data like json object, mandatory.',
@@ -141,16 +179,16 @@ class RuleValidationTest extends AbstractTest
     }
 
     /**
-     * @param \Mage_Core_Controller_Request_Http $request
+     * @param Mage_Core_Controller_Request_Http $request
      *
-     * @return \Varien_Event_Observer
+     * @return Varien_Event_Observer
      */
-    private function setupEvent(\Mage_Core_Controller_Request_Http $request)
+    private function setupEvent(Mage_Core_Controller_Request_Http $request)
     {
-        $front = $this->createMock(\Mage_Core_Controller_Varien_Front::class);
+        $front = $this->createMock(Mage_Core_Controller_Varien_Front::class);
         $front->method('getRequest')->willReturn($request);
-        /** @var MockObject|\Varien_Event_Observer $observer */
-        $observer = $this->getMockBuilder(\Varien_Event_Observer::class)
+        /** @var MockObject|Varien_Event_Observer $observer */
+        $observer = $this->getMockBuilder(Varien_Event_Observer::class)
             ->addMethods(['getFront'])
             ->getMock();
         $observer->method('getFront')->willReturn($front);
@@ -163,14 +201,14 @@ class RuleValidationTest extends AbstractTest
      * @param array  $get
      * @param array  $post
      *
-     * @return \Mage_Core_Controller_Request_Http|MockObject
+     * @return Mage_Core_Controller_Request_Http|MockObject
      */
     private function setupRequest($url, $get, $post)
     {
         $GLOBALS['_GET']  = $get;
         $GLOBALS['_POST'] = $post;
 
-        $mock = $this->createMock(\Mage_Core_Controller_Request_Http::class);
+        $mock = $this->createMock(Mage_Core_Controller_Request_Http::class);
         $mock->method('getRequestUri')->willReturn($url);
 
         return $mock;
@@ -179,13 +217,13 @@ class RuleValidationTest extends AbstractTest
     /**
      * @return string
      */
-    private function getAdminPath()
+    private function getAdminPath(): string
     {
-        $adminUrl = \Mage_Adminhtml_Helper_Data::getUrl('adminhtml');
-        $baseUrl  = \Mage::getBaseUrl();
+        $adminUrl = Mage_Adminhtml_Helper_Data::getUrl('adminhtml');
+        $baseUrl  = Mage::getBaseUrl();
 
         if (!preg_match("#{$baseUrl}([a-zA-Z0-9]*)/index/index/#", $adminUrl, $matches)) {
-            throw new \RuntimeException('Can\'t determine admin path.');
+            throw new RuntimeException('Can\'t determine admin path.');
         }
 
         return $matches[1];

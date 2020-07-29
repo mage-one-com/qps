@@ -2,14 +2,22 @@
 
 namespace MageOne\Qps\Test;
 
+use Mage;
+use Mage_Core_Exception;
+use Mage_Core_Model_Resource;
+use Mage_Core_Model_Store;
+use Mage_Core_Model_Store_Exception;
+use Mageone_Qps_Helper_Data;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use ReflectionProperty;
+use Varien_Db_Adapter_Interface;
 
 abstract class AbstractTest extends TestCase
 {
     public const EXAMPLE_USER = 'example@mage-one.com';
     /**
-     * @var \Mageone_Qps_Helper_Data|MockObject
+     * @var Mageone_Qps_Helper_Data|MockObject
      */
     protected $helperMock;
     /**
@@ -26,11 +34,11 @@ abstract class AbstractTest extends TestCase
         $this->startTransaction();
 
         parent::setUp();
-        $this->setConfigurationSetting(\Mageone_Qps_Helper_Data::QPS_STATUS, 1);
-        $this->setConfigurationSetting(\Mageone_Qps_Helper_Data::QPS_USER, self::EXAMPLE_USER);
-        $this->setConfigurationSetting(\Mageone_Qps_Helper_Data::QPS_PUBLIC_KEY, $this->getPublicKey());
+        $this->setConfigurationSetting(Mageone_Qps_Helper_Data::QPS_STATUS, 1);
+        $this->setConfigurationSetting(Mageone_Qps_Helper_Data::QPS_USER, self::EXAMPLE_USER);
+        $this->setConfigurationSetting(Mageone_Qps_Helper_Data::QPS_PUBLIC_KEY, $this->getPublicKey());
 
-        $this->helperMock = $this->createMock(\Mageone_Qps_Helper_Data::class);
+        $this->helperMock = $this->createMock(Mageone_Qps_Helper_Data::class);
 
         // returns one time the private and one time the public key to test decryption/encryption
         // for two rule testing this method is called three times and needs to return public key
@@ -48,16 +56,16 @@ abstract class AbstractTest extends TestCase
         $this->replaceHelperWithMock($this->helperMock, 'qps');
     }
 
-    protected function startTransaction()
+    protected function startTransaction(): void
     {
         $writeConnection = $this->getConnection();
         $writeConnection->beginTransaction();
     }
 
     /**
-     * @return \Varien_Db_Adapter_Interface
+     * @return Varien_Db_Adapter_Interface
      */
-    protected function getConnection()
+    protected function getConnection(): Varien_Db_Adapter_Interface
     {
         return $this->getResource()->getConnection('core_write');
     }
@@ -67,13 +75,13 @@ abstract class AbstractTest extends TestCase
      * @param string   $value
      * @param int|null $singleStoreId
      *
-     * @throws \Mage_Core_Model_Store_Exception
+     * @throws Mage_Core_Model_Store_Exception
      */
-    public function setConfigurationSetting($path, $value, $singleStoreId = null)
+    public function setConfigurationSetting($path, $value, $singleStoreId = null): void
     {
-        $storeIds = $singleStoreId ? [$singleStoreId] : array_keys(\Mage::app()->getStores());
+        $storeIds = $singleStoreId ? [$singleStoreId] : array_keys(Mage::app()->getStores());
         foreach ($storeIds as $storeId) {
-            $store   = \Mage::app()->getStore($storeId);
+            $store   = Mage::app()->getStore($storeId);
             $storeId = $storeId === null ? 0 : $storeId;
 
             $this->configSettingsToRestore[$storeId][$path] = $store->getConfig($path);
@@ -85,11 +93,11 @@ abstract class AbstractTest extends TestCase
     /**
      * @param string                      $path
      * @param string                      $value
-     * @param \Mage_Core_Model_Store|null $store
+     * @param Mage_Core_Model_Store|null $store
      */
-    private function setConfig($path, $value, \Mage_Core_Model_Store $store = null)
+    private function setConfig($path, $value, Mage_Core_Model_Store $store = null): void
     {
-        $propReflection = new \ReflectionProperty(\Mage_Core_Model_Store::class, '_configCache');
+        $propReflection = new ReflectionProperty(Mage_Core_Model_Store::class, '_configCache');
         $propReflection->setAccessible(true);
         $settings        = $propReflection->getValue($store);
         $settings[$path] = $value;
@@ -100,7 +108,7 @@ abstract class AbstractTest extends TestCase
     /**
      * @return string
      */
-    protected function getPublicKey()
+    protected function getPublicKey(): string
     {
         return '-----BEGIN RSA PUBLIC KEY-----
 MIIBCgKCAQEAuCW8CyWqeDXW6E93D+u5Tlq7Ys0mpLfQUbBdEivwPHKgWwYgb4OA
@@ -115,7 +123,7 @@ qzrEphd4FSt8f2CbSztLQ046asfCcRDoLQIDAQAB
     /**
      * @return string
      */
-    protected function getPrivateKey()
+    protected function getPrivateKey(): string
     {
         return '-----BEGIN RSA PRIVATE KEY-----
 MIIEpQIBAAKCAQEAuCW8CyWqeDXW6E93D+u5Tlq7Ys0mpLfQUbBdEivwPHKgWwYg
@@ -150,12 +158,12 @@ ttN9LdCCHb6T79AHfi5n6Wjl4xvtYoQ3chpLFoy7fXuLgUtGxDiK7KQQMdCg9bb7
      * @param object $mock
      * @param string $helper
      *
-     * @throws \Mage_Core_Exception
+     * @throws Mage_Core_Exception
      */
-    protected function replaceHelperWithMock($mock, $helper)
+    protected function replaceHelperWithMock($mock, $helper): void
     {
-        \Mage::unregister('_helper/' . $helper);
-        \Mage::register('_helper/' . $helper, $mock);
+        Mage::unregister('_helper/' . $helper);
+        Mage::register('_helper/' . $helper, $mock);
         $this->cleanupHelperMocks[$helper] = $helper;
     }
 
@@ -166,34 +174,34 @@ ttN9LdCCHb6T79AHfi5n6Wjl4xvtYoQ3chpLFoy7fXuLgUtGxDiK7KQQMdCg9bb7
         $this->rollbackTransaction();
 
         foreach ($this->cleanupHelperMocks as $helper) {
-            \Mage::unregister('_helper/' . $helper);
+            Mage::unregister('_helper/' . $helper);
         }
 
     }
 
-    private function restoreConfigSettings()
+    private function restoreConfigSettings(): void
     {
         foreach ($this->configSettingsToRestore as $storeId => $settings) {
-            $store = \Mage::app()->getStore($storeId);
+            $store = Mage::app()->getStore($storeId);
             foreach ($settings as $path => $value) {
                 $this->setConfig($path, $value, $store);
             }
         }
     }
 
-    protected function rollbackTransaction()
+    protected function rollbackTransaction(): void
     {
         $writeConnection = $this->getConnection();
         $writeConnection->rollBack();
     }
 
     /**
-     * @return \Mage_Core_Model_Resource
+     * @return Mage_Core_Model_Resource
      */
-    protected function getResource()
+    protected function getResource(): Mage_Core_Model_Resource
     {
-        /** @var \Mage_Core_Model_Resource $return */
-        $return = \Mage::getSingleton('core/resource');
+        /** @var Mage_Core_Model_Resource $return */
+        $return = Mage::getSingleton('core/resource');
 
         return $return;
     }

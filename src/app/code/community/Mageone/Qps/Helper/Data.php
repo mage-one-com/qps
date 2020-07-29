@@ -11,7 +11,7 @@ class Mageone_Qps_Helper_Data extends Mage_Core_Helper_Abstract
     /**
      * @return bool
      */
-    public function isEnabled()
+    public function isEnabled(): bool
     {
         return Mage::getStoreConfigFlag(self::QPS_STATUS);
     }
@@ -19,7 +19,7 @@ class Mageone_Qps_Helper_Data extends Mage_Core_Helper_Abstract
     /**
      * @return bool
      */
-    public function isRuleAutoEnable()
+    public function isRuleAutoEnable(): bool
     {
         return Mage::getStoreConfigFlag(self::QPS_RULE_AUTO_ENABLE);
     }
@@ -27,7 +27,7 @@ class Mageone_Qps_Helper_Data extends Mage_Core_Helper_Abstract
     /**
      * @return string
      */
-    public function getPublicKey()
+    public function getPublicKey(): string
     {
         return trim(Mage::getStoreConfig(self::QPS_PUBLIC_KEY));
     }
@@ -35,7 +35,7 @@ class Mageone_Qps_Helper_Data extends Mage_Core_Helper_Abstract
     /**
      * @return string
      */
-    public function getResourceUrl()
+    public function getResourceUrl(): string
     {
         return trim(Mage::getStoreConfig(self::QPS_URL));
     }
@@ -43,7 +43,7 @@ class Mageone_Qps_Helper_Data extends Mage_Core_Helper_Abstract
     /**
      * @return string
      */
-    public function getUserName()
+    public function getUserName(): string
     {
         return trim(Mage::getStoreConfig(self::QPS_USER));
     }

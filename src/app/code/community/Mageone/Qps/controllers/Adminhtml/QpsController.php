@@ -3,7 +3,7 @@
 class Mageone_Qps_Adminhtml_QpsController extends Mage_Adminhtml_Controller_Action
 {
 
-    public function indexAction()
+    public function indexAction(): void
     {
         $this->loadLayout();
         $this->_addContent($this->getLayout()->createBlock('qps/rule'));

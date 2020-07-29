@@ -22,7 +22,7 @@ class Mageone_Qps_Helper_GlobalGetter
      *
      * @return string
      */
-    public function get($expr)
+    public function get($expr): string
     {
         if (!is_string($expr)) {
             throw new InvalidArgumentException('$expr must be a string.');
@@ -62,7 +62,7 @@ class Mageone_Qps_Helper_GlobalGetter
     /**
      * @return string
      */
-    private function getPhpInput()
+    private function getPhpInput(): string
     {
         if ($this->inputStreamReader) {
             return (string)call_user_func($this->inputStreamReader);
@@ -71,7 +71,7 @@ class Mageone_Qps_Helper_GlobalGetter
         return (string)file_get_contents('php://input');
     }
 
-    private function getPhpStdin()
+    private function getPhpStdin(): string
     {
         if ($this->stdinStreamReader) {
             return (string)call_user_func($this->stdinStreamReader);

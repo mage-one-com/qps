@@ -10,20 +10,12 @@ class Mageone_Qps_Block_Rule_Grid extends Mage_Adminhtml_Block_Widget_Grid
         $this->setSaveParametersInSession(true);
     }
 
-    /**
-     * @param Mageone_Qps_Model_Rule $row
-     *
-     * @return string
-     */
-    public function getRowUrl(Mageone_Qps_Model_Rule $row)
+    public function getRowUrl(Mageone_Qps_Model_Rule $row): string
     {
         return $this->getUrl('*/*/edit', ['id' => $row->getId()]);
     }
 
-    /**
-     * @return Mageone_Qps_Block_Rule_Grid
-     */
-    protected function _prepareCollection()
+    protected function _prepareCollection(): Mageone_Qps_Block_Rule_Grid
     {
         $collection = Mage::getModel('qps/rule')->getCollection();
         $this->setCollection($collection);
@@ -31,10 +23,7 @@ class Mageone_Qps_Block_Rule_Grid extends Mage_Adminhtml_Block_Widget_Grid
         return parent::_prepareCollection();
     }
 
-    /**
-     * @return Mageone_Qps_Block_Rule_Grid
-     */
-    protected function _prepareColumns()
+    protected function _prepareColumns(): Mageone_Qps_Block_Rule_Grid
     {
         $this->addColumn('m1_key',
             [
@@ -123,7 +112,7 @@ class Mageone_Qps_Block_Rule_Grid extends Mage_Adminhtml_Block_Widget_Grid
      *
      * @return string
      */
-    public function decorateStatus($value, $row)
+    public function decorateStatus($value, $row): string
     {
         if ($row->getEnabled()) {
             return '<span class="grid-severity-notice"><span>' . $value . '</span></span>';

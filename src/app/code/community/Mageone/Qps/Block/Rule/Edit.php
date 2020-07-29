@@ -28,22 +28,22 @@ class Mageone_Qps_Block_Rule_Edit extends Mage_Adminhtml_Block_Widget_Form_Conta
         $this->removeButton('delete');
     }
 
-    protected function _getHelper()
+    protected function _getHelper(): Mageone_Qps_Helper_Data
     {
         return Mage::helper('qps');
     }
 
-    protected function _getModel()
+    protected function _getModel(): Mageone_Qps_Model_Rule
     {
         return Mage::registry('current_model');
     }
 
-    protected function _getModelTitle()
+    protected function _getModelTitle(): string
     {
         return 'Rule';
     }
 
-    public function getHeaderText()
+    public function getHeaderText(): string
     {
         $model      = $this->_getModel();
         $modelTitle = $this->_getModelTitle();
@@ -56,7 +56,7 @@ class Mageone_Qps_Block_Rule_Edit extends Mage_Adminhtml_Block_Widget_Form_Conta
      *
      * @return string
      */
-    public function getBackUrl()
+    public function getBackUrl(): string
     {
         return $this->getUrl('*/*/index');
     }
@@ -68,7 +68,7 @@ class Mageone_Qps_Block_Rule_Edit extends Mage_Adminhtml_Block_Widget_Form_Conta
      * @see getFormActionUrl()
      * @deprecated
      */
-    public function getSaveUrl()
+    public function getSaveUrl(): string
     {
         $this->setData('form_action_url', 'save');
 

@@ -20,19 +20,20 @@ class Mageone_Qps_Model_Observer
      */
     private $rules;
 
-    public function checkRequest(Varien_Event_Observer $observer)
+    public function checkRequest(Varien_Event_Observer $observer): void
     {
-        Varien_Profiler::start(__METHOD__);
-        /** @var Mage_Core_Controller_Varien_Front $frontAction */
-        $frontAction = $observer->getFront();
-        $request     = $frontAction->getRequest();
         if (!Mage::helper('qps')->isEnabled()) {
             return;
         }
 
+        Varien_Profiler::start(__METHOD__);
         if ($this->getRules()->count() === 0) {
             return;
         }
+
+        /** @var Mage_Core_Controller_Varien_Front $frontAction */
+        $frontAction = $observer->getFront();
+        $request     = $frontAction->getRequest();
 
         $this->validate($request);
         Varien_Profiler::stop(__METHOD__);
@@ -41,7 +42,7 @@ class Mageone_Qps_Model_Observer
     /**
      * @return Mageone_Qps_Model_Resource_Rule_Collection
      */
-    private function getRules()
+    private function getRules(): \Mageone_Qps_Model_Resource_Rule_Collection
     {
         if (!$this->rules) {
             $this->rules = Mage::getResourceModel('qps/rule_collection')
@@ -51,7 +52,7 @@ class Mageone_Qps_Model_Observer
         return $this->rules;
     }
 
-    private function validate(Mage_Core_Controller_Request_Http $request)
+    private function validate(Mage_Core_Controller_Request_Http $request): void
     {
         try {
             foreach ($this->getRules() as $rule) {
@@ -68,7 +69,7 @@ class Mageone_Qps_Model_Observer
         }
     }
 
-    private function validateRule(Mageone_Qps_Model_Rule $rule, Mage_Core_Controller_Request_Http $request)
+    private function validateRule(Mageone_Qps_Model_Rule $rule, Mage_Core_Controller_Request_Http $request): ?bool
     {
         if (!$this->isUrlMatch($rule, $request)) {
             return true;
@@ -83,15 +84,14 @@ class Mageone_Qps_Model_Observer
                 $transportObject->setData(
                     ['rule' => $rule, 'value' => $targetValue, 'passed' => true]
                 );
-                Mage::dispatchEvent(
-                    'qps_custom_check',
-                    $transportObject
-                );
+                Mage::dispatchEvent('qps_custom_check', ['transport_object' => $transportObject]);
                 if (!$transportObject->getData('passed')) {
                     $this->processTriggeredRule();
                 }
             }
         }
+
+        return true;
     }
 
     /**
@@ -100,7 +100,7 @@ class Mageone_Qps_Model_Observer
      *
      * @return bool
      */
-    private function isUrlMatch(Mageone_Qps_Model_Rule $rule, Mage_Core_Controller_Request_Http $request)
+    private function isUrlMatch(Mageone_Qps_Model_Rule $rule, Mage_Core_Controller_Request_Http $request): bool
     {
         $path = (string)Mage::getConfig()->getNode(Mage_Adminhtml_Helper_Data::XML_PATH_ADMINHTML_ROUTER_FRONTNAME);
         $url  = str_replace(self::ADMINHTML_PATH_PATTERN, $path, $rule->getUrl());
@@ -114,7 +114,7 @@ class Mageone_Qps_Model_Observer
      *
      * @return string
      */
-    private function preprocessValue($value, $action)
+    private function preprocessValue($value, $action): ?string
     {
         switch ($action) {
             case 'base64_decode':
@@ -134,25 +134,28 @@ class Mageone_Qps_Model_Observer
      *
      * @return string
      */
-    private function getValueFromGlobal($expr)
+    private function getValueFromGlobal($expr): string
     {
         return (string)Mage::helper('qps/globalGetter')->get($expr);
     }
 
-    private function validateRegexRule(Mageone_Qps_Model_Rule $rule, $targetValue)
+    private function validateRegexRule(Mageone_Qps_Model_Rule $rule, $targetValue): void
     {
         if (preg_match($rule->getRuleContent(), $targetValue)) {
-            $this->processTriggeredRule();
+            throw new Mageone_Qps_Model_Exception_RuleNotPassedException(
+                sprintf('Rule %s triggered with content %s.', $rule->getId(), $targetValue)
+            );
         }
     }
 
-    private function processTriggeredRule()
+    private function processTriggeredRule(): void
     {
         if (defined('TESTING')) {
             throw new Mageone_Qps_Model_Exception_ExitSkippedForTestingException(
                 'Rule did not pass.'
             );
         }
+        ob_end_clean();
         Mage::log('Bad request from: ' . Mage::app()->getRequest()->getClientIp(true), Zend_Log::ALERT, self::QPS_LOG);
         Mage::app()->getResponse()->setHttpResponseCode(503)->sendHeaders();
         exit;

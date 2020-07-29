@@ -19,7 +19,7 @@ class Mageone_Qps_Model_SecService
      *
      * @return string
      */
-    public function encryptMessage($message)
+    public function encryptMessage($message): string
     {
         $rij = new Rijndael();
 
@@ -41,7 +41,7 @@ class Mageone_Qps_Model_SecService
     {
         $key = Mage::helper('qps')->getPublicKey();
 
-        list($iv, $symKey, $message) = explode('|', $message);
+        [$iv, $symKey, $message] = explode('|', $message);
 
         $symKey = $this->decryptAsymmetrically($key, $symKey);
 
@@ -90,7 +90,7 @@ class Mageone_Qps_Model_SecService
      *
      * @return string
      */
-    private function decodeBase64AndCheck($encoded)
+    private function decodeBase64AndCheck($encoded): string
     {
         $decoded = base64_decode($encoded, true);
         if (!$decoded) {

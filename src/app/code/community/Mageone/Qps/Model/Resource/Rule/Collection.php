@@ -5,7 +5,7 @@
  */
 class Mageone_Qps_Model_Resource_Rule_Collection extends Mage_Core_Model_Resource_Db_Collection_Abstract
 {
-    public function _construct()
+    public function _construct(): void
     {
         $this->_init('qps/rule');
         $this->initCache(

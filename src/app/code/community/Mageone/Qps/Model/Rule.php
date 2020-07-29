@@ -127,7 +127,13 @@ class Mageone_Qps_Model_Rule extends Mage_Core_Model_Abstract
      */
     public function setTarget($target)
     {
-        if (!in_array($target, $this->targetDefaultValues)) {
+        $targets = explode(',', $target);
+        foreach ($targets as $t) {
+            foreach ($this->targetDefaultValues as $global) {
+                if (substr_compare($t, $global, 0, strlen($global)) === 0) {
+                    break 2;
+                }
+            }
             throw new RuntimeException('Value for target is invalid.');
         }
 

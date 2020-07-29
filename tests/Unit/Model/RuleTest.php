@@ -37,12 +37,14 @@ class RuleTest extends AbstractTest
             'url'          => ['Url', 'adminhtml*wysiwyg/directive/index*'],
             'type'         => ['Type', 'regex', ''],
             'name'         => ['Name', 'Block admin create via plain SQL'],
-            'rule_content' => ['Rule_content', '/(^([a-zA-z]+)(\\d+)?$)/u'],
+            'rule_content' => ['RuleContent', '/(^([a-zA-z]+)(\\d+)?$)/u'],
             'preprocess_1' => ['Preprocess', 'base64_decode', ''],
             'preprocess_2' => ['Preprocess', 'json_decode', ''],
             'preprocess_3' => ['Preprocess', 'rawurldecode', ''],
             'preprocess_4' => ['Preprocess', '', ''],
-            'patch_fix'    => ['Patch_fix', 'SUPEE-5344'],
+            'patch_fix'    => ['PatchFix', 'SUPEE-5344'],
+            'm1_key'       => ['M1Key', 'MO-1'],
+            'enabled'      => ['Enabled', true, false],
         ];
     }
 
@@ -63,6 +65,20 @@ class RuleTest extends AbstractTest
             ['something_else'],
             [5],
         ];
+    }
+
+    public function testSetTargetForNonTrivialPattern()
+    {
+        $this->rule->setTarget('_GET[\'one\'][\'two\'][\'three\'][\'four\']');
+        $this->assertIsArray($this->rule->getTarget());
+        $this->assertSame(['_GET[\'one\'][\'two\'][\'three\'][\'four\']'], $this->rule->getTarget());
+    }
+
+    public function testSetTargetForMultiplePattern()
+    {
+        $this->rule->setTarget('_GET[\'one\'][\'two\'],_SERVER,_POST');
+        $this->assertIsArray($this->rule->getTarget());
+        $this->assertSame(['_GET[\'one\'][\'two\']', '_SERVER', '_POST'], $this->rule->getTarget());
     }
 
     public function testGetTargetReturnsNonEmptyArray()

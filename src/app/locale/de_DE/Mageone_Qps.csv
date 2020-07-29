@@ -15,7 +15,7 @@
 "Auto-Enable New Rules","Neue Regeln automatisch aktivieren"
 "Enable module","Modul aktivieren"
 "Enable new Rules which come day and night through update automatically (not recommended, without testing them!)","Neue Regeln, die Tag und Nacht automatisch aktualisiert werden automatisch aktivieren (nicht empfohlen ohne vorherigen Test!)"
-"Your <a href=""https://my.mage-one.com"">https://my.mage-one.com</a> username","Ihr <a href=""https://my.mage-one.com"">https://my.mage-one.com</a> Benutzername"
+"Your <a href=""https://my.mage-one.com/qps"">https://my.mage-one.com/qps</a> username","Ihr <a href=""https://my.mage-one.com/qps"">https://my.mage-one.com/qps</a> Benutzername"
 "Public key for encryption between API and store. This key can be copied from <a href=""https://my.mage-one.com"">https://my.mage-one.com</a>","Öffentlicher Schlüssel für die Verschlüsselung zwischen API und Ihrem Shop. Diesen Key erhalten Sie von <a href=""https://my.mage-one.com"">https://my.mage-one.com</a>"
 "Save Rule","Regel speichern"
 "Edit Rule (ID: %s)","Regel bearbeiten (ID: %s)"

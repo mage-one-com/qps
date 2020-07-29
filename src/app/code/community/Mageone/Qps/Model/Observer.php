@@ -74,11 +74,6 @@ class Mageone_Qps_Model_Observer
             return true;
         }
 
-        // we don't test for already fixed vulnerabilities,
-        //because getting a list of installed patches takes
-        // longer then just running the regex
-
-        $regex = $rule->getRuleContent();
         foreach ($rule->getTarget() as $target) {
             $targetValue = $this->preprocessValue($this->getValueFromGlobal($target), $rule->getPreprocess());
             if ($rule->getType() === Mageone_Qps_Model_Rule::TYPE_REGEX) {

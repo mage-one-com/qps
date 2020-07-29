@@ -16,7 +16,7 @@ class Mageone_Qps_Adminhtml_QpsController extends Mage_Adminhtml_Controller_Acti
         $model = Mage::getModel('qps/rule');
 
         if (!$id) {
-            $this->_getSession()->addError('You can\'t create new rules, only edit existing ones.');
+            $this->_getSession()->addError('You can\'t create new rules. You can only change the status of existing rules.');
 
             return $this->_redirect('*/*/index');
         }
@@ -51,7 +51,7 @@ class Mageone_Qps_Adminhtml_QpsController extends Mage_Adminhtml_Controller_Acti
             $model   = Mage::getModel('qps/rule');
             $session = $this->_getSession();
             if (!$id) {
-                $session->addError('You can\'t create new rules, only edit existing ones.');
+                $session->addError('You can\'t create new rules. You can only change the status of existing rules.');
 
                 return $this->_redirect('*/*/index');
             }
@@ -59,7 +59,7 @@ class Mageone_Qps_Adminhtml_QpsController extends Mage_Adminhtml_Controller_Acti
             $model->load($id);
             if (!$model->getId()) {
                 $session->addError(
-                    Mage::helper('qps')->__('This Rule no longer exists.')
+                    Mage::helper('qps')->__('This rule no longer exists.')
                 );
 
                 return $this->_redirect('*/*/index');
@@ -72,13 +72,13 @@ class Mageone_Qps_Adminhtml_QpsController extends Mage_Adminhtml_Controller_Acti
                 $model->save();
                 $session->setFormData(false);
                 $session->addSuccess(
-                    Mage::helper('qps')->__('The Rule has been saved.')
+                    Mage::helper('qps')->__('The rule has been saved.')
                 );
             } catch (Mage_Core_Exception $e) {
                 $session->addError($e->getMessage());
                 $redirectBack = true;
             } catch (Exception $e) {
-                $session->addError(Mage::helper('qps')->__('Unable to save the Rule.'));
+                $session->addError(Mage::helper('qps')->__('Unable to save this rule.'));
                 $redirectBack = true;
                 Mage::logException($e);
             }

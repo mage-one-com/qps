@@ -36,7 +36,7 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
-                            <comment>Enable new Rules which come day and night through update automatically (not recommended, without testing them!)</comment>
+                            <comment>Enable new Rules automatically. Rules will be updated every hour via our API. (We recommend to enable rules manually after intensive testing)</comment>
                             <depends>
                                 <status>1</status>
                             </depends>
@@ -49,7 +49,7 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
-                            <comment><![CDATA[Public key for encryption between API and store. This key can be copied from <a href="https://my.mage-one.com">https://my.mage-one.com</a>]]></comment>
+                            <comment><![CDATA[Public key for encryption between API and store. This key can be copied from <a href="https://my.mage-one.com/qps" target="_blank">https://my.mage-one.com/qps</a>]]></comment>
                             <depends>
                                 <status>1</status>
                             </depends>
@@ -62,7 +62,7 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
-                            <comment><![CDATA[Your <a href="https://my.mage-one.com/qps">https://my.mage-one.com/qps</a> username]]></comment>
+                            <comment><![CDATA[Your <a href="https://my.mage-one.com/qps" target="_blank">https://my.mage-one.com/qps</a> username]]></comment>
                             <depends>
                                 <status>1</status>
                             </depends>

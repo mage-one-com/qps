@@ -28,8 +28,12 @@
         <testsuite name="QPS Integration Tests">
             <directory>Integration</directory>
         </testsuite>
-
     </testsuites>
+    <filter>
+        <whitelist>
+            <directory suffix=".php">../src</directory>
+        </whitelist>
+    </filter>
     <php>
         <const name="TESTING" value="1"/>
     </php>

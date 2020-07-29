@@ -38,7 +38,12 @@ The Magento cron job needs to run in order to obtain updated rule sets.
 
 # How does it work?
 
-## 
+Our module filters malicious requests based on rules. These rules will be provided by our API, which is part of [https://mage-one.com/](https://mage-one.com/). Rules are usually based on regex inspections of the _GLOBALS data.
+
+Rules will be fetch from the API every hour and only cover vulnerabilities that aren't patched with Mage One Patches yet. Therefor our extension provides the API with a list of all installed Mage One patches. Our API then decides which rules have to be returned.
+
+The rule processing must be enabled manually in System > Config > Quick Protection System (General Tab). Rules can automatically be enabled after the hourly API sync, although we recommend to enable rules manually after testing them.   
+
 
 # Contribution
 

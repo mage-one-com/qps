@@ -26,9 +26,8 @@ class Mageone_Qps_Adminhtml_QpsController extends Mage_Adminhtml_Controller_Acti
             $this->_getSession()->addError(
                 Mage::helper('qps')->__('This Rule no longer exists.')
             );
-            $this->_redirect('*/*/');
 
-            return;
+            return $this->_redirect('*/*/');
         }
 
         $data = $this->_getSession()->getFormData(true);
@@ -48,48 +47,51 @@ class Mageone_Qps_Adminhtml_QpsController extends Mage_Adminhtml_Controller_Acti
         $redirectBack = $this->getRequest()->getParam('back', false);
         if ($data = $this->getRequest()->getPost()) {
 
-            $id    = $this->getRequest()->getParam('id');
-            $model = Mage::getModel('qps/rule');
+            $id      = $this->getRequest()->getParam('id');
+            $model   = Mage::getModel('qps/rule');
+            $session = $this->_getSession();
             if (!$id) {
-                $this->_getSession()->addError('You can\'t create new rules, only edit existing ones.');
+                $session->addError('You can\'t create new rules, only edit existing ones.');
 
                 return $this->_redirect('*/*/index');
             }
 
             $model->load($id);
             if (!$model->getId()) {
-                $this->_getSession()->addError(
+                $session->addError(
                     Mage::helper('qps')->__('This Rule no longer exists.')
                 );
-                $this->_redirect('*/*/index');
 
-                return;
+                return $this->_redirect('*/*/index');
             }
 
             // save model
             try {
                 $model->setData('enabled', $data['enabled']);
-                $this->_getSession()->setFormData($data);
+                $session->setFormData($data);
                 $model->save();
-                $this->_getSession()->setFormData(false);
-                $this->_getSession()->addSuccess(
+                $session->setFormData(false);
+                $session->addSuccess(
                     Mage::helper('qps')->__('The Rule has been saved.')
                 );
             } catch (Mage_Core_Exception $e) {
-                $this->_getSession()->addError($e->getMessage());
+                $session->addError($e->getMessage());
                 $redirectBack = true;
             } catch (Exception $e) {
-                $this->_getSession()->addError(Mage::helper('qps')->__('Unable to save the Rule.'));
+                $session->addError(Mage::helper('qps')->__('Unable to save the Rule.'));
                 $redirectBack = true;
                 Mage::logException($e);
             }
 
             if ($redirectBack) {
-                $this->_redirect('*/*/edit', ['id' => $model->getId()]);
-
-                return;
+                return $this->_redirect('*/*/edit', ['id' => $model->getId()]);
             }
         }
         $this->_redirect('*/*/index');
+    }
+
+    protected function _isAllowed()
+    {
+        return Mage::getSingleton('admin/session')->isAllowed('system/config/qps_section');
     }
 }

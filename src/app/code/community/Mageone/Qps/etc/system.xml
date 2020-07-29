@@ -37,6 +37,9 @@
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
                             <comment>Enable new Rules which come day and night through update automatically (not recommended, without testing them!)</comment>
+                            <depends>
+                                <status>1</status>
+                            </depends>
                         </rule_auto_enable>
                         <public_key translate="label comment" module="qps">
                             <label>Public Key</label>
@@ -59,7 +62,7 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
-                            <comment><![CDATA[Your <a href="https://my.mage-one.com">https://my.mage-one.com</a> username]]></comment>
+                            <comment><![CDATA[Your <a href="https://my.mage-one.com/qps">https://my.mage-one.com/qps</a> username]]></comment>
                             <depends>
                                 <status>1</status>
                             </depends>

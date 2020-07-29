@@ -54,7 +54,7 @@
             <adminhtml>
                 <args>
                     <modules>
-                        <Mageone_Qps before="-">Mageone_Qps_Adminhtml</Mageone_Qps>
+                        <Mageone_Qps after="Mage_Adminhtml">Mageone_Qps_Adminhtml</Mageone_Qps>
                     </modules>
                 </args>
             </adminhtml>

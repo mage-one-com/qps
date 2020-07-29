@@ -47,11 +47,8 @@ class Mageone_Qps_Block_Rule_Edit extends Mage_Adminhtml_Block_Widget_Form_Conta
     {
         $model      = $this->_getModel();
         $modelTitle = $this->_getModelTitle();
-        if ($model && $model->getId()) {
-            return $this->_getHelper()->__("Edit $modelTitle (ID: %s)", $model->getId());
-        } else {
-            return $this->_getHelper()->__("New $modelTitle");
-        }
+
+        return $this->_getHelper()->__("Edit $modelTitle (ID: %s)", $model->getId());
     }
 
     /**

@@ -37,6 +37,7 @@ abstract class AbstractTest extends TestCase
         $this->setConfigurationSetting(Mageone_Qps_Helper_Data::QPS_STATUS, 1);
         $this->setConfigurationSetting(Mageone_Qps_Helper_Data::QPS_USER, self::EXAMPLE_USER);
         $this->setConfigurationSetting(Mageone_Qps_Helper_Data::QPS_PUBLIC_KEY, $this->getPublicKey());
+        $this->setConfigurationSetting(Mageone_Qps_Helper_Data::QPS_RULE_AUTO_ENABLE, 1);
 
         $this->helperMock = $this->createMock(Mageone_Qps_Helper_Data::class);
 
@@ -91,8 +92,8 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
-     * @param string                      $path
-     * @param string                      $value
+     * @param string                     $path
+     * @param string                     $value
      * @param Mage_Core_Model_Store|null $store
      */
     private function setConfig($path, $value, Mage_Core_Model_Store $store = null): void

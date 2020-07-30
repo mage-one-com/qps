@@ -202,13 +202,13 @@ class RuleUpdateTest extends AbstractTest
     }
 
     /**
-     * @dataProvider getRules
+     * @dataProvider getRulesWithEnabled
      *
      * @param string[]
+     * @param bool $enabled
      */
-    public function testUpdateRule($rules): void
+    public function testUpdateRule(array $rules, bool $enabled): void
     {
-        $enabled = true;
         Mage::getModel('qps/rule')
             ->setData(self::RULE)
             ->setData('enabled', $enabled)
@@ -230,7 +230,7 @@ class RuleUpdateTest extends AbstractTest
         $rule = Mage::getModel('qps/rule')->load(self::RULE_KEY, 'm1_key');
 
         $this->assertFalse($rule->isObjectNew());
-        $this->assertSame($enabled, $rule->getData('enabled'));
+        $this->assertSame($enabled, $rule->getEnabled());
         $this->assertSame(self::RULE_PREPROCESS, $rule->getData('preprocess'));
         $this->assertSame(self::RULE_KEY, $rule->getData('m1_key'));
     }
@@ -266,7 +266,22 @@ class RuleUpdateTest extends AbstractTest
     }
 
     /**
-     * @return string[]
+     * @return string[][]
+     */
+    public function getRulesWithEnabled(): array
+    {
+        $return = [];
+        foreach ([true, false] as $enabled) {
+            foreach ($this->getRules() as $key => $rule) {
+                $return[$key . ($enabled ? '_enabled' : '_disabled')] = array_merge($rule, [$enabled]);
+            }
+        }
+
+        return $return;
+    }
+
+    /**
+     * @return string[][]
      */
     public function getRules(): array
     {

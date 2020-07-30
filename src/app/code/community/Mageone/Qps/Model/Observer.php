@@ -84,7 +84,7 @@ class Mageone_Qps_Model_Observer
                 $transportObject->setData(
                     ['rule' => $rule, 'value' => $targetValue, 'passed' => true]
                 );
-                Mage::dispatchEvent('qps_custom_check', ['transport_object' => $transportObject]);
+                Mage::dispatchEvent('m1_qps_custom_check', ['transport_object' => $transportObject]);
                 if (!$transportObject->getData('passed')) {
                     $this->processTriggeredRule();
                 }

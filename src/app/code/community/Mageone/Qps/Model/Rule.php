@@ -2,10 +2,10 @@
 
 class Mageone_Qps_Model_Rule extends Mage_Core_Model_Abstract
 {
-    const TYPE_REGEX = 'regex';
-    const TYPE_CUSTOM = 'custom';
+    public const TYPE_REGEX = 'regex';
+    public const TYPE_CUSTOM = 'custom';
 
-    const CACHE_TAG = 'm1_qps_rule';
+    public const CACHE_TAG = 'm1_qps_rule';
     /**
      * @var string
      */
@@ -35,81 +35,46 @@ class Mageone_Qps_Model_Rule extends Mage_Core_Model_Abstract
             'php://stdin',
         ];
 
-    /**
-     * @return string
-     */
     public function getUrl(): ?string
     {
         return $this->_getData('url');
     }
 
-    /**
-     * @param string $url
-     *
-     * @return Mageone_Qps_Model_Rule
-     */
-    public function setUrl($url): \Mageone_Qps_Model_Rule
+    public function setUrl(string $url): \Mageone_Qps_Model_Rule
     {
         return $this->setData('url', $url);
     }
 
-    /**
-     * @return string
-     */
     public function getType(): string
     {
         return (string)$this->_getData('type');
     }
 
-    /**
-     * @param string $type
-     *
-     * @return Mageone_Qps_Model_Rule
-     */
-    public function setType($type): \Mageone_Qps_Model_Rule
+    public function setType(string $type): \Mageone_Qps_Model_Rule
     {
         return $this->setData('type', $type);
     }
 
-    /**
-     * @return string
-     */
     public function getName(): ?string
     {
         return $this->_getData('name');
     }
 
-    /**
-     * @param string $name
-     *
-     * @return Mageone_Qps_Model_Rule
-     */
-    public function setName($name): \Mageone_Qps_Model_Rule
+    public function setName(string $name): \Mageone_Qps_Model_Rule
     {
         return $this->setData('name', $name);
     }
 
-    /**
-     * @return string
-     */
     public function getRuleContent(): ?string
     {
         return $this->_getData('rule_content');
     }
 
-    /**
-     * @param string $ruleContent
-     *
-     * @return Mageone_Qps_Model_Rule
-     */
-    public function setRuleContent($ruleContent): \Mageone_Qps_Model_Rule
+    public function setRuleContent(string $ruleContent): \Mageone_Qps_Model_Rule
     {
         return $this->setData('rule_content', $ruleContent);
     }
 
-    /**
-     * @return array
-     */
     public function getTarget(): array
     {
         $target = array_filter(explode(',', $this->_getData('target')));
@@ -120,12 +85,7 @@ class Mageone_Qps_Model_Rule extends Mage_Core_Model_Abstract
         return $this->targetDefaultValues;
     }
 
-    /**
-     * @param string $target
-     *
-     * @return Mageone_Qps_Model_Rule
-     */
-    public function setTarget($target): \Mageone_Qps_Model_Rule
+    public function setTarget(string $target): \Mageone_Qps_Model_Rule
     {
         $targets = explode(',', $target);
         foreach ($targets as $t) {
@@ -140,20 +100,12 @@ class Mageone_Qps_Model_Rule extends Mage_Core_Model_Abstract
         return $this->setData('target', $target);
     }
 
-    /**
-     * @return string
-     */
     public function getPreprocess(): string
     {
         return (string)$this->_getData('preprocess');
     }
 
-    /**
-     * @param string $preprocess
-     *
-     * @return Mageone_Qps_Model_Rule
-     */
-    public function setPreprocess($preprocess): \Mageone_Qps_Model_Rule
+    public function setPreprocess(string $preprocess): \Mageone_Qps_Model_Rule
     {
         if (!in_array($preprocess, ['base64_decode', 'json_decode', 'rawurldecode', ''])) {
             throw new InvalidArgumentException(
@@ -164,9 +116,6 @@ class Mageone_Qps_Model_Rule extends Mage_Core_Model_Abstract
         return $this->setData('preprocess', $preprocess);
     }
 
-    /**
-     * @return string
-     */
     public function getPatchFix(): ?string
     {
         return $this->_getData('patch_fix');
@@ -177,37 +126,21 @@ class Mageone_Qps_Model_Rule extends Mage_Core_Model_Abstract
         return $this->setData('patch_fix', $patchFix);
     }
 
-    /**
-     * @return string
-     */
     public function getM1Key(): ?string
     {
         return $this->_getData('m1_key');
     }
 
-    /**
-     * @param string $key
-     *
-     * @return Mageone_Qps_Model_Rule
-     */
-    public function setM1Key($key): \Mageone_Qps_Model_Rule
+    public function setM1Key(string $key): \Mageone_Qps_Model_Rule
     {
         return $this->setData('m1_key', $key);
     }
 
-    /**
-     * @return bool
-     */
     public function getEnabled(): bool
     {
         return (bool)$this->_getData('enabled');
     }
 
-    /**
-     * @param bool $enabled
-     *
-     * @return Mageone_Qps_Model_Rule
-     */
     public function setEnabled(bool $enabled): \Mageone_Qps_Model_Rule
     {
         return $this->setData('enabled', $enabled);

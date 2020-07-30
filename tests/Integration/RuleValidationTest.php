@@ -91,10 +91,15 @@ class RuleValidationTest extends AbstractTest
     {
         $called = \Mageone_Test_Observer::$called;
 
-        $path = 'global/events/qps_custom_check/observers/mage_one/';
+        $path = 'global/events/m1_qps_custom_check/observers/mage_one/';
         Mage::app()->getConfig()->setNode($path . 'type', 'singleton');
         Mage::app()->getConfig()->setNode($path . 'class', 'Mageone_Test_Observer');
         Mage::app()->getConfig()->setNode($path . 'method', 'qpsCustomCheck');
+
+        $refProp = new \ReflectionProperty(Mage::app()->getConfig(), '_eventAreas');
+        $refProp->setAccessible(true);
+        $refProp->setValue(Mage::app()->getConfig(), null);
+        $refProp->setAccessible(false);
 
         $this->expectException(Mageone_Qps_Model_Exception_ExitSkippedForTestingException::class);
 

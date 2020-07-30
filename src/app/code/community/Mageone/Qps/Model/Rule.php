@@ -87,11 +87,10 @@ class Mageone_Qps_Model_Rule extends Mage_Core_Model_Abstract
 
     public function setTarget(string $target): \Mageone_Qps_Model_Rule
     {
-        $targets = explode(',', $target);
-        foreach ($targets as $t) {
+        foreach (explode(',', $target) as $t) {
             foreach ($this->targetDefaultValues as $global) {
-                if (substr_compare($t, $global, 0, strlen($global)) === 0) {
-                    break 2;
+                if ($this->startsWith($t, $global)) {
+                    continue 2;
                 }
             }
             throw new RuntimeException('Value for target is invalid.');
@@ -149,5 +148,16 @@ class Mageone_Qps_Model_Rule extends Mage_Core_Model_Abstract
     protected function _construct(): void
     {
         $this->_init('qps/rule');
+    }
+
+    /**
+     * @param string $string
+     * @param string $startsWith
+     *
+     * @return bool
+     */
+    private function startsWith(string $string, string $startsWith): bool
+    {
+        return substr_compare($string, $startsWith, 0, strlen($startsWith)) === 0;
     }
 }

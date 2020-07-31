@@ -1,6 +1,6 @@
 # Quick Protection System (QPS)
 
-QPS is a request inspection module for Magento 1 stores. It receives its configuration via the API of https://mage-one.com/.
+QPS is a request inspection module for Magento 1 stores. It receives its rule sets via the API of https://mage-one.com/.
 
 # Important
 
@@ -25,7 +25,7 @@ The Magento cron job needs to run in order to obtain updated rule sets.
     modman clone git@github.com:mage-one-com/qps.git
 
 ## manually
-[Download zip file](https://github.com/mage-one-com/qps/archive/master.zip) and copy the files from `src` into your magento root directory
+[Download zip file](https://github.com/mage-one-com/qps/archive/master.zip) and copy the files from inside the `src` folder into your magento root directory
 
 # Uninstall
 ## with composer
@@ -36,13 +36,33 @@ The Magento cron job needs to run in order to obtain updated rule sets.
 - Remove the files from your installation
 - Drop the rules table: `DROP TABLE <prefix>mageone_qps_rules;`
 
+# Configuration
+
+The rule processing must be enabled manually in `System > Config > Quick Protection System (General Tab)`. 
+
+Rules can be automatically enabled after the hourly API sync, although we recommend enabling rules manually after testing them (this is our default setting).
+
+You have to enter a username and publi key, which you can obtain from [https://my.mage-one.com/qps](https://my.mage-one.com/qps)
+
 # How does it work?
 
 Our module filters malicious requests based on rules. These rules will be provided by our API, which is part of [https://mage-one.com/](https://mage-one.com/). Rules are usually based on regex inspections of the _GLOBALS data.
 
 Rules will be fetch from the API every hour and only cover vulnerabilities that aren't patched with Mage One Patches yet. Therefor our extension provides the API with a list of all installed Mage One patches. Our API then decides which rules have to be returned.
 
-The rule processing must be enabled manually in System > Config > Quick Protection System (General Tab). Rules can automatically be enabled after the hourly API sync, although we recommend to enable rules manually after testing them.   
+# How can I test it?
+
+After a successful installation and configuration you can enable our test rule `MO-TEST` and access `<your-shop-url>/mageone/test/rule/?malicious=<script>`. The result should be a blank page.
+
+After this test, please disable our test rule again.
+
+# Help
+
+If you want to trigger the rule synchronisation manually you can trigger the cron job via [n98-magerun](https://github.com/netz98/n98-magerun)
+```
+php n98-magerun.phar sys:cron:run qps_getrules
+```
+
 
 
 # Contribution
@@ -55,7 +75,7 @@ This module is under development by Mage One (https://mage-one.com) a service of
 
 # License
 
-QPS is licensed under BSD 3-clause License, modified according to german law.
+QPS is licensed under a modified BSD 3-clause License (according to german law)
 
 Copyright 2020 Paddox GmbH, Germany
 

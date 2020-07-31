@@ -87,6 +87,15 @@ class RuleValidationTest extends AbstractTest
         $this->observer->checkRequest($this->setupEvent($request));
     }
 
+    public function testEmptyUrlMatchesEverything(): void
+    {
+        $this->expectException(Mageone_Qps_Model_Exception_ExitSkippedForTestingException::class);
+
+        $this->createRule('', 'Custom URL which never matches', '#^value$#', '_GET["key"]', '', 'MO-1');
+        $request = $this->setupRequest('/some/url', ['key' => 'value'], []);
+        $this->observer->checkRequest($this->setupEvent($request));
+    }
+
     public function testRuleDoesTriggerEventIfNotRegex(): void
     {
         $called = \Mageone_Test_Observer::$called;

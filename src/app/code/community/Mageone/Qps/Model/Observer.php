@@ -102,6 +102,9 @@ class Mageone_Qps_Model_Observer
      */
     private function isUrlMatch(Mageone_Qps_Model_Rule $rule, Mage_Core_Controller_Request_Http $request): bool
     {
+        if (!$rule->getUrl()) {
+            return true;
+        }
         $path = (string)Mage::getConfig()->getNode(Mage_Adminhtml_Helper_Data::XML_PATH_ADMINHTML_ROUTER_FRONTNAME);
         $url  = str_replace(self::ADMINHTML_PATH_PATTERN, $path, $rule->getUrl());
 

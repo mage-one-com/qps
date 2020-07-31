@@ -30,6 +30,7 @@ class Mageone_Qps_Block_Rule_Grid extends Mage_Adminhtml_Block_Widget_Grid
                 'header' => $this->__('Identifier'),
                 'type'   => 'text',
                 'index'  => 'm1_key',
+                'escape' => true,
             ]
         );
 
@@ -37,7 +38,8 @@ class Mageone_Qps_Block_Rule_Grid extends Mage_Adminhtml_Block_Widget_Grid
             [
                 'header' => $this->__('Validated URL pattern'),
                 'type'   => 'text',
-                'index'  => 'url'
+                'index'  => 'url',
+                'escape' => true,
             ]
         );
 
@@ -45,7 +47,8 @@ class Mageone_Qps_Block_Rule_Grid extends Mage_Adminhtml_Block_Widget_Grid
             [
                 'header' => $this->__('Type'),
                 'type'   => 'text',
-                'index'  => 'type'
+                'index'  => 'type',
+                'escape' => true,
             ]
         );
 
@@ -53,7 +56,8 @@ class Mageone_Qps_Block_Rule_Grid extends Mage_Adminhtml_Block_Widget_Grid
             [
                 'header' => $this->__('Name'),
                 'type'   => 'text',
-                'index'  => 'name'
+                'index'  => 'name',
+                'escape' => true,
             ]
         );
 
@@ -61,7 +65,8 @@ class Mageone_Qps_Block_Rule_Grid extends Mage_Adminhtml_Block_Widget_Grid
             [
                 'header' => $this->__('Rule Content'),
                 'type'   => 'text',
-                'index'  => 'rule_content'
+                'index'  => 'rule_content',
+                'escape' => true,
             ]
         );
 
@@ -69,7 +74,8 @@ class Mageone_Qps_Block_Rule_Grid extends Mage_Adminhtml_Block_Widget_Grid
             [
                 'header' => $this->__('Target'),
                 'type'   => 'text',
-                'index'  => 'target'
+                'index'  => 'target',
+                'escape' => true,
             ]
         );
 
@@ -78,6 +84,7 @@ class Mageone_Qps_Block_Rule_Grid extends Mage_Adminhtml_Block_Widget_Grid
                 'header' => $this->__('Preprocess'),
                 'type'   => 'text',
                 'index'  => 'preprocess',
+                'escape' => true,
             ]
         );
 
@@ -85,7 +92,8 @@ class Mageone_Qps_Block_Rule_Grid extends Mage_Adminhtml_Block_Widget_Grid
             [
                 'header' => $this->__('Fixing Patch'),
                 'type'   => 'text',
-                'index'  => 'patch_fix'
+                'index'  => 'patch_fix',
+                'escape' => true,
             ]
         );
 

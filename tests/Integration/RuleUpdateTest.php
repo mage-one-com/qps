@@ -2,7 +2,17 @@
 
 namespace MageOne\Qps\Test\Integration;
 
+use Exception;
+use Mage;
+use Mage_Core_Model_Resource;
+use Mage_HTTP_IClient;
 use MageOne\Qps\Test\AbstractTest;
+use Mageone_Qps_Helper_Data;
+use Mageone_Qps_Model_Cron;
+use Mageone_Qps_Model_Observer;
+use Mageone_Qps_Model_Rule;
+use Mageone_Qps_Model_SecService;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @covers \Mageone_Qps_Model_Cron
@@ -24,43 +34,43 @@ class RuleUpdateTest extends AbstractTest
     const RULE_KEY = 'MO-4711';
     const RULE_PREPROCESS = 'base64_decode';
     /**
-     * @var \Mageone_Qps_Model_Cron
+     * @var Mageone_Qps_Model_Cron
      */
     private $cron;
     /**
-     * @var \Mage_HTTP_IClient|\PHPUnit\Framework\MockObject\MockObject
+     * @var Mage_HTTP_IClient|MockObject
      */
     private $clientMock;
     /**
-     * @var \Mageone_Qps_Model_SecService
+     * @var Mageone_Qps_Model_SecService
      */
     private $secService;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->clientMock = $this->createMock(\Mage_HTTP_IClient::class);
-        $this->cron       = \Mage::getModel('qps/cron', ['client' => $this->clientMock]);
-        $this->secService = \Mage::getModel('qps/secService');
+        $this->clientMock = $this->createMock(Mage_HTTP_IClient::class);
+        $this->cron       = Mage::getModel('qps/cron', ['client' => $this->clientMock]);
+        $this->secService = Mage::getModel('qps/secService');
 
         $this->helperMock->method('getUsername')->willReturn(self::EXAMPLE_USER);
         $this->helperMock->method('getResourceUrl')->willReturn(self::RESOURCE_URL);
 
-        \Mage::app()->cleanCache([\Mageone_Qps_Model_Observer::QPS_CACHE_TAG]);
+        Mage::app()->cleanCache([Mageone_Qps_Model_Observer::QPS_CACHE_TAG]);
         $this->getConnection()->delete($this->getResource()->getTableName('qps/rule'));
-        $this->assertEquals(0, \Mage::getResourceModel('qps/rule_collection')->count());
+        $this->assertEquals(0, Mage::getResourceModel('qps/rule_collection')->count());
     }
 
     protected function tearDown(): void
     {
         parent::tearDown();
-        /** @var \Mage_Core_Model_Resource $resource */
-        $resource = \Mage::getSingleton('core/resource');
+        /** @var Mage_Core_Model_Resource $resource */
+        $resource = Mage::getSingleton('core/resource');
     }
 
-    public function testDoNothingIfNotEnabled()
+    public function testDoNothingIfNotEnabled(): void
     {
-        $helperMock = $this->createMock(\Mageone_Qps_Helper_Data::class);
+        $helperMock = $this->createMock(Mageone_Qps_Helper_Data::class);
         $helperMock->method('isEnabled')->willReturn(false);
         $this->replaceHelperWithMock($helperMock, 'qps');
 
@@ -68,11 +78,11 @@ class RuleUpdateTest extends AbstractTest
             ->expects($this->never())
             ->method('post');
 
-        $cron = \Mage::getModel('qps/cron', ['client' => $this->clientMock]);
+        $cron = Mage::getModel('qps/cron', ['client' => $this->clientMock]);
         $cron->getRules();
     }
 
-    public function testClientReturns200()
+    public function testClientReturns200(): void
     {
         $secService       = $this->secService;
         $validatePostData = (static function ($postData) use ($secService) {
@@ -83,9 +93,9 @@ class RuleUpdateTest extends AbstractTest
             try {
                 $message = json_decode($decrypt, true, 512, JSON_THROW_ON_ERROR);
 
-                return $message['magento_version'] === \Mage::getVersion()
+                return $message['magento_version'] === Mage::getVersion()
                     && $message['patches_list'] === ['test-patch' => 'TEST patch'];
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 return false;
             }
         });
@@ -103,7 +113,7 @@ class RuleUpdateTest extends AbstractTest
         $this->cron->getRules();
     }
 
-    public function testClientReturnsNo200()
+    public function testClientReturnsNo200(): void
     {
         $this->clientMock
             ->expects($this->once())
@@ -120,9 +130,9 @@ class RuleUpdateTest extends AbstractTest
     /**
      * @dataProvider getRules
      *
-     * @param \string[][][][]
+     * @param string[]
      */
-    public function testRulesAreAutoDisabled($rules)
+    public function testRulesAreAutoDisabled($rules): void
     {
         $this->clientMock
             ->method('getStatus')
@@ -136,8 +146,8 @@ class RuleUpdateTest extends AbstractTest
 
         $this->cron->getRules();
 
-        foreach (\Mage::getResourceModel('qps/rule_collection') as $rule) {
-            /** @var \Mageone_Qps_Model_Rule $rule */
+        foreach (Mage::getResourceModel('qps/rule_collection') as $rule) {
+            /** @var Mageone_Qps_Model_Rule $rule */
             $this->assertFalse($rule->getEnabled());
         }
     }
@@ -145,9 +155,9 @@ class RuleUpdateTest extends AbstractTest
     /**
      * @dataProvider getRules
      *
-     * @param \string[][][][]
+     * @param string[]
      */
-    public function testRulesAreAutoEnabled($rules)
+    public function testRulesAreAutoEnabled($rules): void
     {
         $this->helperMock->method('isRuleAutoEnable')->willReturn(true);
 
@@ -163,8 +173,8 @@ class RuleUpdateTest extends AbstractTest
 
         $this->cron->getRules();
 
-        foreach (\Mage::getResourceModel('qps/rule_collection') as $rule) {
-            /** @var \Mageone_Qps_Model_Rule $rule */
+        foreach (Mage::getResourceModel('qps/rule_collection') as $rule) {
+            /** @var Mageone_Qps_Model_Rule $rule */
             $this->assertTrue($rule->getEnabled());
         }
     }
@@ -172,9 +182,9 @@ class RuleUpdateTest extends AbstractTest
     /**
      * @dataProvider getRules
      *
-     * @param \string[][][][]
+     * @param string[]
      */
-    public function testWriteNewRules($rules)
+    public function testWriteNewRules($rules): void
     {
         $this->clientMock
             ->method('getStatus')
@@ -188,18 +198,18 @@ class RuleUpdateTest extends AbstractTest
 
         $this->cron->getRules();
 
-        $this->assertEquals(count($rules), \Mage::getResourceModel('qps/rule_collection')->count());
+        $this->assertEquals(count($rules), Mage::getResourceModel('qps/rule_collection')->count());
     }
 
     /**
-     * @dataProvider getRules
+     * @dataProvider getRulesWithEnabled
      *
-     * @param \string[][][][]
+     * @param string[]
+     * @param bool $enabled
      */
-    public function testUpdateRule($rules)
+    public function testUpdateRule(array $rules, bool $enabled): void
     {
-        $enabled = '1';
-        \Mage::getModel('qps/rule')
+        Mage::getModel('qps/rule')
             ->setData(self::RULE)
             ->setData('enabled', $enabled)
             ->setData('preprocess', '')
@@ -217,10 +227,10 @@ class RuleUpdateTest extends AbstractTest
 
         $this->cron->getRules();
 
-        $rule = \Mage::getModel('qps/rule')->load(self::RULE_KEY, 'm1_key');
+        $rule = Mage::getModel('qps/rule')->load(self::RULE_KEY, 'm1_key');
 
         $this->assertFalse($rule->isObjectNew());
-        $this->assertSame($enabled, $rule->getData('enabled'));
+        $this->assertSame($enabled, $rule->getEnabled());
         $this->assertSame(self::RULE_PREPROCESS, $rule->getData('preprocess'));
         $this->assertSame(self::RULE_KEY, $rule->getData('m1_key'));
     }
@@ -228,12 +238,12 @@ class RuleUpdateTest extends AbstractTest
     /**
      * @dataProvider getRules
      *
-     * @param \string[][][][]
+     * @param string[]
      */
-    public function testDeleteRuleOnUpdate($rules)
+    public function testDeleteRuleOnUpdate($rules): void
     {
         $key = 'something_else';
-        \Mage::getModel('qps/rule')
+        Mage::getModel('qps/rule')
             ->setData(self::RULE)
             ->setData('m1_key', $key)
             ->save();
@@ -250,15 +260,30 @@ class RuleUpdateTest extends AbstractTest
 
         $this->cron->getRules();
 
-        $rule = \Mage::getModel('qps/rule')->load($key, 'm1_key');
+        $rule = Mage::getModel('qps/rule')->load($key, 'm1_key');
 
         $this->assertTrue($rule->isObjectNew());
     }
 
     /**
-     * @return \string[][][][]
+     * @return string[][]
      */
-    public function getRules()
+    public function getRulesWithEnabled(): array
+    {
+        $return = [];
+        foreach ([true, false] as $enabled) {
+            foreach ($this->getRules() as $key => $rule) {
+                $return[$key . ($enabled ? '_enabled' : '_disabled')] = array_merge($rule, [$enabled]);
+            }
+        }
+
+        return $return;
+    }
+
+    /**
+     * @return string[][]
+     */
+    public function getRules(): array
     {
         return [
             'one rule'  => [

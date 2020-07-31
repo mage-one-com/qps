@@ -3,7 +3,7 @@
 class Mageone_Qps_Block_Rule_Edit_Form extends Mage_Adminhtml_Block_Widget_Form
 {
 
-    protected function _prepareForm()
+    protected function _prepareForm(): Mageone_Qps_Block_Rule_Edit_Form
     {
         $model      = $this->_getModel();
         $modelTitle = $this->_getModelTitle();
@@ -103,7 +103,7 @@ class Mageone_Qps_Block_Rule_Edit_Form extends Mage_Adminhtml_Block_Widget_Form
         return Mage::registry('current_model');
     }
 
-    protected function _getModelTitle()
+    protected function _getModelTitle(): string
     {
         return 'Rule';
     }

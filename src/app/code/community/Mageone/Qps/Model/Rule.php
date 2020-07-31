@@ -2,10 +2,10 @@
 
 class Mageone_Qps_Model_Rule extends Mage_Core_Model_Abstract
 {
-    const TYPE_REGEX = 'regex';
-    const TYPE_CUSTOM = 'custom';
+    public const TYPE_REGEX = 'regex';
+    public const TYPE_CUSTOM = 'custom';
 
-    const CACHE_TAG = 'm1_qps_rule';
+    public const CACHE_TAG = 'm1_qps_rule';
     /**
      * @var string
      */
@@ -35,82 +35,47 @@ class Mageone_Qps_Model_Rule extends Mage_Core_Model_Abstract
             'php://stdin',
         ];
 
-    /**
-     * @return string
-     */
-    public function getUrl()
+    public function getUrl(): ?string
     {
         return $this->_getData('url');
     }
 
-    /**
-     * @param string $url
-     *
-     * @return Mageone_Qps_Model_Rule
-     */
-    public function setUrl($url)
+    public function setUrl(string $url): \Mageone_Qps_Model_Rule
     {
         return $this->setData('url', $url);
     }
 
-    /**
-     * @return string
-     */
-    public function getType()
+    public function getType(): string
     {
         return (string)$this->_getData('type');
     }
 
-    /**
-     * @param string $type
-     *
-     * @return Mageone_Qps_Model_Rule
-     */
-    public function setType($type)
+    public function setType(string $type): \Mageone_Qps_Model_Rule
     {
         return $this->setData('type', $type);
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->_getData('name');
     }
 
-    /**
-     * @param string $name
-     *
-     * @return Mageone_Qps_Model_Rule
-     */
-    public function setName($name)
+    public function setName(string $name): \Mageone_Qps_Model_Rule
     {
         return $this->setData('name', $name);
     }
 
-    /**
-     * @return string
-     */
-    public function getRuleContent()
+    public function getRuleContent(): ?string
     {
         return $this->_getData('rule_content');
     }
 
-    /**
-     * @param string $ruleContent
-     *
-     * @return Mageone_Qps_Model_Rule
-     */
-    public function setRuleContent($ruleContent)
+    public function setRuleContent(string $ruleContent): \Mageone_Qps_Model_Rule
     {
         return $this->setData('rule_content', $ruleContent);
     }
 
-    /**
-     * @return array
-     */
-    public function getTarget()
+    public function getTarget(): array
     {
         $target = array_filter(explode(',', $this->_getData('target')));
         if ($target) {
@@ -120,34 +85,26 @@ class Mageone_Qps_Model_Rule extends Mage_Core_Model_Abstract
         return $this->targetDefaultValues;
     }
 
-    /**
-     * @param string $target
-     *
-     * @return Mageone_Qps_Model_Rule
-     */
-    public function setTarget($target)
+    public function setTarget(string $target): \Mageone_Qps_Model_Rule
     {
-        if (!in_array($target, $this->targetDefaultValues)) {
+        foreach (explode(',', $target) as $t) {
+            foreach ($this->targetDefaultValues as $global) {
+                if ($this->startsWith($t, $global)) {
+                    continue 2;
+                }
+            }
             throw new RuntimeException('Value for target is invalid.');
         }
 
         return $this->setData('target', $target);
     }
 
-    /**
-     * @return string
-     */
-    public function getPreprocess()
+    public function getPreprocess(): string
     {
         return (string)$this->_getData('preprocess');
     }
 
-    /**
-     * @param string $preprocess
-     *
-     * @return Mageone_Qps_Model_Rule
-     */
-    public function setPreprocess($preprocess)
+    public function setPreprocess(string $preprocess): \Mageone_Qps_Model_Rule
     {
         if (!in_array($preprocess, ['base64_decode', 'json_decode', 'rawurldecode', ''])) {
             throw new InvalidArgumentException(
@@ -158,62 +115,49 @@ class Mageone_Qps_Model_Rule extends Mage_Core_Model_Abstract
         return $this->setData('preprocess', $preprocess);
     }
 
-    /**
-     * @return string
-     */
-    public function getPatchFix()
+    public function getPatchFix(): ?string
     {
         return $this->_getData('patch_fix');
     }
 
-    /**
-     * @param string $patchFix
-     *
-     * @return Mageone_Qps_Model_Rule
-     */
-    public function setPatchFix($patchFix)
+    public function setPatchFix(string $patchFix): \Mageone_Qps_Model_Rule
     {
         return $this->setData('patch_fix', $patchFix);
     }
 
-    /**
-     * @return string
-     */
-    public function getM1Key()
+    public function getM1Key(): ?string
     {
         return $this->_getData('m1_key');
     }
 
-    /**
-     * @param string $key
-     *
-     * @return Mageone_Qps_Model_Rule
-     */
-    public function setM1Key($key)
+    public function setM1Key(string $key): \Mageone_Qps_Model_Rule
     {
         return $this->setData('m1_key', $key);
     }
 
-    /**
-     * @return bool
-     */
-    public function getEnabled()
+    public function getEnabled(): bool
     {
         return (bool)$this->_getData('enabled');
     }
 
-    /**
-     * @param bool $enabled
-     *
-     * @return Mageone_Qps_Model_Rule
-     */
-    public function setEnabled($enabled)
+    public function setEnabled(bool $enabled): \Mageone_Qps_Model_Rule
     {
         return $this->setData('enabled', $enabled);
     }
 
-    protected function _construct()
+    protected function _construct(): void
     {
         $this->_init('qps/rule');
+    }
+
+    /**
+     * @param string $string
+     * @param string $startsWith
+     *
+     * @return bool
+     */
+    private function startsWith(string $string, string $startsWith): bool
+    {
+        return substr_compare($string, $startsWith, 0, strlen($startsWith)) === 0;
     }
 }

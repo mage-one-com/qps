@@ -2,7 +2,9 @@
 
 namespace MageOne\Qps\Test\Unit\Helper;
 
+use Mage;
 use MageOne\Qps\Test\AbstractTest;
+use Mageone_Qps_Helper_Patches;
 
 /**
  * @covers Mageone_Qps_Helper_Patches
@@ -10,7 +12,7 @@ use MageOne\Qps\Test\AbstractTest;
 class PatchesTest extends AbstractTest
 {
     /**
-     * @var \Mageone_Qps_Helper_Patches
+     * @var Mageone_Qps_Helper_Patches
      */
     private $helper;
     /**
@@ -21,7 +23,7 @@ class PatchesTest extends AbstractTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->helper = \Mage::helper('qps/patches');
+        $this->helper = Mage::helper('qps/patches');
     }
 
     protected function tearDown(): void
@@ -30,18 +32,18 @@ class PatchesTest extends AbstractTest
             unlink($file);
         }
         $this->clearConfigCache();
-        \Mage::getConfig()->reinit();
+        Mage::getConfig()->reinit();
         parent::tearDown();
     }
 
-    public function testGetPatchList()
+    public function testGetPatchList(): void
     {
         $this->assertSame(['test-patch' => 'TEST patch'], $this->helper->getPatchList());
     }
 
-    public function testGetPatchListWithNewXml()
+    public function testGetPatchListWithNewXml(): void
     {
-        $filePatch           = \Mage::getBaseDir('etc') . '/' . 'mageone1.xml';
+        $filePatch           = Mage::getBaseDir('etc') . '/' . 'mageone1.xml';
         $this->deleteFiles[] = $filePatch;
 
         $xmlConfig = <<<XML
@@ -55,7 +57,7 @@ class PatchesTest extends AbstractTest
 </config>
 XML;
         file_put_contents($filePatch, $xmlConfig);
-        \Mage::getConfig()->reinit();
+        Mage::getConfig()->reinit();
         $this->assertSame(['patch2' => 'PATCH TWO', 'test-patch' => 'TEST patch'], $this->helper->getPatchList());
     }
 
@@ -64,8 +66,8 @@ XML;
      */
     private function clearConfigCache()
     {
-        \Mage::getConfig()->loadCache();
+        Mage::getConfig()->loadCache();
 
-        return \Mage::app()->getCacheInstance()->cleanType('config');
+        return Mage::app()->getCacheInstance()->cleanType('config');
     }
 }

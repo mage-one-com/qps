@@ -7,7 +7,7 @@ class Mageone_Qps_Helper_Patches
     /**
      * @return string[]
      */
-    public function getPatchList()
+    public function getPatchList(): array
     {
         return Mage::app()->getConfig()->getNode(self::MAGE_ONE_PATCH_LIST)->asArray();
     }

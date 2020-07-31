@@ -8,3 +8,4 @@ require 'AbstractTest.php';
 
 require 'app/Mage.php';
 Mage::app();
+Mage::getResourceModel('qps/rule_collection')->walk('delete');

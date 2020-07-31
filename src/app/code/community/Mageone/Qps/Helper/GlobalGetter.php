@@ -22,14 +22,16 @@ class Mageone_Qps_Helper_GlobalGetter
      *
      * @return string
      */
-    public function get($expr)
+    public function get($expr): string
     {
         if (!is_string($expr)) {
             throw new InvalidArgumentException('$expr must be a string.');
         }
         if ($expr === 'php://input') {
             return $this->getPhpInput();
-        } elseif ($expr === 'php://stdin') {
+        }
+
+        if ($expr === 'php://stdin') {
             return $this->getPhpStdin();
         }
 
@@ -40,15 +42,12 @@ class Mageone_Qps_Helper_GlobalGetter
 
     /**
      * @param array  $array
-     * @param string $keys
+     * @param array $keys
      *
      * @return array|string|mixed
      */
-    private
-    function getFrom(
-        $array,
-        $keys
-    ) {
+    private function getFrom($array, $keys)
+    {
         if (!isset($array[current($keys)])) {
             return '';
         }
@@ -63,8 +62,7 @@ class Mageone_Qps_Helper_GlobalGetter
     /**
      * @return string
      */
-    private
-    function getPhpInput()
+    private function getPhpInput(): string
     {
         if ($this->inputStreamReader) {
             return (string)call_user_func($this->inputStreamReader);
@@ -73,7 +71,7 @@ class Mageone_Qps_Helper_GlobalGetter
         return (string)file_get_contents('php://input');
     }
 
-    private function getPhpStdin()
+    private function getPhpStdin(): string
     {
         if ($this->stdinStreamReader) {
             return (string)call_user_func($this->stdinStreamReader);

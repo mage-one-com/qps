@@ -22,7 +22,7 @@ class Mageone_Qps_Model_Cron
     /**
      * @return void
      */
-    public function getRules()
+    public function getRules(): void
     {
         if (!$this->helper->isEnabled()) {
             return;
@@ -54,7 +54,7 @@ class Mageone_Qps_Model_Cron
                 return;
             }
 
-            $result = Mage::helper('core')->jsonDecode($security->decryptMessage($client->getBody()));
+            $result = json_decode($security->decryptMessage($client->getBody()), true);
             if (is_array($result)) {
                 /** @var $keys string[] */
                 // load all rules before update
@@ -63,7 +63,9 @@ class Mageone_Qps_Model_Cron
                 foreach ($result as $item) {
                     // update rules, save to database and unset on collection
                     $rule = $collection->getItemByColumnValue('m1_key', $item['m1_key']) ?: Mage::getModel('qps/rule');
-                    $rule->setData('enabled', $this->helper->isRuleAutoEnable());
+                    if ($rule->isObjectNew()) {
+                        $rule->setEnabled($this->helper->isRuleAutoEnable());
+                    }
                     $rule->addData($item)->save();
                     $collection->removeItemByKey($rule->getId());
                 }
@@ -89,7 +91,7 @@ class Mageone_Qps_Model_Cron
      * @return string[]
      * @throws Exception
      */
-    private function getPatchList()
+    private function getPatchList(): array
     {
         return Mage::helper('qps/patches')->getPatchList();
     }

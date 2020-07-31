@@ -2,7 +2,9 @@
 
 namespace MageOne\Qps\Test\Unit\Model;
 
+use Mage;
 use MageOne\Qps\Test\AbstractTest;
+use Mageone_Qps_Model_SecService;
 
 /**
  * @covers \Mageone_Qps_Model_SecService
@@ -10,7 +12,7 @@ use MageOne\Qps\Test\AbstractTest;
 class SecServiceTest extends AbstractTest
 {
     /**
-     * @var \Mageone_Qps_Model_SecService
+     * @var Mageone_Qps_Model_SecService
      */
     private $secService;
 
@@ -18,10 +20,10 @@ class SecServiceTest extends AbstractTest
     {
         parent::setUp();
 
-        $this->secService = \Mage::getModel('qps/secService');
+        $this->secService = Mage::getModel('qps/secService');
     }
 
-    public function testEncryptDecrypt()
+    public function testEncryptDecrypt(): void
     {
 
         $encryptedDecryptedMessage = $this->secService->decryptMessage(
@@ -40,7 +42,7 @@ class SecServiceTest extends AbstractTest
     /**
      * @return string
      */
-    private function getMessage()
+    private function getMessage(): string
     {
         return 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut lab'
             . 'ore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et e'

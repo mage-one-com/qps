@@ -2,7 +2,11 @@
 
 namespace MageOne\Qps\Test\Unit\Helper;
 
+use InvalidArgumentException;
+use Mage;
 use MageOne\Qps\Test\AbstractTest;
+use Mageone_Qps_Helper_GlobalGetter;
+use stdClass;
 
 /**
  * @covers Mageone_Qps_Helper_GlobalGetter
@@ -19,15 +23,15 @@ class GlobalGetterTest extends AbstractTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->helper = new \Mageone_Qps_Helper_GlobalGetter();
+        $this->helper = new Mageone_Qps_Helper_GlobalGetter();
     }
 
-    public function testCreateHelperViaMageHelper()
+    public function testCreateHelperViaMageHelper(): void
     {
-        $this->assertInstanceOf(\Mageone_Qps_Helper_GlobalGetter::class, \Mage::helper('qps/globalGetter'));
+        $this->assertInstanceOf(Mageone_Qps_Helper_GlobalGetter::class, Mage::helper('qps/globalGetter'));
     }
 
-    public function testGetWithSingleQuote()
+    public function testGetWithSingleQuote(): void
     {
         $value                        = '123';
         $GLOBALS['_GET']['something'] = $value;
@@ -35,7 +39,7 @@ class GlobalGetterTest extends AbstractTest
         $this->assertSame($value, $this->helper->get('_GET[\'something\']'));
     }
 
-    public function testGetWithDoubleQuote()
+    public function testGetWithDoubleQuote(): void
     {
         $value                        = '123';
         $GLOBALS['_GET']['something'] = $value;
@@ -43,7 +47,7 @@ class GlobalGetterTest extends AbstractTest
         $this->assertSame($value, $this->helper->get('_GET["something"]'));
     }
 
-    public function testGetWithDeepArray()
+    public function testGetWithDeepArray(): void
     {
         $value                                          = '1234';
         $GLOBALS['_GET']['one']['two']['three']['four'] = $value;
@@ -51,32 +55,32 @@ class GlobalGetterTest extends AbstractTest
         $this->assertSame($value, $this->helper->get('_GET[\'one\'][\'two\'][\'three\'][\'four\']'));
     }
 
-    public function testReturnsEmptyStringIfUndefined()
+    public function testReturnsEmptyStringIfUndefined(): void
     {
         $this->assertSame('', $this->helper->get('_GET[\'one\'][\'two\'][\'three\'][\'four\']'));
 
     }
 
-    public function testThrowsExceptionIfExprIsNoString()
+    public function testThrowsExceptionIfExprIsNoString(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->assertSame('', $this->helper->get(new \stdClass()));
+        $this->expectException(InvalidArgumentException::class);
+        $this->assertSame('', $this->helper->get(new stdClass()));
     }
 
-    public function testReturnsPhpInput()
+    public function testReturnsPhpInput(): void
     {
         $expected = '12345';
-        $getter   = new \Mageone_Qps_Helper_GlobalGetter(static function () use ($expected) {
+        $getter   = new Mageone_Qps_Helper_GlobalGetter(static function () use ($expected) {
             return $expected;
         });
 
         $this->assertSame($expected, $getter->get('php://input'));
     }
 
-    public function testReturnsPhpStdin()
+    public function testReturnsPhpStdin(): void
     {
         $expected = 'lalala';
-        $getter   = new \Mageone_Qps_Helper_GlobalGetter(null, static function () use ($expected) {
+        $getter   = new Mageone_Qps_Helper_GlobalGetter(null, static function () use ($expected) {
             return $expected;
         });
 

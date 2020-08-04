@@ -1,8 +1,8 @@
 {
   "name": "mage_one_com/qps",
   "type": "magento-module",
-  "license": "MIT",
-  "description": "QuickProtectionSystem for the Mage One service",
+  "license": "modified BSD 3-Clause",
+  "description": "Quick Protection System for Mage One",
   "authors": [
     {
       "name": "Paddox GmbH",

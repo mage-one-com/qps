@@ -84,7 +84,7 @@ class Mageone_Qps_Model_Cron
      */
     private function getClient()
     {
-        return $this->client ?: Mage_HTTP_Client::getInstance();
+        return $this->client ?: new Mageone_Qps_Model_HTTP_Client_Curl();
     }
 
     /**

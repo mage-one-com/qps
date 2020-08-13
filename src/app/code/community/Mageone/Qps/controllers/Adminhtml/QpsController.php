@@ -92,7 +92,7 @@ class Mageone_Qps_Adminhtml_QpsController extends Mage_Adminhtml_Controller_Acti
 
     public function loadAction()
     {
-        $cron = new Mageone_Qps_Model_Cron();
+        $cron = Mage::getModel('qps/cron');
         $cron->getRules();
 
         $this->_redirect('*/*/index');

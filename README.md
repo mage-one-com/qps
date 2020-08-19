@@ -41,6 +41,7 @@ The Magento cron job needs to run in order to obtain updated rule sets.
 The rule processing must be enabled manually in `System > Config > Quick Protection System (General Tab)`. 
 
 Rules can be automatically enabled after the hourly API sync, although we recommend enabling rules manually after testing them (this is our default setting).
+Enabling or disabling rules is possible in `System > Tools > MageOne QPS Rules`
 
 You have to enter a username and public key, which you can obtain from [https://my.mage-one.com/qps](https://my.mage-one.com/qps)
 

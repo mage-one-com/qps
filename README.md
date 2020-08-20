@@ -52,7 +52,7 @@ Rules will be fetched from the API every hour and only cover vulnerabilities tha
 
 # How can I test it?
 
-After a successful installation and configuration you can enable our test rule `MO-TEST` and access `<your-shop-url>/mageone/test/rule/?malicious=<script>`. The result should be a blank page.
+After a successful installation and configuration you can enable our test rule `MO-TEST` under `System > Tools > Mage One QPS Rules` and access `<your-shop-url>/mageone/test/rule/?malicious=<script>`. The result should be a blank page.
 
 After this test, please disable our test rule again.
 

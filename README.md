@@ -7,7 +7,10 @@ QPS is a request inspection module for Magento 1 stores. It receives its rule se
 The Magento cron job needs to run in order to obtain updated rule sets.
 
 # Install
-## with composer
+
+Make sure your **Magento cronjob** is running. 
+
+### with composer
 
 1. Add the repository with the module:
 
@@ -20,12 +23,21 @@ The Magento cron job needs to run in order to obtain updated rule sets.
 
 2. `composer require mage_one_com/qps`
 
-## with modman
+### with modman
 
     modman clone git@github.com:mage-one-com/qps.git
 
-## manually
+### manually
 [Download zip file](https://github.com/mage-one-com/qps/archive/master.zip) and copy the files from inside the `src` folder into your magento root directory
+
+## Clean cache/run install scripts
+
+After cleaning the cache, the install scripts should run automatically to create the table for the rules.
+
+## Username + key
+To use the QPS you need to [add your username and key in the configuration](https://my.mage-one.com/qps):
+
+    System > Konfiguration > General > Quick Protection System
 
 # Uninstall
 ## with composer

@@ -12,7 +12,7 @@ class Mageone_Qps_Adminhtml_QpsController extends Mage_Adminhtml_Controller_Acti
 
     public function editAction()
     {
-        $id    = $this->getRequest()->getParam('id');
+        $id = $this->getRequest()->getParam('id');
         $model = Mage::getModel('qps/rule');
 
         if (!$id) {
@@ -47,8 +47,8 @@ class Mageone_Qps_Adminhtml_QpsController extends Mage_Adminhtml_Controller_Acti
         $redirectBack = $this->getRequest()->getParam('back', false);
         if ($data = $this->getRequest()->getPost()) {
 
-            $id      = $this->getRequest()->getParam('id');
-            $model   = Mage::getModel('qps/rule');
+            $id = $this->getRequest()->getParam('id');
+            $model = Mage::getModel('qps/rule');
             $session = $this->_getSession();
             if (!$id) {
                 $session->addError('You can\'t create new rules. You can only change the status of existing rules.');
@@ -87,6 +87,14 @@ class Mageone_Qps_Adminhtml_QpsController extends Mage_Adminhtml_Controller_Acti
                 return $this->_redirect('*/*/edit', ['id' => $model->getId()]);
             }
         }
+        $this->_redirect('*/*/index');
+    }
+
+    public function loadAction()
+    {
+        $cron = Mage::getModel('qps/cron');
+        $cron->getRules();
+
         $this->_redirect('*/*/index');
     }
 

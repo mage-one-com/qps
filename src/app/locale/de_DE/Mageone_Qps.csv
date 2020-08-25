@@ -14,7 +14,7 @@
 "Fixing Patch","Schützender Patch"
 "Auto-Enable New Rules","Neue Regeln automatisch aktivieren"
 "Enable module","Modul aktivieren"
-"Enable new Rules automatically. Rules will be updated every hour via our API. (We recommend to enable rules manually after intensive testing)","Neue Regeln automatisch aktivieren. Neue Regeln werden automatisch jede Stunde über die API abgeglichen. (Wir empfehlen, Regeln manuell nach intensen Tests zu aktivieren)"
+"Enable new Rules automatically. Rules will be updated every hour via our API. (We recommend to enable rules manually after intensive testing)","Neue Regeln automatisch aktivieren. Neue Regeln werden automatisch jede Stunde über die API abgeglichen. (Wir empfehlen, Regeln manuell nach intensiven Tests zu aktivieren)"
 "Your <a href=""https://my.mage-one.com/qps"">https://my.mage-one.com/qps</a> username","Ihr <a href=""https://my.mage-one.com/qps"">https://my.mage-one.com/qps</a> Benutzername"
 "Public key for encryption between API and store. This key can be copied from <a href=""https://my.mage-one.com"">https://my.mage-one.com/qps</a>","Öffentlicher Schlüssel für die Verschlüsselung zwischen API und Ihrem Shop. Diesen Key erhalten Sie von <a href=""https://my.mage-one.com/qps"">https://my.mage-one.com/qps</a>"
 "You can only enable and disable a rule.", "Sie können nur Regeln aktivieren und deaktivieren."

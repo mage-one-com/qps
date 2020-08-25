@@ -10,6 +10,11 @@ class Mageone_Qps_Block_Rule extends Mage_Adminhtml_Block_Widget_Grid_Container
         parent::__construct();
 
         $this->removeButton('add');
+
+        $this->_addButton('load_rules', array(
+            'label' => $this->__('Load rules'),
+            'onclick' => "setLocation('{$this->getUrl('*/*/load')}')",
+        ));
     }
 }
 

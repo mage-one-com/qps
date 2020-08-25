@@ -64,6 +64,6 @@ class Mageone_Qps_Model_HTTP_Client_Curl extends Mage_HTTP_Client_Curl
 
             return;
         }
-        $this->doError('Invalid response line returned from server: ' . $data);
+        $this->doError('Invalid response line returned from server: ' . implode(' ', $line));
     }
 }

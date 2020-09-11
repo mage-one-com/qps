@@ -33,6 +33,11 @@ Make sure your **Magento cronjob** is running.
 ## Clean cache/run install scripts
 
 After cleaning the cache, the install scripts should run automatically to create the table for the rules.
+In order to see the rules page and configuration, logout and login again.
+
+# Usage
+
+You can find the list of downloaded rules in `System > Tools > Mage One QPS Rules`
 
 ## Username + key
 To use the QPS you need to [add your username and key in the configuration](https://my.mage-one.com/qps):

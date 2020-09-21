@@ -8,5 +8,8 @@
       "name": "Paddox GmbH",
       "email": "info@mage-one.com"
     }
-  ]
+  ],
+  require: {
+    "magento-hackathon/magento-composer-installer": "^3.2"
+  }
 }

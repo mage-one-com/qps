@@ -9,7 +9,7 @@
       "email": "info@mage-one.com"
     }
   ],
-  "require": {
+  "suggest": {
     "magento-hackathon/magento-composer-installer": "^3.2"
   }
 }

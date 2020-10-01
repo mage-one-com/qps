@@ -5,17 +5,17 @@ declare(strict_types = 1);
 class Mageone_Qps_Model_EmailService
 {
 
-    public function sendNotificationEmail(Mageone_Qps_Helper_Data $helper)
+    public function sendNotificationEmail(Mageone_Qps_Helper_Data $helper): void
     {
         if ($helper->isNotificationEnabled() === false ) {
             return;
         }
 
-        if(!$this->isEmailValid($helper->getNotifactionEmail())){
+        if($this->isEmailValid($helper->getNotificationEmail()) === false){
             Mage::log('QPS notification email address seems to be invalid. Please check your configuration!');
             return;
         }
-        
+
         $variables = [];
         if (!$helper->isRuleAutoEnable()) {
             $variables['notautoenable'] = 'true';
@@ -26,7 +26,7 @@ class Mageone_Qps_Model_EmailService
             $mail->sendTransactional(
                 'mageone_qps_ruleupdate',
                 'general',
-                $helper->getNotifactionEmail(),
+                $helper->getNotificationEmail(),
                 'Mage One QPS',
                 $variables
             );
@@ -35,8 +35,8 @@ class Mageone_Qps_Model_EmailService
         }
     }
 
-    private function isEmailValid($emailAddress)
+    private function isEmailValid($emailAddress): bool
     {
-        return filter_var($emailAddress, FILTER_VALIDATE_EMAIL);
+        return filter_var($emailAddress, FILTER_VALIDATE_EMAIL) !== false;
     }
 }

@@ -75,20 +75,18 @@ class Mageone_Qps_Model_Cron
                     // update rules, save to database and unset on collection
                     $rule = $collection->getItemByColumnValue('m1_key', $item['m1_key']) ?: Mage::getModel('qps/rule');
                     if ($rule->isObjectNew()) {
+                        $sendNotification = true;
                         $rule->setEnabled($this->helper->isRuleAutoEnable());
                     }
                     $rule->addData($item)->save();
                     $collection->removeItemByKey($rule->getId());
-                    $sendNotification = true;
                 }
                 // delete everything which was not updated and unset
                 $collection->walk('delete');
                 Mage::app()->cleanCache([Mageone_Qps_Model_Observer::QPS_CACHE_TAG]);
-
-                if ($sendNotification === true && $this->helper->isNotificationEnabled()) {
+                if($sendNotification === true){
                     $this->emailService->sendNotificationEmail($this->helper);
                 }
-
             }
         } catch (Exception $exception) {
             Mage::logException($exception);

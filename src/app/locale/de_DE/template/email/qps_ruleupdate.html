@@ -1,0 +1,18 @@
+<!--@subject Neue QPS Regeln aktualisiert! @-->
+<!--@vars @-->
+<!--@styles @-->
+
+{{template config_path="design/email/header"}}
+{{inlinecss file="email-inline.css"}}
+
+<table cellpadding="0" cellspacing="0" border="0">
+    <tr>
+        <td class="action-content">
+            <h1>Neue QPS Regeln in {{var store.getFrontendName()}}.</h1>
+            <p>Das Regelset für QPS wurde soeben aktualisiert.</p>
+            {{if notautoenable}}<p>Bitte prüfen und aktivieren Sie die neuen Regeln.</p>{{/if}}
+        </td>
+    </tr>
+</table>
+
+{{template config_path="design/email/footer"}}

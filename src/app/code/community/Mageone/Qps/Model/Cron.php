@@ -10,13 +10,18 @@ class Mageone_Qps_Model_Cron
      * @var Mageone_Qps_Helper_Data
      */
     private $helper;
+    /**
+     * @var Mageone_Qps_Model_EmailService
+     */
+    private $emailService;
 
     public function __construct(array $args = [])
     {
         if (isset($args['client'])) {
             $this->client = $args['client'];
         }
-        $this->helper = Mage::helper('qps');
+        $this->helper       = Mage::helper('qps');
+        $this->emailService = Mage::getModel('qps/emailService');
     }
 
     /**
@@ -28,18 +33,21 @@ class Mageone_Qps_Model_Cron
             return;
         }
         try {
-            $security = Mage::getModel('qps/secService');
-            $client   = $this->getClient();
-            $message  = $security->encryptMessage(
-                json_encode([
-                    'magento_version' => Mage::getVersion(),
-                    'patches_list'    => $this->getPatchList()
-                ])
+            $sendNotification = false;
+            $security         = Mage::getModel('qps/secService');
+            $client           = $this->getClient();
+            $message          = $security->encryptMessage(
+                json_encode(
+                    [
+                        'magento_version' => Mage::getVersion(),
+                        'patches_list'    => $this->getPatchList(),
+                    ])
             );
-            $client->post($this->helper->getResourceUrl(),
+            $client->post(
+                $this->helper->getResourceUrl(),
                 [
                     'user'    => $this->helper->getUserName(),
-                    'message' => $message
+                    'message' => $message,
                 ]
             );
             if ($client->getStatus() !== 200) {
@@ -64,6 +72,7 @@ class Mageone_Qps_Model_Cron
                     // update rules, save to database and unset on collection
                     $rule = $collection->getItemByColumnValue('m1_key', $item['m1_key']) ?: Mage::getModel('qps/rule');
                     if ($rule->isObjectNew()) {
+                        $sendNotification = true;
                         $rule->setEnabled($this->helper->isRuleAutoEnable());
                     }
                     $rule->addData($item)->save();
@@ -72,6 +81,9 @@ class Mageone_Qps_Model_Cron
                 // delete everything which was not updated and unset
                 $collection->walk('delete');
                 Mage::app()->cleanCache([Mageone_Qps_Model_Observer::QPS_CACHE_TAG]);
+                if ($sendNotification === true) {
+                    $this->emailService->sendNotificationEmail($this->helper);
+                }
             }
         } catch (Exception $exception) {
             Mage::logException($exception);

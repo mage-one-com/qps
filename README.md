@@ -39,28 +39,25 @@ In order to see the rules page and configuration, logout and login again.
 
 You can find the list of downloaded rules in `System > Tools > Mage One QPS Rules`
 
+
 ## Username + key
 To use the QPS you need to [add your username and key in the configuration](https://my.mage-one.com/qps):
 
     System > Konfiguration > General > Quick Protection System
 
-# Uninstall
-## with composer
-- Remove module from `composer.json` and rerun `composer update mageone/qps`
-- Drop the rules table: `DROP TABLE <prefix>mageone_qps_rules;`
+## Configuration
 
-## with modman or manually
-- Remove the files from your installation
-- Drop the rules table: `DROP TABLE <prefix>mageone_qps_rules;`
-
-# Configuration
-
-The rule processing must be enabled manually in `System > Config > Quick Protection System (General Tab)`. 
+### Access credentials and rules enabling
+The rule processing must be enabled manually in `System > Config > Quick Protection System > Configuration`. 
 
 Rules can be automatically enabled after the hourly API sync, although we recommend enabling rules manually after testing them (this is our default setting).
 Enabling or disabling rules is possible in `System > Tools > MageOne QPS Rules`
 
 You have to enter a username and public key, which you can obtain from [https://my.mage-one.com/qps](https://my.mage-one.com/qps)
+
+### Notification of new rules
+
+You can send an email once new rules have been fetched. Configure the recipient's email address and enable the notification in `System > Tools > MageOne QPS Rules > Notification`   
 
 # How does it work?
 
@@ -73,6 +70,16 @@ Rules will be fetched from the API every hour and only cover vulnerabilities tha
 After a successful installation and configuration you can enable our test rule `MO-TEST` and access `<your-shop-url>/mageone/test/rule/?malicious=<script>`. The result should be a blank page.
 
 After this test, please disable our test rule again.
+
+
+# Uninstall
+## with composer
+- Remove module from `composer.json` and rerun `composer update mageone/qps`
+- Drop the rules table: `DROP TABLE <prefix>mageone_qps_rules;`
+
+## with modman or manually
+- Remove the files from your installation
+- Drop the rules table: `DROP TABLE <prefix>mageone_qps_rules;`
 
 # Help
 

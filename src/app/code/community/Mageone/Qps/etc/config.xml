@@ -37,6 +37,15 @@
                 </setup>
             </qps_setup>
         </resources>
+        <template>
+            <email>
+                <mageone_qps_ruleupdate translate="label" module="qps">
+                    <label>QPS rule update</label>
+                    <file>qps_ruleupdate.html</file>
+                    <type>html</type>
+                </mageone_qps_ruleupdate>
+            </email>
+        </template>
         <events>
             <controller_front_init_before>
                 <observers>

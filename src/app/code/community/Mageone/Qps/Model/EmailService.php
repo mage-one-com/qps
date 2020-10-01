@@ -7,12 +7,13 @@ class Mageone_Qps_Model_EmailService
 
     public function sendNotificationEmail(Mageone_Qps_Helper_Data $helper): void
     {
-        if ($helper->isNotificationEnabled() === false ) {
+        if ($helper->isNotificationEnabled() === false) {
             return;
         }
 
-        if($this->isEmailValid($helper->getNotificationEmail()) === false){
+        if ($this->isEmailValid($helper->getNotificationEmail()) === false) {
             Mage::log('QPS notification email address seems to be invalid. Please check your configuration!');
+
             return;
         }
 

@@ -81,7 +81,7 @@ class Mageone_Qps_Model_Cron
                 // delete everything which was not updated and unset
                 $collection->walk('delete');
                 Mage::app()->cleanCache([Mageone_Qps_Model_Observer::QPS_CACHE_TAG]);
-                if($sendNotification === true){
+                if ($sendNotification === true) {
                     $this->emailService->sendNotificationEmail($this->helper);
                 }
             }

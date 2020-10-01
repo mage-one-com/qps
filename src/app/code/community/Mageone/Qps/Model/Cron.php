@@ -10,10 +10,7 @@ class Mageone_Qps_Model_Cron
      * @var Mageone_Qps_Helper_Data
      */
     private $helper;
-
     /**
-     * .
-     *
      * @var Mageone_Qps_Model_EmailService
      */
     private $emailService;

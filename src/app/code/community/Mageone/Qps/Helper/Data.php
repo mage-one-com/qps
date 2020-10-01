@@ -21,7 +21,7 @@ class Mageone_Qps_Helper_Data extends Mage_Core_Helper_Abstract
     /**
      * @return string
      */
-    public function getNotifactionEmail(): bool
+    public function getNotificationEmail(): string
     {
         return Mage::getStoreConfig(self::NOTIFICATION_EMAIL);
     }

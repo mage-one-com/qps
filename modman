@@ -1,5 +1,7 @@
 src/app/code/community/Mageone/Qps                         app/code/community/Mageone/Qps
 src/app/locale/de_DE/Mageone_Qps.csv                       app/locale/de_DE/Mageone_Qps.csv
 src/app/locale/en_US/Mageone_Qps.csv                       app/locale/en_US/Mageone_Qps.csv
+src/app/locale/en_US/template/email/qps_ruleupdate.html                       app/locale/en_US/template/email/qps_ruleupdate.html
+src/app/locale/de_DE/template/email/qps_ruleupdate.html                       app/locale/de_DE/template/email/qps_ruleupdate.html
 
 src/app/etc/modules/Mageone_Qps.xml                        app/etc/modules/Mageone_Qps.xml

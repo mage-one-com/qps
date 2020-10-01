@@ -6,6 +6,7 @@ class Mageone_Qps_Adminhtml_QpsController extends Mage_Adminhtml_Controller_Acti
     public function indexAction(): void
     {
         $this->loadLayout();
+        $this->_title($this->_getHelper()->__('Mage One QPS Rules'));
         $this->_addContent($this->getLayout()->createBlock('qps/rule'));
         $this->renderLayout();
     }

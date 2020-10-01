@@ -41,3 +41,11 @@
 "Reset","Reset"
 "Save and Continue Edit","Save and Continue Edit"
 "Quick Protection System Section","Mage One QPS"
+
+"Notification","Notification",
+"Notify this email address, when new QPS rules are downloaded.","Notify this email address, when new QPS rules are downloaded."
+"eMail Address","eMail Address"
+"Enable notifications","Enable notifications"
+
+"Yes","Yes"
+"No","No"

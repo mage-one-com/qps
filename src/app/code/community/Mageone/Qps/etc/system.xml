@@ -4,7 +4,6 @@
         <qps_section translate="label" module="qps">
             <label>Quick Protection System</label>
             <tab>general</tab>
-            <frontend_type>text</frontend_type>
             <sort_order>5000</sort_order>
             <show_in_default>1</show_in_default>
             <show_in_website>0</show_in_website>
@@ -12,7 +11,6 @@
             <groups>
                 <config translate="label" module="qps">
                     <label>Configuration</label>
-                    <frontend_type>text</frontend_type>
                     <sort_order>100</sort_order>
                     <show_in_default>1</show_in_default>
                     <show_in_website>0</show_in_website>

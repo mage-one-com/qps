@@ -1,12 +1,13 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 class Mageone_Qps_Model_EmailService
 {
 
-    public function sendNotificationEmail(Mageone_Qps_Helper_Data $helper): void
+    public function sendNotificationEmail(): void
     {
+        $helper = Mage::helper('qps');
         if ($helper->isNotificationEnabled() === false) {
             return;
         }

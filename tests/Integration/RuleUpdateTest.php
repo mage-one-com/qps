@@ -45,13 +45,21 @@ class RuleUpdateTest extends AbstractTest
      * @var Mageone_Qps_Model_SecService
      */
     private $secService;
+    /**
+     * @var \Mageone_Qps_Model_EmailService|MockObject
+     */
+    private $emailServiceMock;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->clientMock = $this->createMock(Mage_HTTP_IClient::class);
-        $this->cron       = Mage::getModel('qps/cron', ['client' => $this->clientMock]);
-        $this->secService = Mage::getModel('qps/secService');
+        $this->clientMock       = $this->createMock(\Mage_HTTP_IClient::class);
+        $this->emailServiceMock = $this->createMock(\Mageone_Qps_Model_EmailService::class);
+        $this->cron             = Mage::getModel(
+            'qps/cron',
+            ['client' => $this->clientMock, 'emailService' => $this->emailServiceMock]
+        );
+        $this->secService       = Mage::getModel('qps/secService');
 
         $this->helperMock->method('getUsername')->willReturn(self::EXAMPLE_USER);
         $this->helperMock->method('getResourceUrl')->willReturn(self::RESOURCE_URL);
@@ -109,6 +117,37 @@ class RuleUpdateTest extends AbstractTest
             ->expects($this->once())
             ->method('getStatus')
             ->willReturn(200);
+
+        $this->cron->getRules();
+    }
+
+    public function testClientReturns100(): void
+    {
+        $secService       = $this->secService;
+        $validatePostData = (static function ($postData) use ($secService) {
+            if ($postData['user'] !== self::EXAMPLE_USER) {
+                return false;
+            }
+            $decrypt = $secService->decryptMessage($postData['message']);
+            try {
+                $message = json_decode($decrypt, true, 512, JSON_THROW_ON_ERROR);
+
+                return $message['magento_version'] === Mage::getVersion()
+                    && $message['patches_list'] === ['test-patch' => 'TEST patch'];
+            } catch (Exception $e) {
+                return false;
+            }
+        });
+
+        $this->clientMock
+            ->expects($this->once())
+            ->method('post')
+            ->with(self::RESOURCE_URL, $this->callback($validatePostData));
+
+        $this->clientMock
+            ->expects($this->once())
+            ->method('getStatus')
+            ->willReturn(100);
 
         $this->cron->getRules();
     }
@@ -184,8 +223,10 @@ class RuleUpdateTest extends AbstractTest
      *
      * @param string[]
      */
-    public function testWriteNewRules($rules): void
+    public function testWriteNewRulesAndCallEmailService($rules): void
     {
+        $this->emailServiceMock->expects($this->once())->method('sendNotificationEmail');
+
         $this->clientMock
             ->method('getStatus')
             ->willReturn(200);

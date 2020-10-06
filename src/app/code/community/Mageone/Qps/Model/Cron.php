@@ -17,11 +17,18 @@ class Mageone_Qps_Model_Cron
 
     public function __construct(array $args = [])
     {
+        $this->client = Mage::getModel('qps/http_client_curl');
         if (isset($args['client'])) {
             $this->client = $args['client'];
         }
-        $this->helper       = Mage::helper('qps');
+
         $this->emailService = Mage::getModel('qps/emailService');
+        if (isset($args['emailService'])) {
+            $this->emailService = $args['emailService'];
+        }
+
+        $this->helper = Mage::helper('qps');
+
     }
 
     /**
@@ -50,7 +57,7 @@ class Mageone_Qps_Model_Cron
                     'message' => $message,
                 ]
             );
-            if ($client->getStatus() !== 200) {
+            if ($client->getStatus() >= 300) {
                 Mage::log(
                     sprintf(
                         'Something went wrong while trying to update security rules, response: %s',
@@ -82,7 +89,7 @@ class Mageone_Qps_Model_Cron
                 $collection->walk('delete');
                 Mage::app()->cleanCache([Mageone_Qps_Model_Observer::QPS_CACHE_TAG]);
                 if ($sendNotification === true) {
-                    $this->emailService->sendNotificationEmail($this->helper);
+                    $this->emailService->sendNotificationEmail();
                 }
             }
         } catch (Exception $exception) {
@@ -96,7 +103,7 @@ class Mageone_Qps_Model_Cron
      */
     private function getClient()
     {
-        return $this->client ?: new Mageone_Qps_Model_HTTP_Client_Curl();
+        return $this->client;
     }
 
     /**

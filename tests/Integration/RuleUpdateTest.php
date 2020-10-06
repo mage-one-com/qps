@@ -113,6 +113,37 @@ class RuleUpdateTest extends AbstractTest
         $this->cron->getRules();
     }
 
+    public function testClientReturns100(): void
+    {
+        $secService       = $this->secService;
+        $validatePostData = (static function ($postData) use ($secService) {
+            if ($postData['user'] !== self::EXAMPLE_USER) {
+                return false;
+            }
+            $decrypt = $secService->decryptMessage($postData['message']);
+            try {
+                $message = json_decode($decrypt, true, 512, JSON_THROW_ON_ERROR);
+
+                return $message['magento_version'] === Mage::getVersion()
+                    && $message['patches_list'] === ['test-patch' => 'TEST patch'];
+            } catch (Exception $e) {
+                return false;
+            }
+        });
+
+        $this->clientMock
+            ->expects($this->once())
+            ->method('post')
+            ->with(self::RESOURCE_URL, $this->callback($validatePostData));
+
+        $this->clientMock
+            ->expects($this->once())
+            ->method('getStatus')
+            ->willReturn(100);
+
+        $this->cron->getRules();
+    }
+
     public function testClientReturnsNo200(): void
     {
         $this->clientMock

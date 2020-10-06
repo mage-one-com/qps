@@ -50,7 +50,7 @@ class Mageone_Qps_Model_Cron
                     'message' => $message,
                 ]
             );
-            if ($client->getStatus() !== 200) {
+            if ($client->getStatus() >= 300) {
                 Mage::log(
                     sprintf(
                         'Something went wrong while trying to update security rules, response: %s',

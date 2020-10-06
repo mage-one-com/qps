@@ -17,6 +17,7 @@ class Mageone_Qps_Model_Cron
 
     public function __construct(array $args = [])
     {
+        $this->client = Mage::getModel('qps/http_client_curl');
         if (isset($args['client'])) {
             $this->client = $args['client'];
         }
@@ -96,7 +97,7 @@ class Mageone_Qps_Model_Cron
      */
     private function getClient()
     {
-        return $this->client ?: new Mageone_Qps_Model_HTTP_Client_Curl();
+        return $this->client;
     }
 
     /**

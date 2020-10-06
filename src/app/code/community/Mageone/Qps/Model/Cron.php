@@ -21,8 +21,14 @@ class Mageone_Qps_Model_Cron
         if (isset($args['client'])) {
             $this->client = $args['client'];
         }
-        $this->helper       = Mage::helper('qps');
+
         $this->emailService = Mage::getModel('qps/emailService');
+        if (isset($args['emailService'])) {
+            $this->emailService = $args['emailService'];
+        }
+
+        $this->helper = Mage::helper('qps');
+
     }
 
     /**

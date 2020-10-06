@@ -45,13 +45,21 @@ class RuleUpdateTest extends AbstractTest
      * @var Mageone_Qps_Model_SecService
      */
     private $secService;
+    /**
+     * @var \Mageone_Qps_Model_EmailService|MockObject
+     */
+    private $emailServiceMock;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->clientMock = $this->createMock(Mage_HTTP_IClient::class);
-        $this->cron       = Mage::getModel('qps/cron', ['client' => $this->clientMock]);
-        $this->secService = Mage::getModel('qps/secService');
+        $this->clientMock       = $this->createMock(\Mage_HTTP_IClient::class);
+        $this->emailServiceMock = $this->createMock(\Mageone_Qps_Model_EmailService::class);
+        $this->cron             = Mage::getModel(
+            'qps/cron',
+            ['client' => $this->clientMock, 'emailService' => $this->emailServiceMock]
+        );
+        $this->secService       = Mage::getModel('qps/secService');
 
         $this->helperMock->method('getUsername')->willReturn(self::EXAMPLE_USER);
         $this->helperMock->method('getResourceUrl')->willReturn(self::RESOURCE_URL);
@@ -215,8 +223,10 @@ class RuleUpdateTest extends AbstractTest
      *
      * @param string[]
      */
-    public function testWriteNewRules($rules): void
+    public function testWriteNewRulesAndCallEmailService($rules): void
     {
+        $this->emailServiceMock->expects($this->once())->method('sendNotificationEmail');
+
         $this->clientMock
             ->method('getStatus')
             ->willReturn(200);

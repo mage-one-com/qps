@@ -83,7 +83,7 @@ class Mageone_Qps_Model_Cron
                 $collection->walk('delete');
                 Mage::app()->cleanCache([Mageone_Qps_Model_Observer::QPS_CACHE_TAG]);
                 if ($sendNotification === true) {
-                    $this->emailService->sendNotificationEmail($this->helper);
+                    $this->emailService->sendNotificationEmail();
                 }
             }
         } catch (Exception $exception) {

@@ -158,7 +158,9 @@ class Mageone_Qps_Model_Observer
                 'Rule did not pass.'
             );
         }
-        ob_end_clean();
+        if (ob_get_contents ()) {
+            ob_end_clean ();
+        }
         Mage::log('Bad request from: ' . Mage::app()->getRequest()->getClientIp(true), Zend_Log::ALERT, self::QPS_LOG);
         Mage::app()->getResponse()->setHttpResponseCode(503)->sendHeaders();
         exit;

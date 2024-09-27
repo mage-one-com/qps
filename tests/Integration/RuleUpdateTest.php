@@ -7,15 +7,15 @@ use Mage;
 use Mage_Core_Model_Resource;
 use Mage_HTTP_IClient;
 use MageOne\Qps\Test\AbstractTest;
-use Mageone_Qps_Helper_Data;
-use Mageone_Qps_Model_Cron;
-use Mageone_Qps_Model_Observer;
-use Mageone_Qps_Model_Rule;
-use Mageone_Qps_Model_SecService;
+use MageOne_Qps_Helper_Data;
+use MageOne_Qps_Model_Cron;
+use MageOne_Qps_Model_Observer;
+use MageOne_Qps_Model_Rule;
+use MageOne_Qps_Model_SecService;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
- * @covers \Mageone_Qps_Model_Cron
+ * @covers \MageOne_Qps_Model_Cron
  */
 class RuleUpdateTest extends AbstractTest
 {
@@ -34,7 +34,7 @@ class RuleUpdateTest extends AbstractTest
     const RULE_KEY = 'MO-4711';
     const RULE_PREPROCESS = 'base64_decode';
     /**
-     * @var Mageone_Qps_Model_Cron
+     * @var MageOne_Qps_Model_Cron
      */
     private $cron;
     /**
@@ -42,11 +42,11 @@ class RuleUpdateTest extends AbstractTest
      */
     private $clientMock;
     /**
-     * @var Mageone_Qps_Model_SecService
+     * @var MageOne_Qps_Model_SecService
      */
     private $secService;
     /**
-     * @var \Mageone_Qps_Model_EmailService|MockObject
+     * @var \MageOne_Qps_Model_EmailService|MockObject
      */
     private $emailServiceMock;
 
@@ -54,7 +54,7 @@ class RuleUpdateTest extends AbstractTest
     {
         parent::setUp();
         $this->clientMock       = $this->createMock(\Mage_HTTP_IClient::class);
-        $this->emailServiceMock = $this->createMock(\Mageone_Qps_Model_EmailService::class);
+        $this->emailServiceMock = $this->createMock(\MageOne_Qps_Model_EmailService::class);
         $this->cron             = Mage::getModel(
             'qps/cron',
             ['client' => $this->clientMock, 'emailService' => $this->emailServiceMock]
@@ -64,7 +64,7 @@ class RuleUpdateTest extends AbstractTest
         $this->helperMock->method('getUsername')->willReturn(self::EXAMPLE_USER);
         $this->helperMock->method('getResourceUrl')->willReturn(self::RESOURCE_URL);
 
-        Mage::app()->cleanCache([Mageone_Qps_Model_Observer::QPS_CACHE_TAG]);
+        Mage::app()->cleanCache([MageOne_Qps_Model_Observer::QPS_CACHE_TAG]);
         $this->getConnection()->delete($this->getResource()->getTableName('qps/rule'));
         $this->assertEquals(0, Mage::getResourceModel('qps/rule_collection')->count());
     }
@@ -78,7 +78,7 @@ class RuleUpdateTest extends AbstractTest
 
     public function testDoNothingIfNotEnabled(): void
     {
-        $helperMock = $this->createMock(Mageone_Qps_Helper_Data::class);
+        $helperMock = $this->createMock(MageOne_Qps_Helper_Data::class);
         $helperMock->method('isEnabled')->willReturn(false);
         $this->replaceHelperWithMock($helperMock, 'qps');
 
@@ -186,7 +186,7 @@ class RuleUpdateTest extends AbstractTest
         $this->cron->getRules();
 
         foreach (Mage::getResourceModel('qps/rule_collection') as $rule) {
-            /** @var Mageone_Qps_Model_Rule $rule */
+            /** @var MageOne_Qps_Model_Rule $rule */
             $this->assertFalse($rule->getEnabled());
         }
     }
@@ -213,7 +213,7 @@ class RuleUpdateTest extends AbstractTest
         $this->cron->getRules();
 
         foreach (Mage::getResourceModel('qps/rule_collection') as $rule) {
-            /** @var Mageone_Qps_Model_Rule $rule */
+            /** @var MageOne_Qps_Model_Rule $rule */
             $this->assertTrue($rule->getEnabled());
         }
     }

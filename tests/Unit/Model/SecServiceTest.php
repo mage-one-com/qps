@@ -4,15 +4,15 @@ namespace MageOne\Qps\Test\Unit\Model;
 
 use Mage;
 use MageOne\Qps\Test\AbstractTest;
-use Mageone_Qps_Model_SecService;
+use MageOne_Qps_Model_SecService;
 
 /**
- * @covers \Mageone_Qps_Model_SecService
+ * @covers \MageOne_Qps_Model_SecService
  */
 class SecServiceTest extends AbstractTest
 {
     /**
-     * @var Mageone_Qps_Model_SecService
+     * @var MageOne_Qps_Model_SecService
      */
     private $secService;
 

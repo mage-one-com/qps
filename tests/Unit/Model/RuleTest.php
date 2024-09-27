@@ -5,16 +5,16 @@ namespace MageOne\Qps\Test\Unit\Model;
 use InvalidArgumentException;
 use Mage;
 use MageOne\Qps\Test\AbstractTest;
-use Mageone_Qps_Model_Rule;
+use MageOne_Qps_Model_Rule;
 use RuntimeException;
 
 /**
- * @covers \Mageone_Qps_Model_Rule
+ * @covers \MageOne_Qps_Model_Rule
  */
 class RuleTest extends AbstractTest
 {
     /**
-     * @var Mageone_Qps_Model_Rule
+     * @var MageOne_Qps_Model_Rule
      */
     private $rule;
 

@@ -7,7 +7,7 @@ use Mage_Core_Exception;
 use Mage_Core_Model_Resource;
 use Mage_Core_Model_Store;
 use Mage_Core_Model_Store_Exception;
-use Mageone_Qps_Helper_Data;
+use MageOne_Qps_Helper_Data;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
@@ -17,7 +17,7 @@ abstract class AbstractTest extends TestCase
 {
     public const EXAMPLE_USER = 'example@mage-one.com';
     /**
-     * @var Mageone_Qps_Helper_Data|MockObject
+     * @var MageOne_Qps_Helper_Data|MockObject
      */
     protected $helperMock;
     /**
@@ -34,12 +34,12 @@ abstract class AbstractTest extends TestCase
         $this->startTransaction();
 
         parent::setUp();
-        $this->setConfigurationSetting(Mageone_Qps_Helper_Data::QPS_STATUS, 1);
-        $this->setConfigurationSetting(Mageone_Qps_Helper_Data::QPS_USER, self::EXAMPLE_USER);
-        $this->setConfigurationSetting(Mageone_Qps_Helper_Data::QPS_PUBLIC_KEY, $this->getPublicKey());
-        $this->setConfigurationSetting(Mageone_Qps_Helper_Data::QPS_RULE_AUTO_ENABLE, 1);
+        $this->setConfigurationSetting(MageOne_Qps_Helper_Data::QPS_STATUS, 1);
+        $this->setConfigurationSetting(MageOne_Qps_Helper_Data::QPS_USER, self::EXAMPLE_USER);
+        $this->setConfigurationSetting(MageOne_Qps_Helper_Data::QPS_PUBLIC_KEY, $this->getPublicKey());
+        $this->setConfigurationSetting(MageOne_Qps_Helper_Data::QPS_RULE_AUTO_ENABLE, 1);
 
-        $this->helperMock = $this->createMock(Mageone_Qps_Helper_Data::class);
+        $this->helperMock = $this->createMock(MageOne_Qps_Helper_Data::class);
 
         // returns one time the private and one time the public key to test decryption/encryption
         // for two rule testing this method is called three times and needs to return public key

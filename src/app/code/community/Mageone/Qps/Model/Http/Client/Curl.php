@@ -1,6 +1,6 @@
 <?php
 
-class Mageone_Qps_Model_HTTP_Client_Curl extends Mage_HTTP_Client_Curl
+class MageOne_Qps_Model_HTTP_Client_Curl extends Mage_HTTP_Client_Curl
 {
     /**
      * Parse headers - CURL callback functin

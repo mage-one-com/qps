@@ -1,6 +1,6 @@
 <?php
 
-class Mageone_Qps_Helper_GlobalGetter
+class MageOne_Qps_Helper_GlobalGetter
 {
     /**
      * @var callable|null

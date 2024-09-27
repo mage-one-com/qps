@@ -1,6 +1,6 @@
 <?php
 
-class Mageone_Qps_Helper_Data extends Mage_Core_Helper_Abstract
+class MageOne_Qps_Helper_Data extends Mage_Core_Helper_Abstract
 {
     const QPS_URL = 'qps_section/config/url';
     const QPS_STATUS = 'qps_section/config/status';

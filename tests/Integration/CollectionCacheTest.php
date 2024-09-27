@@ -4,11 +4,11 @@ namespace MageOne\Qps\Test\Integration;
 
 use Mage;
 use MageOne\Qps\Test\AbstractTest;
-use Mageone_Qps_Model_Resource_Rule_Collection;
+use MageOne_Qps_Model_Resource_Rule_Collection;
 use ReflectionMethod;
 
 /**
- * @covers Mageone_Qps_Model_Resource_Rule_Collection
+ * @covers MageOne_Qps_Model_Resource_Rule_Collection
  */
 class CollectionCacheTest extends AbstractTest
 {
@@ -20,7 +20,7 @@ class CollectionCacheTest extends AbstractTest
         );
 
         Mage::getResourceModel('qps/rule_collection')->load();
-        /** @var Mageone_Qps_Model_Resource_Rule_Collection $collection */
+        /** @var MageOne_Qps_Model_Resource_Rule_Collection $collection */
         $collection = Mage::getResourceModel('qps/rule_collection')->load();
 
         $refMethod = new ReflectionMethod($collection, '_loadCache');

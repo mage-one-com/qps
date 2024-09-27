@@ -1,6 +1,6 @@
 <?php
 
-class Mageone_Qps_Block_Rule_Grid extends Mage_Adminhtml_Block_Widget_Grid
+class MageOne_Qps_Block_Rule_Grid extends Mage_Adminhtml_Block_Widget_Grid
 {
 
     public function __construct()
@@ -10,12 +10,12 @@ class Mageone_Qps_Block_Rule_Grid extends Mage_Adminhtml_Block_Widget_Grid
         $this->setSaveParametersInSession(true);
     }
 
-    public function getRowUrl(Mageone_Qps_Model_Rule $row): string
+    public function getRowUrl(MageOne_Qps_Model_Rule $row): string
     {
         return $this->getUrl('*/*/edit', ['id' => $row->getId()]);
     }
 
-    protected function _prepareCollection(): Mageone_Qps_Block_Rule_Grid
+    protected function _prepareCollection(): MageOne_Qps_Block_Rule_Grid
     {
         $collection = Mage::getModel('qps/rule')->getCollection();
         $this->setCollection($collection);
@@ -23,7 +23,7 @@ class Mageone_Qps_Block_Rule_Grid extends Mage_Adminhtml_Block_Widget_Grid
         return parent::_prepareCollection();
     }
 
-    protected function _prepareColumns(): Mageone_Qps_Block_Rule_Grid
+    protected function _prepareColumns(): MageOne_Qps_Block_Rule_Grid
     {
         $this->addColumn('m1_key',
             [
@@ -116,7 +116,7 @@ class Mageone_Qps_Block_Rule_Grid extends Mage_Adminhtml_Block_Widget_Grid
      * Decorate status column values
      *
      * @param string                 $value
-     * @param Mageone_Qps_Model_Rule $row
+     * @param MageOne_Qps_Model_Rule $row
      *
      * @return string
      */

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-class Mageone_Qps_Block_Rule_Edit extends Mage_Adminhtml_Block_Widget_Form_Container
+class MageOne_Qps_Block_Rule_Edit extends Mage_Adminhtml_Block_Widget_Form_Container
 {
     public function __construct()
     {
@@ -28,12 +28,12 @@ class Mageone_Qps_Block_Rule_Edit extends Mage_Adminhtml_Block_Widget_Form_Conta
         $this->removeButton('delete');
     }
 
-    protected function _getHelper(): Mageone_Qps_Helper_Data
+    protected function _getHelper(): MageOne_Qps_Helper_Data
     {
         return Mage::helper('qps');
     }
 
-    protected function _getModel(): Mageone_Qps_Model_Rule
+    protected function _getModel(): MageOne_Qps_Model_Rule
     {
         return Mage::registry('current_model');
     }

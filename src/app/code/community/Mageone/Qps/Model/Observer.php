@@ -5,9 +5,9 @@ if (!defined('JSON_THROW_ON_ERROR')) {
 }
 
 /**
- * Class Mageone_Qps_Model_Observer
+ * Class MageOne_Qps_Model_Observer
  */
-class Mageone_Qps_Model_Observer
+class MageOne_Qps_Model_Observer
 {
     const QPS_CACHE = 'qps_security';
     const QPS_CACHE_TAG = 'qps';
@@ -16,7 +16,7 @@ class Mageone_Qps_Model_Observer
     const ADMINHTML_PATH_PATTERN = '*adminhtml*';
 
     /**
-     * @var Mageone_Qps_Model_Resource_Rule_Collection
+     * @var MageOne_Qps_Model_Resource_Rule_Collection
      */
     private $rules;
 
@@ -40,9 +40,9 @@ class Mageone_Qps_Model_Observer
     }
 
     /**
-     * @return Mageone_Qps_Model_Resource_Rule_Collection
+     * @return MageOne_Qps_Model_Resource_Rule_Collection
      */
-    private function getRules(): \Mageone_Qps_Model_Resource_Rule_Collection
+    private function getRules(): \MageOne_Qps_Model_Resource_Rule_Collection
     {
         if (!$this->rules) {
             $this->rules = Mage::getResourceModel('qps/rule_collection')
@@ -58,18 +58,18 @@ class Mageone_Qps_Model_Observer
             foreach ($this->getRules() as $rule) {
                 try {
                     $this->validateRule($rule, $request);
-                } catch (Mageone_Qps_Model_Exception_RuleNotPassedException $e) {
+                } catch (MageOne_Qps_Model_Exception_RuleNotPassedException $e) {
                     $this->processTriggeredRule();
                 }
             }
-        } catch (Mageone_Qps_Model_Exception_ExitSkippedForTestingException $e) {
+        } catch (MageOne_Qps_Model_Exception_ExitSkippedForTestingException $e) {
             throw $e;
         } catch (Exception $e) {
             Mage::logException($e);
         }
     }
 
-    private function validateRule(Mageone_Qps_Model_Rule $rule, Mage_Core_Controller_Request_Http $request): ?bool
+    private function validateRule(MageOne_Qps_Model_Rule $rule, Mage_Core_Controller_Request_Http $request): ?bool
     {
         if (!$this->isUrlMatch($rule, $request)) {
             return true;
@@ -77,7 +77,7 @@ class Mageone_Qps_Model_Observer
 
         foreach ($rule->getTarget() as $target) {
             $targetValue = $this->preprocessValue($this->getValueFromGlobal($target), $rule->getPreprocess());
-            if ($rule->getType() === Mageone_Qps_Model_Rule::TYPE_REGEX) {
+            if ($rule->getType() === MageOne_Qps_Model_Rule::TYPE_REGEX) {
                 $this->validateRegexRule($rule, $targetValue);
             } else {
                 $transportObject = new Varien_Object();
@@ -95,12 +95,12 @@ class Mageone_Qps_Model_Observer
     }
 
     /**
-     * @param Mageone_Qps_Model_Rule            $rule
+     * @param MageOne_Qps_Model_Rule            $rule
      * @param Mage_Core_Controller_Request_Http $request
      *
      * @return bool
      */
-    private function isUrlMatch(Mageone_Qps_Model_Rule $rule, Mage_Core_Controller_Request_Http $request): bool
+    private function isUrlMatch(MageOne_Qps_Model_Rule $rule, Mage_Core_Controller_Request_Http $request): bool
     {
         if (!$rule->getUrl()) {
             return true;
@@ -142,10 +142,10 @@ class Mageone_Qps_Model_Observer
         return (string)Mage::helper('qps/globalGetter')->get($expr);
     }
 
-    private function validateRegexRule(Mageone_Qps_Model_Rule $rule, $targetValue): void
+    private function validateRegexRule(MageOne_Qps_Model_Rule $rule, $targetValue): void
     {
         if (preg_match($rule->getRuleContent(), $targetValue)) {
-            throw new Mageone_Qps_Model_Exception_RuleNotPassedException(
+            throw new MageOne_Qps_Model_Exception_RuleNotPassedException(
                 sprintf('Rule %s triggered with content %s.', $rule->getId(), $targetValue)
             );
         }
@@ -154,7 +154,7 @@ class Mageone_Qps_Model_Observer
     private function processTriggeredRule(): void
     {
         if (defined('TESTING')) {
-            throw new Mageone_Qps_Model_Exception_ExitSkippedForTestingException(
+            throw new MageOne_Qps_Model_Exception_ExitSkippedForTestingException(
                 'Rule did not pass.'
             );
         }

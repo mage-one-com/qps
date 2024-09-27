@@ -1,6 +1,6 @@
 <?php
 
-class Mageone_Qps_Adminhtml_QpsController extends Mage_Adminhtml_Controller_Action
+class MageOne_Qps_Adminhtml_QpsController extends Mage_Adminhtml_Controller_Action
 {
 
     public function indexAction(): void

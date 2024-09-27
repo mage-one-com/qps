@@ -1,6 +1,6 @@
 <?php
 
-class Mageone_Qps_Model_Rule extends Mage_Core_Model_Abstract
+class MageOne_Qps_Model_Rule extends Mage_Core_Model_Abstract
 {
     public const TYPE_REGEX = 'regex';
     public const TYPE_CUSTOM = 'custom';
@@ -40,7 +40,7 @@ class Mageone_Qps_Model_Rule extends Mage_Core_Model_Abstract
         return $this->_getData('url');
     }
 
-    public function setUrl(string $url): \Mageone_Qps_Model_Rule
+    public function setUrl(string $url): \MageOne_Qps_Model_Rule
     {
         return $this->setData('url', $url);
     }
@@ -50,7 +50,7 @@ class Mageone_Qps_Model_Rule extends Mage_Core_Model_Abstract
         return (string)$this->_getData('type');
     }
 
-    public function setType(string $type): \Mageone_Qps_Model_Rule
+    public function setType(string $type): \MageOne_Qps_Model_Rule
     {
         return $this->setData('type', $type);
     }
@@ -60,7 +60,7 @@ class Mageone_Qps_Model_Rule extends Mage_Core_Model_Abstract
         return $this->_getData('name');
     }
 
-    public function setName(string $name): \Mageone_Qps_Model_Rule
+    public function setName(string $name): \MageOne_Qps_Model_Rule
     {
         return $this->setData('name', $name);
     }
@@ -70,7 +70,7 @@ class Mageone_Qps_Model_Rule extends Mage_Core_Model_Abstract
         return $this->_getData('rule_content');
     }
 
-    public function setRuleContent(string $ruleContent): \Mageone_Qps_Model_Rule
+    public function setRuleContent(string $ruleContent): \MageOne_Qps_Model_Rule
     {
         return $this->setData('rule_content', $ruleContent);
     }
@@ -85,7 +85,7 @@ class Mageone_Qps_Model_Rule extends Mage_Core_Model_Abstract
         return $this->targetDefaultValues;
     }
 
-    public function setTarget(string $target): \Mageone_Qps_Model_Rule
+    public function setTarget(string $target): \MageOne_Qps_Model_Rule
     {
         foreach (explode(',', $target) as $t) {
             foreach ($this->targetDefaultValues as $global) {
@@ -104,7 +104,7 @@ class Mageone_Qps_Model_Rule extends Mage_Core_Model_Abstract
         return (string)$this->_getData('preprocess');
     }
 
-    public function setPreprocess(string $preprocess): \Mageone_Qps_Model_Rule
+    public function setPreprocess(string $preprocess): \MageOne_Qps_Model_Rule
     {
         if (!in_array($preprocess, ['base64_decode', 'json_decode', 'rawurldecode', ''])) {
             throw new InvalidArgumentException(
@@ -120,7 +120,7 @@ class Mageone_Qps_Model_Rule extends Mage_Core_Model_Abstract
         return $this->_getData('patch_fix');
     }
 
-    public function setPatchFix(string $patchFix): \Mageone_Qps_Model_Rule
+    public function setPatchFix(string $patchFix): \MageOne_Qps_Model_Rule
     {
         return $this->setData('patch_fix', $patchFix);
     }
@@ -130,7 +130,7 @@ class Mageone_Qps_Model_Rule extends Mage_Core_Model_Abstract
         return $this->_getData('m1_key');
     }
 
-    public function setM1Key(string $key): \Mageone_Qps_Model_Rule
+    public function setM1Key(string $key): \MageOne_Qps_Model_Rule
     {
         return $this->setData('m1_key', $key);
     }
@@ -140,7 +140,7 @@ class Mageone_Qps_Model_Rule extends Mage_Core_Model_Abstract
         return (bool)$this->_getData('enabled');
     }
 
-    public function setEnabled(bool $enabled): \Mageone_Qps_Model_Rule
+    public function setEnabled(bool $enabled): \MageOne_Qps_Model_Rule
     {
         return $this->setData('enabled', $enabled);
     }

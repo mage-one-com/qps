@@ -1,6 +1,6 @@
 <?php
 
-class Mageone_Qps_Helper_Patches
+class MageOne_Qps_Helper_Patches
 {
     const MAGE_ONE_PATCH_LIST = 'mage-one/patches';
 

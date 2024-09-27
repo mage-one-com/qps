@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-class Mageone_Qps_Model_EmailService
+class MageOne_Qps_Model_EmailService
 {
 
     public function sendNotificationEmail(): void

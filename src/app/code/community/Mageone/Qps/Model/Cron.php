@@ -1,17 +1,17 @@
 <?php
 
-class Mageone_Qps_Model_Cron
+class MageOne_Qps_Model_Cron
 {
     /**
      * @var Mage_HTTP_Client
      */
     private $client;
     /**
-     * @var Mageone_Qps_Helper_Data
+     * @var MageOne_Qps_Helper_Data
      */
     private $helper;
     /**
-     * @var Mageone_Qps_Model_EmailService
+     * @var MageOne_Qps_Model_EmailService
      */
     private $emailService;
 
@@ -87,7 +87,7 @@ class Mageone_Qps_Model_Cron
                 }
                 // delete everything which was not updated and unset
                 $collection->walk('delete');
-                Mage::app()->cleanCache([Mageone_Qps_Model_Observer::QPS_CACHE_TAG]);
+                Mage::app()->cleanCache([MageOne_Qps_Model_Observer::QPS_CACHE_TAG]);
                 if ($sendNotification === true) {
                     $this->emailService->sendNotificationEmail();
                 }

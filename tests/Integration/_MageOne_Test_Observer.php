@@ -1,6 +1,6 @@
 <?php
 
-class Mageone_Test_Observer
+class MageOne_Test_Observer
 {
     public static $called = 0;
 

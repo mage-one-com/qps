@@ -7,9 +7,9 @@ use phpseclib\Crypt\RSA;
 set_include_path(get_include_path() . PATH_SEPARATOR . 'phpseclib/bootstrap.php');
 
 /**
- * Class Mageone_Qps_Model_SecService
+ * Class MageOne_Qps_Model_SecService
  */
-class Mageone_Qps_Model_SecService
+class MageOne_Qps_Model_SecService
 {
     const KEY_LENGTH = 32;
     const IV_LENGTH = 16;

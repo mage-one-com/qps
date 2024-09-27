@@ -1,28 +1,28 @@
 <?xml version="1.0"?>
 <config>
     <modules>
-        <Mageone_Qps>
-            <version>1.0.0</version>
-        </Mageone_Qps>
+        <MageOne_Qps>
+            <version>1.1.0</version>
+        </MageOne_Qps>
     </modules>
     <global>
         <helpers>
             <qps>
-                <class>Mageone_Qps_Helper</class>
+                <class>MageOne_Qps_Helper</class>
             </qps>
         </helpers>
         <blocks>
             <qps>
-                <class>Mageone_Qps_Block</class>
+                <class>MageOne_Qps_Block</class>
             </qps>
         </blocks>
         <models>
             <qps>
-                <class>Mageone_Qps_Model</class>
+                <class>MageOne_Qps_Model</class>
                 <resourceModel>qps_resource</resourceModel>
             </qps>
             <qps_resource>
-                <class>Mageone_Qps_Model_Resource</class>
+                <class>MageOne_Qps_Model_Resource</class>
                 <entities>
                     <rule>
                         <table>mageone_qps_rules</table>
@@ -33,7 +33,7 @@
         <resources>
             <qps_setup>
                 <setup>
-                    <module>Mageone_Qps</module>
+                    <module>MageOne_Qps</module>
                 </setup>
             </qps_setup>
         </resources>
@@ -63,7 +63,7 @@
             <adminhtml>
                 <args>
                     <modules>
-                        <Mageone_Qps after="Mage_Adminhtml">Mageone_Qps_Adminhtml</Mageone_Qps>
+                        <MageOne_Qps after="Mage_Adminhtml">MageOne_Qps_Adminhtml</MageOne_Qps>
                     </modules>
                 </args>
             </adminhtml>
@@ -72,11 +72,11 @@
     <adminhtml>
         <translate>
             <modules>
-                <Mageone_Qps>
+                <MageOne_Qps>
                     <files>
-                        <default>Mageone_Qps.csv</default>
+                        <default>MageOne_Qps.csv</default>
                     </files>
-                </Mageone_Qps>
+                </MageOne_Qps>
             </modules>
         </translate>
     </adminhtml>

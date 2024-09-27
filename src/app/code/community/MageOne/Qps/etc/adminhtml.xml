@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<config>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <system>
+                        <children>
+                            <tools>
+                                <children>
+                                    <qps translate="title" module="qps">
+                                        <title>Mage One QPS Rules</title>
+                                        <sort_order>10</sort_order>
+                                    </qps>
+                                </children>
+                            </tools>
+                            <config>
+                                <children>
+                                    <qps_section translate="title" module="qps">
+                                        <title>Quick Protection System Section</title>
+                                        <sort_order>250</sort_order>
+                                    </qps_section>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+    <menu>
+        <system>
+            <children>
+                <tools>
+                    <children>
+                        <qps module="qps" translate="title">
+                            <title>Mage One QPS Rules</title>
+                            <sort_order>1</sort_order>
+                            <action>adminhtml/qps</action>
+                        </qps>
+                    </children>
+                </tools>
+            </children>
+        </system>
+    </menu>
+</config>

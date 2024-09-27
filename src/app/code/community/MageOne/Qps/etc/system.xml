@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+<config>
+    <sections>
+        <qps_section translate="label" module="qps">
+            <label>Quick Protection System</label>
+            <tab>general</tab>
+            <sort_order>5000</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>0</show_in_website>
+            <show_in_store>0</show_in_store>
+            <groups>
+                <notification translate="label" module="qps">
+                    <label>Notification</label>
+                    <sort_order>200</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <enabled translate="label comment" module="qps">
+                            <label>Enabled</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment>Enable notifications</comment>
+                        </enabled>
+                        <email translate="label comment" module="qps">
+                            <label>eMail Address</label>
+                            <frontend_type>text</frontend_type>
+                            <comment>Notify this email address, when new QPS rules are downloaded.</comment>
+                            <validate>validate-email</validate>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+
+                        </email>
+                    </fields>
+                </notification>
+                <config translate="label" module="qps">
+                    <label>Configuration</label>
+                    <sort_order>100</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <status translate="label comment" module="qps">
+                            <label>Enabled</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment>Enable module</comment>
+                        </status>
+                        <rule_auto_enable translate="label comment" module="qps">
+                            <label>Auto-Enable New Rules</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>15</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment>Enable new Rules automatically. Rules will be updated every hour via our API. (We recommend to enable rules manually after intensive testing)</comment>
+                            <depends>
+                                <status>1</status>
+                            </depends>
+                        </rule_auto_enable>
+                        <user_name translate="label comment" module="qps">
+                            <label>Username</label>
+                            <frontend_type>text</frontend_type>
+                            <validate>required-entry</validate>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment><![CDATA[Your <a href="https://my.mage-one.com/qps" target="_blank">https://my.mage-one.com/qps</a> username]]></comment>
+                            <depends>
+                                <status>1</status>
+                            </depends>
+                        </user_name>
+                        <public_key translate="label comment" module="qps">
+                            <label>Public Key</label>
+                            <frontend_type>textarea</frontend_type>
+                            <validate>required-entry</validate>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment><![CDATA[Public key for encryption between API and store. This key can be copied from <a href="https://my.mage-one.com/qps" target="_blank">https://my.mage-one.com/qps</a>]]></comment>
+                            <depends>
+                                <status>1</status>
+                            </depends>
+                        </public_key>
+                    </fields>
+                </config>
+            </groups>
+        </qps_section>
+    </sections>
+</config>

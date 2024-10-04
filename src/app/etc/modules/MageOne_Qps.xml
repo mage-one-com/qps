@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <MageOne_Qps>
+            <active>true</active>
+            <codePool>community</codePool>
+            <depends>
+                <Mage_Payment/>
+                <Mage_Checkout/>
+            </depends>
+        </MageOne_Qps>
+    </modules>
+</config>

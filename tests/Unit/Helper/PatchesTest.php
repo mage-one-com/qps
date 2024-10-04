@@ -4,15 +4,15 @@ namespace MageOne\Qps\Test\Unit\Helper;
 
 use Mage;
 use MageOne\Qps\Test\AbstractTest;
-use Mageone_Qps_Helper_Patches;
+use MageOne_Qps_Helper_Patches;
 
 /**
- * @covers Mageone_Qps_Helper_Patches
+ * @covers MageOne_Qps_Helper_Patches
  */
 class PatchesTest extends AbstractTest
 {
     /**
-     * @var Mageone_Qps_Helper_Patches
+     * @var MageOne_Qps_Helper_Patches
      */
     private $helper;
     /**

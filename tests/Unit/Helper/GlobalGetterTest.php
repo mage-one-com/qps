@@ -5,16 +5,16 @@ namespace MageOne\Qps\Test\Unit\Helper;
 use InvalidArgumentException;
 use Mage;
 use MageOne\Qps\Test\AbstractTest;
-use Mageone_Qps_Helper_GlobalGetter;
+use MageOne_Qps_Helper_GlobalGetter;
 use stdClass;
 
 /**
- * @covers Mageone_Qps_Helper_GlobalGetter
+ * @covers MageOne_Qps_Helper_GlobalGetter
  */
 class GlobalGetterTest extends AbstractTest
 {
     /**
-     * @var Mageone_Qps_Helper_GlobalGetter
+     * @var MageOne_Qps_Helper_GlobalGetter
      */
     private $helper;
 
@@ -23,12 +23,12 @@ class GlobalGetterTest extends AbstractTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->helper = new Mageone_Qps_Helper_GlobalGetter();
+        $this->helper = new MageOne_Qps_Helper_GlobalGetter();
     }
 
     public function testCreateHelperViaMageHelper(): void
     {
-        $this->assertInstanceOf(Mageone_Qps_Helper_GlobalGetter::class, Mage::helper('qps/globalGetter'));
+        $this->assertInstanceOf(MageOne_Qps_Helper_GlobalGetter::class, Mage::helper('qps/globalGetter'));
     }
 
     public function testGetWithSingleQuote(): void
@@ -70,7 +70,7 @@ class GlobalGetterTest extends AbstractTest
     public function testReturnsPhpInput(): void
     {
         $expected = '12345';
-        $getter   = new Mageone_Qps_Helper_GlobalGetter(static function () use ($expected) {
+        $getter   = new MageOne_Qps_Helper_GlobalGetter(static function () use ($expected) {
             return $expected;
         });
 
@@ -80,7 +80,7 @@ class GlobalGetterTest extends AbstractTest
     public function testReturnsPhpStdin(): void
     {
         $expected = 'lalala';
-        $getter   = new Mageone_Qps_Helper_GlobalGetter(null, static function () use ($expected) {
+        $getter   = new MageOne_Qps_Helper_GlobalGetter(null, static function () use ($expected) {
             return $expected;
         });
 

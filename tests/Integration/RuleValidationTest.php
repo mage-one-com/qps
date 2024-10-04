@@ -2,28 +2,28 @@
 
 namespace MageOne\Qps\Test\Integration;
 
-require __DIR__ . '/_Mageone_Test_Observer.php';
+require __DIR__ . '/_MageOne_Test_Observer.php';
 
 use Mage;
 use Mage_Adminhtml_Helper_Data;
 use Mage_Core_Controller_Request_Http;
 use Mage_Core_Controller_Varien_Front;
 use MageOne\Qps\Test\AbstractTest;
-use Mageone_Qps_Helper_Data;
-use Mageone_Qps_Model_Exception_ExitSkippedForTestingException;
-use Mageone_Qps_Model_Observer;
+use MageOne_Qps_Helper_Data;
+use MageOne_Qps_Model_Exception_ExitSkippedForTestingException;
+use MageOne_Qps_Model_Observer;
 use PHPUnit\Framework\MockObject\MockObject;
 use RuntimeException;
 use Varien_Event_Observer;
 
 /**
- * @covers \Mageone_Qps_Model_Observer
+ * @covers \MageOne_Qps_Model_Observer
  */
 class RuleValidationTest extends AbstractTest
 {
     protected $backupGlobals = true;
     /**
-     * @var Mageone_Qps_Model_Observer
+     * @var MageOne_Qps_Model_Observer
      */
     private $observer;
 
@@ -35,7 +35,7 @@ class RuleValidationTest extends AbstractTest
 
     public function testDoesNothingIfDisabled(): void
     {
-        $helperMock = $this->createMock(Mageone_Qps_Helper_Data::class);
+        $helperMock = $this->createMock(MageOne_Qps_Helper_Data::class);
         $helperMock->method('isEnabled')->willReturn(false);
         $this->replaceHelperWithMock($helperMock, 'qps');
 
@@ -80,7 +80,7 @@ class RuleValidationTest extends AbstractTest
 
     public function testRuleDoesTriggerIfUrlDoesMatch(): void
     {
-        $this->expectException(Mageone_Qps_Model_Exception_ExitSkippedForTestingException::class);
+        $this->expectException(MageOne_Qps_Model_Exception_ExitSkippedForTestingException::class);
 
         $this->createRule('/', 'Custom URL which never matches', '#^value$#', '_GET["key"]', '', 'MO-1');
         $request = $this->setupRequest('/', ['key' => 'value'], []);
@@ -89,7 +89,7 @@ class RuleValidationTest extends AbstractTest
 
     public function testEmptyUrlMatchesEverything(): void
     {
-        $this->expectException(Mageone_Qps_Model_Exception_ExitSkippedForTestingException::class);
+        $this->expectException(MageOne_Qps_Model_Exception_ExitSkippedForTestingException::class);
 
         $this->createRule('', 'Custom URL which never matches', '#^value$#', '_GET["key"]', '', 'MO-1');
         $request = $this->setupRequest('/some/url', ['key' => 'value'], []);
@@ -98,11 +98,11 @@ class RuleValidationTest extends AbstractTest
 
     public function testRuleDoesTriggerEventIfNotRegex(): void
     {
-        $called = \Mageone_Test_Observer::$called;
+        $called = \MageOne_Test_Observer::$called;
 
         $path = 'global/events/m1_qps_custom_check/observers/mage_one/';
         Mage::app()->getConfig()->setNode($path . 'type', 'singleton');
-        Mage::app()->getConfig()->setNode($path . 'class', 'Mageone_Test_Observer');
+        Mage::app()->getConfig()->setNode($path . 'class', 'MageOne_Test_Observer');
         Mage::app()->getConfig()->setNode($path . 'method', 'qpsCustomCheck');
 
         $refProp = new \ReflectionProperty(Mage::app()->getConfig(), '_eventAreas');
@@ -110,21 +110,21 @@ class RuleValidationTest extends AbstractTest
         $refProp->setValue(Mage::app()->getConfig(), null);
         $refProp->setAccessible(false);
 
-        $this->expectException(Mageone_Qps_Model_Exception_ExitSkippedForTestingException::class);
+        $this->expectException(MageOne_Qps_Model_Exception_ExitSkippedForTestingException::class);
 
         $this->createRule(
             '/', 'Custom URL which never matches', '#^value$#', '_GET["key"]', '', 'MO-1', 1, 'something-else'
         );
         $request = $this->setupRequest('/', ['key' => 'value'], []);
         $this->observer->checkRequest($this->setupEvent($request));
-        $this->assertSame($called + 1, \Mageone_Test_Observer::$called);
+        $this->assertSame($called + 1, \MageOne_Test_Observer::$called);
     }
 
     public function testAdminhtmlReplacementWorks(): void
     {
         $adminPath = $this->getAdminPath();
 
-        $this->expectException(Mageone_Qps_Model_Exception_ExitSkippedForTestingException::class);
+        $this->expectException(MageOne_Qps_Model_Exception_ExitSkippedForTestingException::class);
 
         $this->createRule(
             '/*adminhtml*/customer/index/',
@@ -140,7 +140,7 @@ class RuleValidationTest extends AbstractTest
 
     public function testPreprocessBase64Decode(): void
     {
-        $this->expectException(Mageone_Qps_Model_Exception_ExitSkippedForTestingException::class);
+        $this->expectException(MageOne_Qps_Model_Exception_ExitSkippedForTestingException::class);
 
         $this->createRule(
             '/checkout/cart/add/',

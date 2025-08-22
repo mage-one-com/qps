@@ -10,7 +10,7 @@ class MageOne_Qps_Block_Rule_Grid extends Mage_Adminhtml_Block_Widget_Grid
         $this->setSaveParametersInSession(true);
     }
 
-    public function getRowUrl(MageOne_Qps_Model_Rule $row): string
+    public function getRowUrl($row): string
     {
         return $this->getUrl('*/*/edit', ['id' => $row->getId()]);
     }

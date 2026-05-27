@@ -37,7 +37,29 @@ class MageOne_Qps_Helper_GlobalGetter
 
         $expr = str_replace([']', '\'', '"'], '', $expr);
 
-        return (string)$this->getFrom($GLOBALS, explode('[', $expr));
+        $value = $this->getFrom($GLOBALS, explode('[', $expr));
+
+        return is_array($value) ? $this->flattenArray($value) : (string)$value;
+    }
+
+    /**
+     * @param array $value
+     * @param int   $depth
+     *
+     * @return string
+     */
+    private function flattenArray(array $value, $depth = 0): string
+    {
+        if ($depth > 10) {
+            return '';
+        }
+
+        $parts = [];
+        foreach ($value as $item) {
+            $parts[] = is_array($item) ? $this->flattenArray($item, $depth + 1) : (string)$item;
+        }
+
+        return implode(' ', $parts);
     }
 
     /**

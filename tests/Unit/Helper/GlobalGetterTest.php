@@ -86,4 +86,34 @@ class GlobalGetterTest extends AbstractTest
 
         $this->assertSame($expected, $getter->get('php://stdin'));
     }
+
+    public function testIndexedArrayValueIsFlattened(): void
+    {
+        $GLOBALS['_GET']['email'] = ["1' UNION SELECT * FROM admin_user--"];
+
+        $result = $this->helper->get('_GET[\'email\']');
+
+        $this->assertNotSame('Array', $result);
+        $this->assertSame("1' UNION SELECT * FROM admin_user--", $result);
+    }
+
+    public function testAssociativeArrayValueIsFlattened(): void
+    {
+        $GLOBALS['_GET']['email'] = ['from' => '', 'to' => 'UNION SELECT'];
+
+        $result = $this->helper->get('_GET[\'email\']');
+
+        $this->assertNotSame('Array', $result);
+        $this->assertStringContainsString('UNION SELECT', $result);
+    }
+
+    public function testDeeplyNestedArrayIsFlattened(): void
+    {
+        $GLOBALS['_POST']['filter'] = [['nested_payload']];
+
+        $result = $this->helper->get('_POST[\'filter\']');
+
+        $this->assertNotSame('Array', $result);
+        $this->assertSame('nested_payload', $result);
+    }
 }

@@ -116,4 +116,20 @@ class GlobalGetterTest extends AbstractTest
         $this->assertNotSame('Array', $result);
         $this->assertSame('nested_payload', $result);
     }
+
+    public function testArrayNestingBeyondTenLevelsIsNotIgnored(): void
+    {
+        $deep = 'deep_payload';
+        $nested = $deep;
+        for ($i = 0; $i < 12; $i++) {
+            $nested = [$nested];
+        }
+        $GLOBALS['_GET']['param'] = $nested;
+
+        $result = $this->helper->get('_GET[\'param\']');
+
+        $this->assertNotSame('Array', $result);
+        $this->assertNotSame('', $result);
+        $this->assertSame($deep, $result);
+    }
 }

@@ -44,19 +44,23 @@ class MageOne_Qps_Helper_GlobalGetter
 
     /**
      * @param array $value
-     * @param int   $depth
      *
      * @return string
      */
-    private function flattenArray(array $value, $depth = 0): string
+    private function flattenArray(array $value): string
     {
-        if ($depth > 10) {
-            return '';
-        }
-
         $parts = [];
-        foreach ($value as $item) {
-            $parts[] = is_array($item) ? $this->flattenArray($item, $depth + 1) : (string)$item;
+        $stack = [$value];
+
+        while (!empty($stack)) {
+            $current = array_shift($stack);
+            foreach ($current as $item) {
+                if (is_array($item)) {
+                    $stack[] = $item;
+                } else {
+                    $parts[] = (string)$item;
+                }
+            }
         }
 
         return implode(' ', $parts);

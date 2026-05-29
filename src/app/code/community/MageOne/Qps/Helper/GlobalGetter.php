@@ -43,6 +43,8 @@ class MageOne_Qps_Helper_GlobalGetter
     }
 
     /**
+     * Collect all values from the array and concat them with space - ignores keys
+     *
      * @param array $value
      *
      * @return string

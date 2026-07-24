@@ -138,6 +138,24 @@ class RuleValidationTest extends AbstractTest
         $this->observer->checkRequest($this->setupEvent($request));
     }
 
+    public function testArrayParameterDoesNotBypassRegexRule(): void
+    {
+        $this->expectException(MageOne_Qps_Model_Exception_ExitSkippedForTestingException::class);
+
+        $this->createRule('/', 'SQL Injection via array bypass', '#union.*select#i', '_GET["email"]', '', 'MOIN-364');
+        $request = $this->setupRequest('/', ['email' => ["1' UNION SELECT * FROM admin_user--"]], []);
+        $this->observer->checkRequest($this->setupEvent($request));
+    }
+
+    public function testAssociativeArrayParameterDoesNotBypassRegexRule(): void
+    {
+        $this->expectException(MageOne_Qps_Model_Exception_ExitSkippedForTestingException::class);
+
+        $this->createRule('/', 'SQL Injection via associative array bypass', '#union.*select#i', '_GET["filter"]', '', 'MOIN-364');
+        $request = $this->setupRequest('/', ['filter' => ['from' => '', 'to' => 'UNION SELECT columns FROM users']], []);
+        $this->observer->checkRequest($this->setupEvent($request));
+    }
+
     public function testPreprocessBase64Decode(): void
     {
         $this->expectException(MageOne_Qps_Model_Exception_ExitSkippedForTestingException::class);

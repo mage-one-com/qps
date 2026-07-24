@@ -37,7 +37,35 @@ class MageOne_Qps_Helper_GlobalGetter
 
         $expr = str_replace([']', '\'', '"'], '', $expr);
 
-        return (string)$this->getFrom($GLOBALS, explode('[', $expr));
+        $value = $this->getFrom($GLOBALS, explode('[', $expr));
+
+        return is_array($value) ? $this->flattenArray($value) : (string)$value;
+    }
+
+    /**
+     * Collect all values from the array and concat them with space - ignores keys
+     *
+     * @param array $value
+     *
+     * @return string
+     */
+    private function flattenArray(array $value): string
+    {
+        $parts = [];
+        $stack = [$value];
+
+        while (!empty($stack)) {
+            $current = array_shift($stack);
+            foreach ($current as $item) {
+                if (is_array($item)) {
+                    $stack[] = $item;
+                } else {
+                    $parts[] = (string)$item;
+                }
+            }
+        }
+
+        return implode(' ', $parts);
     }
 
     /**
